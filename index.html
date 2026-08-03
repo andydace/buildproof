@@ -34,11 +34,11 @@
     padding:24px 12px;
   }
   #frame{
-    width:390px;
+    width:100%;
     min-height:844px;
     background:var(--bg);
-    border-radius:36px;
-    box-shadow:0 30px 60px rgba(0,0,0,.45), 0 0 0 10px #0b1418;
+    border-radius:0;
+    
     overflow:hidden;
     position:relative;
     display:flex;
@@ -482,7 +482,7 @@
     <div class="screen" id="screen-projects">
       <div class="topnav">
         <div class="topnav-title"><h1>Projects</h1></div>
-        <button class="backbtn" onclick="toast('Add project flow')">＋</button>
+        <button class="backbtn" onclick="addProject()">＋</button>
       </div>
       <div class="screen-body">
         <div class="searchbar">🔍<input placeholder="Search projects, plots, clients..." oninput="filterProjects(this.value)"></div>
@@ -537,7 +537,7 @@
 
         <div class="quick-actions">
           <button class="qa-btn" onclick="openCamera('oakview')"><span class="ic">📷</span><span class="txt">Take Photo</span></button>
-          <button class="qa-btn" onclick="toast('Add plot flow')"><span class="ic">➕</span><span class="txt">Add Plot</span></button>
+          <button class="qa-btn" onclick="addPlot()"><span class="ic">➕</span><span class="txt">Add Plot</span></button>
           <button class="qa-btn" onclick="setChip(null,'plotfilter','Needs Attention')"><span class="ic">⚠️</span><span class="txt">View Issues</span></button>
           <button class="qa-btn" onclick="go('reports')"><span class="ic">📄</span><span class="txt">Reports</span></button>
         </div>
@@ -956,7 +956,7 @@ function renderPlotList(filterText, statusFilter){
     </div>`;
   }).join('') || `<div class="empty-state"><div class="ic">📭</div>No plots match this filter.</div>`;
 }
-function filterPlots(){ renderPlotList(); }
+
 
 function renderPlotOverview(){
   const p = plots[state.plotId];
@@ -1092,9 +1092,41 @@ function filterPlots(q=""){
 }
 function generateReportForPlot(id){toast('PDF generated for '+plots[id].number);}
 
+
+
 function filterProjects(){ /* visual only in this prototype */ }
 
-/* ---------------- TOAST ---------------- */
+function addPlot() {
+
+  const plotNumber = prompt("Enter plot number");
+
+  if (!plotNumber) return;
+
+  const plotList = document.getElementById('plot-list');
+
+  plotList.insertAdjacentHTML(
+    'beforeend',
+    `
+    <div class="card tap">
+      <div class="row">
+        <span style="font-weight:800;color:var(--navy);">
+          ${plotNumber}
+        </span>
+        <span class="badge badge-blue">New</span>
+      </div>
+
+      <div style="font-size:12px;color:var(--muted);margin-top:4px;">
+        New plot created
+      </div>
+    </div>
+    `
+  );
+
+  toast("Plot added");
+}
+
+
+/*-------------- TOAST ---------------- */
 let toastTimer;
 function toast(msg){
   const t = document.getElementById('toast');
