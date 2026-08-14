@@ -1128,7 +1128,7 @@ function renderProjects() {
 
   const projectCards = Object.values(projects)
     .map(project => `
-      <div class="card">
+      <div class="card tap" onclick="openProject('${project.id}')">
         <div class="row">
           <span style="font-weight:800;color:var(--navy);font-size:16px;">
             ${project.name}
