@@ -1154,14 +1154,16 @@ function filterProjects(){ }
 function addProject() {
 
   const name = prompt("Enter a project name");
-
-  if (!name) return;
+  const location = prompt("Enter project location");
+  if (!name || !location) return;
   const id = "project" + Date.now();
 
 projects[id] = {
   id: id,
   name: name,
-  location: "New Location"
+  location: location,
+  client: "",
+  siteManager: ""
 };
 
   const projectsScreen =
