@@ -529,8 +529,8 @@
       </div>
       <div class="screen-body">
         <div class="card">
-          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Client</span><span style="font-weight:600;font-size:13px;">Acme Homes</span></div>
-          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Site Manager</span><span style="font-weight:600;font-size:13px;">Andrew Dace</span></div>
+          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Client</span><span id="pd-client" style="font-weight:600;font-size:13px;">Acme Homes</span></div>
+<div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Site Manager</span><span id="pd-sitemanager" style="font-weight:600;font-size:13px;">Andrew Dace</span></div>
           <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Address</span><span id="pd-location" style="font-weight:600;font-size:13px;">Oak View, Leeds</span></div>
           <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Start date</span><span style="font-weight:600;font-size:13px;">12 May 2026</span></div>
           <div class="row"><span style="color:var(--muted);font-size:13px;">Target completion</span><span style="font-weight:600;font-size:13px;">18 Dec 2026</span></div>
@@ -938,6 +938,11 @@ function openProject(id){
 
   document.getElementById('pd-location').textContent =
     projects[id].location || "Not set";
+    document.getElementById('pd-client').textContent =
+  projects[id].client || "Not set";
+
+document.getElementById('pd-sitemanager').textContent =
+  projects[id].siteManager || "Not set";
 
   console.log(projects[id]);
 
@@ -957,9 +962,16 @@ function editProject() {
     prompt("Location", project.location);
 
   if (!newLocation) return;
+  const newClient =
+  prompt("Client", project.client || "");
+
+const newSiteManager =
+  prompt("Site Manager", project.siteManager || "");
 
   project.name = newName;
-  project.location = newLocation;
+project.location = newLocation;
+project.client = newClient;
+project.siteManager = newSiteManager;
 
   saveData();
 
@@ -968,6 +980,12 @@ function editProject() {
 
   document.getElementById('pd-location').textContent =
     project.location;
+    document.getElementById('pd-client').textContent =
+  project.client || "Not set";
+
+document.getElementById('pd-sitemanager').textContent =
+  project.siteManager || "Not set";
+`
 
   toast("Project updated");
 }
