@@ -530,7 +530,7 @@
         <div class="card">
           <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Client</span><span style="font-weight:600;font-size:13px;">Acme Homes</span></div>
           <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Site Manager</span><span style="font-weight:600;font-size:13px;">Andrew Dace</span></div>
-          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Address</span><span style="font-weight:600;font-size:13px;">Oak View, Leeds</span></div>
+          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Address</span><span id="pd-location" style="font-weight:600;font-size:13px;">Oak View, Leeds</span></div>
           <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Start date</span><span style="font-weight:600;font-size:13px;">12 May 2026</span></div>
           <div class="row"><span style="color:var(--muted);font-size:13px;">Target completion</span><span style="font-weight:600;font-size:13px;">18 Dec 2026</span></div>
         </div>
@@ -926,7 +926,17 @@ function updateFab(screen){
 }
 
 /* ---------------- NAVIGATION HELPERS ---------------- */
-function openProject(id){ state.projectId = id; document.getElementById('pd-name').textContent = projects[id].name; go('projectdetails'); }
+
+function openProject(id){
+
+  state.projectId = id;
+
+  document.getElementById('pd-name').textContent =
+    projects[id].name;
+document.getElementById('pd-location').textContent =
+  projects[id].location || "Not set";
+  go('projectdetails');
+}
 function openPlot(id){ state.plotId = id; state.projectId = plots[id].projectId; go('plotoverview'); }
 function openChecklist(id){ state.plotId = id; go('checklist'); }
 function openCamera(projectId){ state.photoProject = projectId; state.photoPlot = null; state.photoCategory = null;
