@@ -935,6 +935,8 @@ function openProject(id){
     projects[id].name;
 document.getElementById('pd-location').textContent =
   projects[id].location || "Not set";
+  console.log(projects[id]);
+
   go('projectdetails');
 }
 function openPlot(id){ state.plotId = id; state.projectId = plots[id].projectId; go('plotoverview'); }
