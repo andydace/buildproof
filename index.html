@@ -406,6 +406,7 @@
 
         <h2 class="section-heading">Quick Actions</h2>
         <div class="quick-actions">
+          <button class="qa-btn" onclick="editProject()"><span class="ic">✏️</span><span class="txt">Edit Project</span></button>
           <button class="qa-btn" onclick="openCamera('oakview')"><span class="ic">📷</span><span class="txt">Take Photo</span></button>
           <button class="qa-btn" onclick="go('projects')"><span class="ic">📁</span><span class="txt">Projects</span></button>
           <button class="qa-btn" onclick="go('reports')"><span class="ic">📄</span><span class="txt">Reports</span></button>
@@ -536,6 +537,7 @@
         </div>
 
         <div class="quick-actions">
+          <button class="qa-btn" onclick="editProject()"><span class="ic">✏️</span><span class="txt">Edit Project</span></button>
           <button class="qa-btn" onclick="openCamera('oakview')"><span class="ic">📷</span><span class="txt">Take Photo</span></button>
           <button class="qa-btn" onclick="addPlot()"><span class="ic">➕</span><span class="txt">Add Plot</span></button>
           <button class="qa-btn" onclick="setChip(null,'plotfilter','Needs Attention')"><span class="ic">⚠️</span><span class="txt">View Issues</span></button>
@@ -933,12 +935,43 @@ function openProject(id){
 
   document.getElementById('pd-name').textContent =
     projects[id].name;
-document.getElementById('pd-location').textContent =
-  projects[id].location || "Not set";
+
+  document.getElementById('pd-location').textContent =
+    projects[id].location || "Not set";
+
   console.log(projects[id]);
 
   go('projectdetails');
 }
+
+function editProject() {
+
+  const project = projects[state.projectId];
+
+  const newName =
+    prompt("Project Name", project.name);
+
+  if (!newName) return;
+
+  const newLocation =
+    prompt("Location", project.location);
+
+  if (!newLocation) return;
+
+  project.name = newName;
+  project.location = newLocation;
+
+  saveData();
+
+  document.getElementById('pd-name').textContent =
+    project.name;
+
+  document.getElementById('pd-location').textContent =
+    project.location;
+
+  toast("Project updated");
+}
+
 function openPlot(id){ state.plotId = id; state.projectId = plots[id].projectId; go('plotoverview'); }
 function openChecklist(id){ state.plotId = id; go('checklist'); }
 function openCamera(projectId){ state.photoProject = projectId; state.photoPlot = null; state.photoCategory = null;
