@@ -1211,7 +1211,14 @@ function renderGallery(){
   grid.innerHTML = p.gallery.length ? p.gallery.map(photo =>
   `<div class="gallery-thumb"
       style="background:${photo.colour || '#1F8A4C'};"
-      onclick="toast('${photo.category} • ${photo.timestamp || "Today"}')">
+      onclick="toast(
+'Plot: ' + photo.plot +
+' | ' +
+photo.category +
+' | GPS ±' +
+(photo.accuracy || '?') +
+'m'
+)"
 
       <span class="lbl">${photo.category}</span>
 
