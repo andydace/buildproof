@@ -893,7 +893,9 @@ const state = {
   screen:'splash', history:[], projectId:'oakview', plotId:'p17',
   photoCategory:null, photoProject:'oakview', photoPlot:'p17', photoNotes:'',
   photoLat:null,
-photoLng:null
+photoLng:null,
+photoAltitude:null,
+photoAccuracy:null
 };
 
 
@@ -1027,7 +1029,8 @@ function savePhoto(){
 
       state.photoLat = position.coords.latitude;
       state.photoLng = position.coords.longitude;
-
+  state.photoAltitude = position.coords.altitude;
+  state.photoAccuracy = position.coords.accuracy;
      console.log(
   "GPS:",
   state.photoLat,
@@ -1035,14 +1038,38 @@ function savePhoto(){
 );
    if(state.photoPlot && plots[state.photoPlot]){
 
-  plots[state.photoPlot].gallery.unshift({
-    category: state.photoCategory || "Other",
-    colour: "#1F8A4C",
-    latitude: state.photoLat,
-    longitude: state.photoLng,
-    notes: state.photoNotes,
-    timestamp: new Date().toLocaleString()
-  });
+ plots[state.photoPlot].gallery.unshift({
+
+  project:
+    projects[state.photoProject].name,
+
+  plot:
+    plots[state.photoPlot].number,
+
+  category:
+    state.photoCategory || "Other",
+
+  colour:"#1F8A4C",
+
+  latitude:
+    state.photoLat,
+
+  longitude:
+    state.photoLng,
+
+  altitude:
+    state.photoAltitude,
+ accuracy:
+  state.photoAccuracy,
+  notes:
+    state.photoNotes,
+   
+
+
+  timestamp:
+    new Date().toLocaleString()
+
+}); 
 
 }
 
