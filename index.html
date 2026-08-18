@@ -891,8 +891,11 @@ function loadData() {
 /* ---------------- STATE ---------------- */
 const state = {
   screen:'splash', history:[], projectId:'oakview', plotId:'p17',
-  photoCategory:null, photoProject:'oakview', photoPlot:'p17', photoNotes:''
+  photoCategory:null, photoProject:'oakview', photoPlot:'p17', photoNotes:'',
+  photoLat:null,
+photoLng:null
 };
+
 
 function go(screen, push=true){
   if(push && state.screen!==screen) state.history.push(state.screen);
@@ -1012,6 +1015,22 @@ function pickCategory(el, name){
   el.classList.add('selected'); state.photoCategory = name;
 }
 function savePhoto(){
+  if (navigator.geolocation) {
+
+  navigator.geolocation.getCurrentPosition(position => {
+
+    state.photoLat = position.coords.latitude;
+    state.photoLng = position.coords.longitude;
+
+    console.log(
+      "GPS:",
+      state.photoLat,
+      state.photoLng
+    );
+
+  });
+
+}
   state.photoNotes = document.getElementById('notes-input').value;
   const plotLbl = state.photoPlot ? plots[state.photoPlot].number : 'Unassigned plot';
   document.getElementById('saved-sub').textContent = (state.photoCategory||'Photo') + ' · ' + plotLbl + ' · ' + projects[state.photoProject].name;
@@ -1315,9 +1334,19 @@ function editPlot() {
     prompt("House Type", plot.houseType);
 
   if (!newHouseType) return;
+  const newStage =
+  prompt("Build Stage", plot.stage);
+
+if (!newStage) return;
+const newStatus =
+  prompt("Status", plot.status);
+
+if (!newStatus) return;
 
   plot.number = newNumber;
   plot.houseType = newHouseType;
+  plot.stage = newStage;
+  plot.status = newStatus;
 
   saveData();
 
