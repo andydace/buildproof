@@ -1073,6 +1073,7 @@ function renderPlotOverview(){
       ${p.missing.map(m=>`<div style="font-size:13.5px;font-weight:600;padding:6px 0;">⚠️ ${m}</div>`).join('')}
     </div>` : ''}
     <div class="quick-actions">
+      <button class="qa-btn" onclick="editPlot()"><span class="ic">✏️</span><span class="txt">Edit Plot</span></button>
       <button class="qa-btn" onclick="openCameraFor('${p.projectId}','${p.id}')"><span class="ic">📷</span><span class="txt">Take Photo</span></button>
       <button class="qa-btn" onclick="openChecklist('${p.id}')"><span class="ic">✅</span><span class="txt">Checklist</span></button>
       <button class="qa-btn" onclick="go('evidencegallery')"><span class="ic">🖼️</span><span class="txt">View Evidence</span></button>
@@ -1301,7 +1302,29 @@ console.log("PLOT ADDED", id);
   saveData();
   toast("Plot added");
 }
+function editPlot() {
 
+  const plot = plots[state.plotId];
+
+  const newNumber =
+    prompt("Plot Number", plot.number);
+
+  if (!newNumber) return;
+
+  const newHouseType =
+    prompt("House Type", plot.houseType);
+
+  if (!newHouseType) return;
+
+  plot.number = newNumber;
+  plot.houseType = newHouseType;
+
+  saveData();
+
+  toast("Plot updated");
+
+  renderPlotOverview();
+}
 
 /*-------------- TOAST ---------------- */
 let toastTimer;
