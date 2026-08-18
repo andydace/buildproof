@@ -1022,11 +1022,12 @@ function savePhoto(){
     state.photoLat = position.coords.latitude;
     state.photoLng = position.coords.longitude;
 
-    console.log(
-      "GPS:",
-      state.photoLat,
-      state.photoLng
-    );
+   alert(
+  "GPS: " +
+  state.photoLat +
+  ", " +
+  state.photoLng
+);
 
   });
 
