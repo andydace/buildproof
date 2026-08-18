@@ -1015,23 +1015,36 @@ function pickCategory(el, name){
   el.classList.add('selected'); state.photoCategory = name;
 }
 function savePhoto(){
-  if (navigator.geolocation) {
+ if (navigator.geolocation) {
 
-  navigator.geolocation.getCurrentPosition(position => {
+  navigator.geolocation.getCurrentPosition(
 
-  state.photoLat = position.coords.latitude;
-  state.photoLng = position.coords.longitude;
+    position => {
 
-  toast(
-    "GPS: " +
-    state.photoLat.toFixed(5) +
-    ", " +
-    state.photoLng.toFixed(5)
+      state.photoLat = position.coords.latitude;
+      state.photoLng = position.coords.longitude;
+
+      alert(
+        "GPS: " +
+        state.photoLat +
+        ", " +
+        state.photoLng
+      );
+
+    },
+
+    error => {
+
+      alert(
+        "GPS Error: " +
+        error.message
+      );
+
+    }
+
   );
 
-});
-
-}
+} 
 console.log("GPS REQUESTED");
 
   state.photoNotes = document.getElementById('notes-input').value;
