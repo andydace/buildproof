@@ -1063,6 +1063,14 @@ console.log("GPS REQUESTED");
   });
 
 }
+  go('photoreview');
+
+  state.history = state.history.filter(
+    s => !['camera','category','notes'].includes(s)
+  );
+
+}
+
 
 /* ---------------- RENDERERS ---------------- */
 function statusMeta(s){
@@ -1092,7 +1100,8 @@ function renderPlotList(filterText, statusFilter){
 }
 
 
-function renderPlotOverview(){
+
+    function renderPlotOverview(){
   const p = plots[state.plotId];
   document.getElementById('po-number').textContent = p.number;
   document.getElementById('po-project').textContent = projects[p.projectId].name;
@@ -1109,30 +1118,13 @@ function renderPlotOverview(){
       <div class="row" style="align-items:flex-end;"><div style="font-size:32px;font-weight:800;color:var(--navy);">${p.score}%</div></div>
       <div class="progress-track"><div class="progress-fill ${p.score>=90?'green':p.score>=70?'':p.score>=40?'amber':'red'}" style="width:${p.score}%;"></div></div>
     </div>
-    <div class="card">
-  <div class="label-eyebrow">EVIDENCE PHOTOS</div>
+   
 
-  <div style="
-    font-size:32px;
-    font-weight:800;
-    color:var(--navy);
-  ">
-    ${p.gallery.length}
-  </div>
-
-  <div style="
-    color:var(--muted);
-    font-size:13px;
-    margin-top:6px;
-  ">
-    GPS-tagged evidence records
-  </div>
-</div>
+ 
     ${p.missing.length? `<div class="card" style="border-left:4px solid var(--red);">
       <div class="label-eyebrow" style="color:var(--red);">MISSING EVIDENCE</div>
       ${p.missing.map(m=>`<div style="font-size:13.5px;font-weight:600;padding:6px 0;">⚠️ ${m}</div>`).join('')}
-    </div>` : ''}
-    <div class="quick-actions">
+    </div>` : ''}<div class="quick-actions">
       <button class="qa-btn" onclick="editPlot()"><span class="ic">✏️</span><span class="txt">Edit Plot</span></button>
       <button class="qa-btn" onclick="openCameraFor('${p.projectId}','${p.id}')"><span class="ic">📷</span><span class="txt">Take Photo</span></button>
       <button class="qa-btn" onclick="openChecklist('${p.id}')"><span class="ic">✅</span><span class="txt">Checklist</span></button>
@@ -1151,7 +1143,15 @@ function renderPlotOverview(){
       <h2 class="section-heading" style="margin:0;">Evidence Gallery</h2>
       <button class="link" onclick="go('evidencegallery')">View All</button>
     </div>
-    <div class="gallery-grid">${p.gallery.slice(0,6).map(([cat,color])=>`<div class="gallery-thumb" style="background:${color};" onclick="go('evidencegallery')"><span class="lbl">${cat}</span></div>`).join('') || '<div class="empty-state" style="grid-column:1/-1;padding:20px;">No photos yet.</div>'}</div>
+    <div class="gallery-grid">${p.gallery.slice(0,6).map(photo =>
+  `<div class="gallery-thumb"
+      style="background:${photo.colour || '#1F8A4C'};"
+      onclick="go('evidencegallery')">
+
+      <span class="lbl">${photo.category}</span>
+
+   </div>`
+).join('') || '<div class="empty-state" style="grid-column:1/-1;padding:20px;">No photos yet.</div>'}</div>
   `;
 }
 function checklistRow(name, st, plotId){
