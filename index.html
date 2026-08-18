@@ -1024,12 +1024,12 @@ function savePhoto(){
       state.photoLat = position.coords.latitude;
       state.photoLng = position.coords.longitude;
 
-      alert(
-        "GPS: " +
-        state.photoLat +
-        ", " +
-        state.photoLng
-      );
+     console.log(
+  "GPS:",
+  state.photoLat,
+  state.photoLng
+);
+ 
 
     },
 
@@ -1052,10 +1052,16 @@ console.log("GPS REQUESTED");
   document.getElementById('saved-sub').textContent = (state.photoCategory||'Photo') + ' · ' + plotLbl + ' · ' + projects[state.photoProject].name;
   document.getElementById('notes-input').value='';
   if(state.photoPlot && plots[state.photoPlot]){
-    plots[state.photoPlot].gallery.unshift([state.photoCategory||'Other', '#1F8A4C']);
-  }
-  go('photoreview');
-  state.history = state.history.filter(s=>!['camera','category','notes'].includes(s));
+
+  plots[state.photoPlot].gallery.unshift({
+    category: state.photoCategory || "Other",
+    colour: "#1F8A4C",
+    latitude: state.photoLat,
+    longitude: state.photoLng,
+    notes: state.photoNotes,
+    timestamp: new Date().toLocaleString()
+  });
+
 }
 
 /* ---------------- RENDERERS ---------------- */
@@ -1103,6 +1109,25 @@ function renderPlotOverview(){
       <div class="row" style="align-items:flex-end;"><div style="font-size:32px;font-weight:800;color:var(--navy);">${p.score}%</div></div>
       <div class="progress-track"><div class="progress-fill ${p.score>=90?'green':p.score>=70?'':p.score>=40?'amber':'red'}" style="width:${p.score}%;"></div></div>
     </div>
+    <div class="card">
+  <div class="label-eyebrow">EVIDENCE PHOTOS</div>
+
+  <div style="
+    font-size:32px;
+    font-weight:800;
+    color:var(--navy);
+  ">
+    ${p.gallery.length}
+  </div>
+
+  <div style="
+    color:var(--muted);
+    font-size:13px;
+    margin-top:6px;
+  ">
+    GPS-tagged evidence records
+  </div>
+</div>
     ${p.missing.length? `<div class="card" style="border-left:4px solid var(--red);">
       <div class="label-eyebrow" style="color:var(--red);">MISSING EVIDENCE</div>
       ${p.missing.map(m=>`<div style="font-size:13.5px;font-weight:600;padding:6px 0;">⚠️ ${m}</div>`).join('')}
@@ -1152,7 +1177,16 @@ function renderGallery(){
   const p = plots[state.plotId] || plots.p17;
   document.getElementById('eg-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
   const grid = document.getElementById('gallery-grid');
-  grid.innerHTML = p.gallery.length ? p.gallery.map(([cat,color])=>`<div class="gallery-thumb" style="background:${color};" onclick="toast('${cat} · Today')"><span class="lbl">${cat}</span></div>`).join('') :
+  grid.innerHTML = p.gallery.length ? p.gallery.map(photo =>
+  `<div class="gallery-thumb"
+      style="background:${photo.colour || '#1F8A4C'};"
+      onclick="toast('${photo.category} • ${photo.timestamp || "Today"}')">
+
+      <span class="lbl">${photo.category}</span>
+
+    </div>`
+).join('') :
+
     `<div class="empty-state" style="grid-column:1/-1;"><div class="ic">📷</div>No evidence captured yet.</div>`;
 }
 function levelDot(level){ return {red:'dot-red',amber:'dot-amber',green:'dot-green',blue:'dot-green'}[level]||'dot-amber'; }
