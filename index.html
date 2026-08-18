@@ -1019,19 +1019,21 @@ function savePhoto(){
 
   navigator.geolocation.getCurrentPosition(position => {
 
-    state.photoLat = position.coords.latitude;
-    state.photoLng = position.coords.longitude;
+  state.photoLat = position.coords.latitude;
+  state.photoLng = position.coords.longitude;
 
-   alert(
-  "GPS: " +
-  state.photoLat +
-  ", " +
-  state.photoLng
-);
+  toast(
+    "GPS: " +
+    state.photoLat.toFixed(5) +
+    ", " +
+    state.photoLng.toFixed(5)
+  );
 
-  });
+});
 
 }
+console.log("GPS REQUESTED");
+
   state.photoNotes = document.getElementById('notes-input').value;
   const plotLbl = state.photoPlot ? plots[state.photoPlot].number : 'Unassigned plot';
   document.getElementById('saved-sub').textContent = (state.photoCategory||'Photo') + ' · ' + plotLbl + ' · ' + projects[state.photoProject].name;
