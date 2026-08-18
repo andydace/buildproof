@@ -1015,7 +1015,11 @@ function pickCategory(el, name){
   el.classList.add('selected'); state.photoCategory = name;
 }
 function savePhoto(){
- if (navigator.geolocation) {
+
+  state.photoNotes =
+    document.getElementById('notes-input').value;
+
+  if (navigator.geolocation) {
 
   navigator.geolocation.getCurrentPosition(
 
@@ -1029,7 +1033,18 @@ function savePhoto(){
   state.photoLat,
   state.photoLng
 );
- 
+   if(state.photoPlot && plots[state.photoPlot]){
+
+  plots[state.photoPlot].gallery.unshift({
+    category: state.photoCategory || "Other",
+    colour: "#1F8A4C",
+    latitude: state.photoLat,
+    longitude: state.photoLng,
+    notes: state.photoNotes,
+    timestamp: new Date().toLocaleString()
+  });
+
+}
 
     },
 
@@ -1051,18 +1066,7 @@ console.log("GPS REQUESTED");
   const plotLbl = state.photoPlot ? plots[state.photoPlot].number : 'Unassigned plot';
   document.getElementById('saved-sub').textContent = (state.photoCategory||'Photo') + ' · ' + plotLbl + ' · ' + projects[state.photoProject].name;
   document.getElementById('notes-input').value='';
-  if(state.photoPlot && plots[state.photoPlot]){
 
-  plots[state.photoPlot].gallery.unshift({
-    category: state.photoCategory || "Other",
-    colour: "#1F8A4C",
-    latitude: state.photoLat,
-    longitude: state.photoLng,
-    notes: state.photoNotes,
-    timestamp: new Date().toLocaleString()
-  });
-
-}
   go('photoreview');
 
   state.history = state.history.filter(
