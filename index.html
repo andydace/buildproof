@@ -892,20 +892,10 @@ function saveData() {
 
 function loadData() {
 
-  const savedProjects =
-    localStorage.getItem("buildproofProjects");
+  localStorage.clear();
 
-  const savedPlots =
-    localStorage.getItem("buildproofPlots");
-
-  if (savedProjects) {
-    projects = JSON.parse(savedProjects);
-  }
-
-  if (savedPlots) {
-    plots = JSON.parse(savedPlots);
-  }
 }
+
 
 /* ---------------- STATE ---------------- */
 const state = {
