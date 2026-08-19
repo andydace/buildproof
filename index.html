@@ -764,7 +764,7 @@
         <button class="btn btn-primary" onclick="savePhoto()">Save</button>
       </div>
     </div>
-
+</div>
     <!-- PHOTO REVIEW / SAVED -->
     <div class="screen" id="screen-photoreview">
       <div class="screen-body center-screen" style="height:100%;">
@@ -1228,7 +1228,7 @@ function renderGallery(){
   grid.innerHTML = p.gallery.length ? p.gallery.map((photo,index) =>
 `<div class="gallery-thumb"
       style="background:${photo.colour || '#1F8A4C'};"
-      onclick="showEvidence(state.plotId, ${index})"
+      onclick="showEvidence(state.plotId, ${index})">
 
       <span class="lbl">${photo.category}</span>
 
