@@ -70,6 +70,13 @@
     -ms-overflow-style:none;
     scrollbar-width:none;
   }
+  #screen-evidencedetails{
+    position:absolute;
+    inset:0;
+    background:white;
+    z-index:9999;
+    min-height:100%;
+}
   .screen::-webkit-scrollbar{display:none;}
   .screen.active{display:flex;animation:screenIn .26s ease;}
   @keyframes screenIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
@@ -777,7 +784,7 @@
         </div>
       </div>
       <!-- EVIDENCE DETAILS -->
-<div class="screen" id="screen-evidencedetails">
+<div class="screen active" id="screen-evidencedetails">
   <div class="topnav">
     <button class="backbtn" onclick="back()">←</button>
 
@@ -805,8 +812,11 @@
 <script>
 /* ---------------- DATA ---------------- */
 let projects = {
-  oakview:{id:'oakview',name:'Oak View Development',location:'Leeds'},
-  greenmeadows:{id:'greenmeadows',name:'Green Meadows',location:'Wakefield'}
+  doseley:{
+    id:'doseley',
+    name:'Doseley Halt',
+    location:'Telford'
+  }
 };
 
 const PARTL_ITEMS = [
@@ -1066,6 +1076,8 @@ function savePhoto(){
   category:
     state.photoCategory || "Other",
 
+    capturedBy: "Andrew Dace",
+
   colour:"#1F8A4C",
 
   latitude:
@@ -1080,7 +1092,7 @@ function savePhoto(){
   state.photoAccuracy,
   notes:
     state.photoNotes,
-   
+    capturedBy: "Andrew Dace",
 
 
   timestamp:
@@ -1238,51 +1250,44 @@ function renderGallery(){
     `<div class="empty-state" style="grid-column:1/-1;"><div class="ic">📷</div>No evidence captured yet.</div>`;
 }
 function showEvidence(plotId, photoIndex){
+
   const p = plots[plotId];
   const photo = p.gallery[photoIndex];
-console.log("PHOTO:", photo);
-  state.selectedPhoto = photo;
 
-  document.getElementById(
-    'evidence-details-body'
-  ).innerHTML = `
+  if (!photo || !photo.project){
+    alert(
+      "This is an older photo record. Take a new photo to view evidence details."
+    );
+    return;
+  }
 
-    <div class="card">
+alert(
+`BUILDPROOF EVIDENCE
 
-      <div class="label-eyebrow">
-        BUILDPROOF EVIDENCE
-      </div>
+Project: ${photo.project}
 
-      <p style="color:red;font-size:20px;">
-TEST PROJECT: ${photo.project}
-</p>
+Plot: ${photo.plot}
 
-      <p><strong>Plot</strong><br>${photo.plot}</p>
+Section: ${photo.category}
 
-      <p><strong>Section</strong><br>${photo.category}</p>
+Date: ${photo.timestamp}
 
-      <p><strong>Date / Time</strong><br>${photo.timestamp}</p>
+Latitude:
+${photo.latitude}
 
-      <p><strong>Latitude</strong><br>${photo.latitude}</p>
+Longitude:
+${photo.longitude}
 
-      <p><strong>Longitude</strong><br>${photo.longitude}</p>
+GPS Accuracy:
+±${photo.accuracy}m
 
-      <p><strong>GPS Accuracy</strong><br>
-      ±${photo.accuracy || "?"}m
-      </p>
+Altitude:
+${photo.altitude || "Unavailable"}
 
-      <p><strong>Altitude</strong><br>
-      ${photo.altitude || "Unavailable"}
-      </p>
+Notes:
+${photo.notes || "None"}`
+);
 
-      <p><strong>Notes</strong><br>
-      ${photo.notes || "None"}
-      </p>
-
-    </div>
-  `;
-console.log(document.getElementById('screen-evidencedetails'));
-  go('evidencedetails');
 }
 function levelDot(level){ return {red:'dot-red',amber:'dot-amber',green:'dot-green',blue:'dot-green'}[level]||'dot-amber'; }
 function renderNotifications(){
