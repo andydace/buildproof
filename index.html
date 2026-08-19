@@ -776,6 +776,19 @@
           <button class="btn btn-secondary" onclick="openPlot(state.photoPlot)">Back to Plot</button>
         </div>
       </div>
+      <!-- EVIDENCE DETAILS -->
+<div class="screen" id="screen-evidencedetails">
+  <div class="topnav">
+    <button class="backbtn" onclick="back()">←</button>
+
+    <div class="topnav-title">
+      <h1>Evidence Details</h1>
+    </div>
+  </div>
+
+  <div class="screen-body" id="evidence-details-body">
+  </div>
+</div>
     </div>
 
   </div>
@@ -890,12 +903,20 @@ function loadData() {
 
 /* ---------------- STATE ---------------- */
 const state = {
-  screen:'splash', history:[], projectId:'oakview', plotId:'p17',
-  photoCategory:null, photoProject:'oakview', photoPlot:'p17', photoNotes:'',
+  screen:'splash',
+  history:[],
+  projectId:'oakview',
+  plotId:'p17',
+  photoCategory:null,
+  photoProject:'oakview',
+  photoPlot:'p17',
+  photoNotes:'',
   photoLat:null,
-photoLng:null,
-photoAltitude:null,
-photoAccuracy:null
+  photoLng:null,
+  photoAltitude:null,
+  photoAccuracy:null,
+
+  selectedPhoto:null
 };
 
 
@@ -1208,17 +1229,10 @@ function renderGallery(){
   const p = plots[state.plotId] || plots.p17;
   document.getElementById('eg-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
   const grid = document.getElementById('gallery-grid');
-  grid.innerHTML = p.gallery.length ? p.gallery.map(photo =>
-  `<div class="gallery-thumb"
+  grid.innerHTML = p.gallery.length ? p.gallery.map((photo,index) =>
+`<div class="gallery-thumb"
       style="background:${photo.colour || '#1F8A4C'};"
-      onclick="toast(
-'Plot: ' + photo.plot +
-' | ' +
-photo.category +
-' | GPS ±' +
-(photo.accuracy || '?') +
-'m'
-)"
+      onclick="showEvidence(p.gallery[${index}])">
 
       <span class="lbl">${photo.category}</span>
 
@@ -1226,6 +1240,49 @@ photo.category +
 ).join('') :
 
     `<div class="empty-state" style="grid-column:1/-1;"><div class="ic">📷</div>No evidence captured yet.</div>`;
+}
+function showEvidence(photo){
+
+  state.selectedPhoto = photo;
+
+  document.getElementById(
+    'evidence-details-body'
+  ).innerHTML = `
+
+    <div class="card">
+
+      <div class="label-eyebrow">
+        BUILDPROOF EVIDENCE
+      </div>
+
+      <p><strong>Project</strong><br>${photo.project}</p>
+
+      <p><strong>Plot</strong><br>${photo.plot}</p>
+
+      <p><strong>Section</strong><br>${photo.category}</p>
+
+      <p><strong>Date / Time</strong><br>${photo.timestamp}</p>
+
+      <p><strong>Latitude</strong><br>${photo.latitude}</p>
+
+      <p><strong>Longitude</strong><br>${photo.longitude}</p>
+
+      <p><strong>GPS Accuracy</strong><br>
+      ±${photo.accuracy || "?"}m
+      </p>
+
+      <p><strong>Altitude</strong><br>
+      ${photo.altitude || "Unavailable"}
+      </p>
+
+      <p><strong>Notes</strong><br>
+      ${photo.notes || "None"}
+      </p>
+
+    </div>
+  `;
+
+  go('evidencedetails');
 }
 function levelDot(level){ return {red:'dot-red',amber:'dot-amber',green:'dot-green',blue:'dot-green'}[level]||'dot-amber'; }
 function renderNotifications(){
