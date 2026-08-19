@@ -789,10 +789,6 @@
   <div class="screen-body" id="evidence-details-body">
   </div>
 </div>
-    </div>
-
-  </div>
-
   <div id="toast"></div>
 
   <button class="fab" onclick="openCamera(state.projectId||'oakview')" id="fabbtn">📷</button>
@@ -1244,7 +1240,7 @@ function renderGallery(){
 function showEvidence(plotId, photoIndex){
   const p = plots[plotId];
   const photo = p.gallery[photoIndex];
-
+console.log("PHOTO:", photo);
   state.selectedPhoto = photo;
 
   document.getElementById(
