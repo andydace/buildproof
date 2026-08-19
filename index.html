@@ -837,46 +837,26 @@ const PARTL_ITEMS = [
 function mkChecklist(statuses){ return PARTL_ITEMS.map((name,i)=>[name, statuses[i]]); }
 
 let plots = {
-  p17:{id:'p17',projectId:'doseley',number:'Plot 17',houseType:'Type B3',stage:'Roof insulation',status:'Needs Attention',score:68,last:'Yesterday, 15:18',
-    checklist:mkChecklist(['done','done','done','done','done','missing','missing','pending','pending','missing','notstarted','notstarted','notstarted']),
-    missing:['3a - Roof Joist or Rafter Level evidence required','3b - Roof Eaves and Gable Edges evidence required','5 - Airtightness of Junctions & Penetrations evidence required before report generation'],
-    timeline:[['Today, 08:42','Roof insulation evidence captured'],['Yesterday, 15:18','External wall evidence synced'],['Monday, 10:05','Floor insulation completed']],
-    gallery:[['Floor','#1F8A4C'],['DPM','#1F8A4C'],['External walls','#1F8A4C'],['Services','#1F8A4C']]},
-  p21:{id:'p21',projectId:'doseley',number:'Plot 21',houseType:'Type A2',stage:'Windows',status:'Pending Review',score:80,last:'Yesterday',
-    checklist:mkChecklist(['done','done','done','done','done','done','done','pending','pending','notstarted','notstarted','notstarted','done']),
-    missing:['4a - Window Position to Cavity Insulation photos pending review','4b - Door Position to Cavity Insulation photos pending review'],
-    timeline:[['Yesterday','Windows completed'],['Monday','Roof insulation completed']],
-    gallery:[['Roof','#1F8A4C'],['Floor','#1F8A4C']]},
-  p5:{id:'p5',projectId:'doseley',number:'Plot 5',houseType:'Type B3',stage:'Complete',status:'Report Ready',score:100,last:'Today, 09:10',
-    checklist:mkChecklist(['done','done','done','done','done','done','done','done','done','done','done','done','done']),
-    missing:[],
-    timeline:[['Today, 09:10','All evidence complete']],
-    gallery:[['1a','#1F8A4C'],['1b','#1F8A4C'],['1c','#1F8A4C'],['2a','#1F8A4C'],['2b','#1F8A4C'],['3a','#1F8A4C'],['3b','#1F8A4C'],['4a','#1F8A4C'],['4b','#1F8A4C'],['5','#1F8A4C'],['6a','#1F8A4C'],['6b','#1F8A4C'],['6c','#1F8A4C']]},
-  p8:{id:'p8',projectId:'doseley',number:'Plot 8',houseType:'Type A2',stage:'Heating',status:'Needs Attention',score:55,last:'2 days ago',
-    checklist:mkChecklist(['done','done','done','done','done','done','done','done','done','missing','missing','missing','pending']),
-    missing:['5 - Airtightness of Junctions & Penetrations evidence required','6a - Plant & Equipment Identification Labels evidence required','6b - Insulation of Primary Pipework evidence required'],
-    timeline:[['2 days ago','Windows completed']],
-    gallery:[['Windows','#1F8A4C']]},
-  p12:{id:'p12',projectId:'doseley',number:'Plot 12',houseType:'Type B3',stage:'Roof insulation',status:'In Progress',score:75,last:'Today, 09:32',
-    checklist:mkChecklist(['done','done','done','done','done','done','done','pending','pending','notstarted','notstarted','notstarted','done']),
-    missing:['4a - Window Position to Cavity Insulation photos pending review','5 - Airtightness of Junctions & Penetrations evidence required'],
-    timeline:[['Today, 09:32','Roof insulation evidence captured']],
-    gallery:[['Roof','#1F8A4C']]},
-  p22:{id:'p22',projectId:'doseley',number:'Plot 22',houseType:'Type A2',stage:'Complete',status:'Report Ready',score:100,last:'Today',
-    checklist:mkChecklist(['done','done','done','done','done','done','done','done','done','done','done','done','done']),
-    missing:[],timeline:[['Today','Report ready']],gallery:[['Roof','#1F8A4C']]},
-  g1:{id:'g1',projectId:'greenmeadows',number:'Plot 3',houseType:'Type C1',stage:'Foundations',status:'Not Started',score:12,last:'5 days ago',
-    checklist:mkChecklist(['notstarted','notstarted','notstarted','notstarted','notstarted','notstarted','notstarted','notstarted','notstarted','notstarted','notstarted','notstarted','notstarted']),
-    missing:['Site not yet started'],timeline:[['5 days ago','Plot created']],gallery:[]}
+ 
+
+   p1:{
+  id:'p1',
+  projectId:'doseley',
+  number:'Plot 1',
+  houseType:'New Plot',
+  stage:'Not Started',
+  status:'Not Started',
+  score:0,
+  last:'Just created',
+  checklist:[],
+  missing:[],
+  timeline:[],
+  gallery:[]
+}
+
 };
 
-let notifications = [
-  {id:'n1', level:'red', title:'Plot 17 · Evidence missing', body:'3a - Roof Joist or Rafter Level still required.', time:'09:15', read:false, action:()=>openPlot('p17')},
-  {id:'n2', level:'amber', title:'Plot 21 · Awaiting evidence', body:'Windows completed yesterday — capture 4a and 4b.', time:'Yesterday, 16:40', read:false, action:()=>openPlot('p21')},
-  {id:'n3', level:'green', title:'Plot 5 · Report ready', body:'All mandatory evidence is complete for Part L.', time:'Today, 09:10', read:false, action:()=>{go('reports');}},
-  {id:'n4', level:'blue', title:'Plot 12 · Evidence synced', body:'Roof insulation photo uploaded successfully.', time:'Today, 09:32', read:true, action:()=>openPlot('p12')},
-  {id:'n5', level:'amber', title:'Green Meadows · Needs attention', body:'5 items missing evidence across the project.', time:'Yesterday, 08:20', read:true, action:()=>openProject('greenmeadows')}
-];
+let notifications = [];
 function saveData() {
   console.log("SAVING", plots);
   localStorage.setItem(
@@ -892,8 +872,19 @@ function saveData() {
 
 function loadData() {
 
-  localStorage.clear();
+  const savedProjects =
+    localStorage.getItem("buildproofProjects");
 
+  const savedPlots =
+    localStorage.getItem("buildproofPlots");
+
+  if (savedProjects) {
+    projects = JSON.parse(savedProjects);
+  }
+
+  if (savedPlots) {
+    plots = JSON.parse(savedPlots);
+  }
 }
 
 
@@ -901,11 +892,11 @@ function loadData() {
 const state = {
   screen:'splash',
   history:[],
-  projectId:'oakview',
-  plotId:'p17',
+  projectId:'doseley',
+  plotId:'p1',
   photoCategory:null,
-  photoProject:'oakview',
-  photoPlot:'p17',
+  photoProject:'doseley',
+  photoPlot:'p1',
   photoNotes:'',
   photoLat:null,
   photoLng:null,
