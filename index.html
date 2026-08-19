@@ -1092,7 +1092,7 @@ function savePhoto(){
   state.photoAccuracy,
   notes:
     state.photoNotes,
-    capturedBy: "Andrew Dace",
+    
 
 
   timestamp:
@@ -1261,7 +1261,7 @@ function showEvidence(plotId, photoIndex){
     return;
   }
 
-alert(
+  alert(
 `BUILDPROOF EVIDENCE
 
 Project: ${photo.project}
@@ -1270,7 +1270,8 @@ Plot: ${photo.plot}
 
 Section: ${photo.category}
 
-Date: ${photo.timestamp}
+Captured By:
+${photo.capturedBy || "Andrew Dace"}
 
 Latitude:
 ${photo.latitude}
@@ -1281,12 +1282,9 @@ ${photo.longitude}
 GPS Accuracy:
 ±${photo.accuracy}m
 
-Altitude:
-${photo.altitude || "Unavailable"}
-
-Notes:
-${photo.notes || "None"}`
-);
+Date:
+${photo.timestamp}`
+  );
 
 }
 function levelDot(level){ return {red:'dot-red',amber:'dot-amber',green:'dot-green',blue:'dot-green'}[level]||'dot-amber'; }
