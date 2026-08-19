@@ -1232,7 +1232,7 @@ function renderGallery(){
   grid.innerHTML = p.gallery.length ? p.gallery.map((photo,index) =>
 `<div class="gallery-thumb"
       style="background:${photo.colour || '#1F8A4C'};"
-      onclick="showEvidence(p.gallery[${index}])">
+      onclick="showEvidence(state.plotId, ${index})"
 
       <span class="lbl">${photo.category}</span>
 
@@ -1241,7 +1241,9 @@ function renderGallery(){
 
     `<div class="empty-state" style="grid-column:1/-1;"><div class="ic">📷</div>No evidence captured yet.</div>`;
 }
-function showEvidence(photo){
+function showEvidence(plotId, photoIndex){
+  const p = plots[plotId];
+  const photo = p.gallery[photoIndex];
 
   state.selectedPhoto = photo;
 
