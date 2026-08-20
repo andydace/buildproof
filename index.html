@@ -858,6 +858,7 @@ let plots = {
 
 let notifications = [];
 function saveData() {
+  console.log("SAVEDATA RUNNING");
   console.log("SAVING", plots);
   localStorage.setItem(
     "buildproofProjects",
@@ -1081,6 +1082,8 @@ function savePhoto(){
 
 }); 
 
+saveData();
+
 }
 
     },
@@ -1242,7 +1245,7 @@ function showEvidence(plotId, photoIndex){
     return;
   }
 
-  alert(
+const openMap = confirm(
 `BUILDPROOF EVIDENCE
 
 Project: ${photo.project}
@@ -1264,8 +1267,19 @@ GPS Accuracy:
 ±${photo.accuracy}m
 
 Date:
-${photo.timestamp}`
-  );
+${photo.timestamp}
+
+Press OK to open Google Maps`
+);
+
+if (openMap) {
+
+  window.location.href =
+  `https://www.google.com/maps/search/?api=1&query=${photo.latitude},${photo.longitude}`;
+  
+
+}
+
 
 }
 function levelDot(level){ return {red:'dot-red',amber:'dot-amber',green:'dot-green',blue:'dot-green'}[level]||'dot-amber'; }
