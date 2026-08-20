@@ -494,12 +494,15 @@
       </div>
       <div class="screen-body">
         <div class="searchbar">🔍<input placeholder="Search projects, plots, clients..." oninput="filterProjects(this.value)"></div>
-        <div class="chip-row">
-          <div class="chip active" onclick="setChip(this,'projfilter')">Active</div>
-          <div class="chip" onclick="setChip(this,'projfilter')">Needs Attention</div>
-          <div class="chip" onclick="setChip(this,'projfilter')">Complete</div>
-          <div class="chip" onclick="setChip(this,'projfilter')">Archived</div>
-        </div>
+      <div class="chip-row">
+  <div class="chip active" onclick="setChip(this,'galfilter')">All</div>
+  <div class="chip" onclick="setChip(this,'galfilter')">Foundations</div>
+  <div class="chip" onclick="setChip(this,'galfilter')">Walls</div>
+  <div class="chip" onclick="setChip(this,'galfilter')">Roof</div>
+  <div class="chip" onclick="setChip(this,'galfilter')">Openings</div>
+  <div class="chip" onclick="setChip(this,'galfilter')">Airtightness</div>
+  <div class="chip" onclick="setChip(this,'galfilter')">Services</div>
+</div>
         <div class="card" style="display:flex;justify-content:space-around;text-align:center;">
           <div><div style="font-weight:800;color:var(--navy);font-size:18px;">4</div><div style="font-size:11px;color:var(--muted);">Projects</div></div>
           <div><div style="font-weight:800;color:var(--navy);font-size:18px;">63</div><div style="font-size:11px;color:var(--muted);">Plots active</div></div>
@@ -746,12 +749,31 @@
       <div class="screen-body">
         <div style="aspect-ratio:16/10;background:#0F2A3D;border-radius:14px;margin-bottom:18px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:13px;">Captured photo</div>
         <div class="category-grid" id="category-grid">
-          <div class="cat-chip" onclick="pickCategory(this,'Floor')">Floor</div>
-          <div class="cat-chip" onclick="pickCategory(this,'Roof')">Roof</div>
-          <div class="cat-chip" onclick="pickCategory(this,'Windows')">Windows</div>
-          <div class="cat-chip" onclick="pickCategory(this,'Heating')">Heating</div>
-          <div class="cat-chip" onclick="pickCategory(this,'Airtightness')">Airtightness</div>
-          <div class="cat-chip" onclick="pickCategory(this,'Services')">Services</div>
+         <div class="cat-chip" onclick="pickCategory(this,'1a - GF Perimeter Insulation Upstand')">1a - GF Perimeter Insulation Upstand</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'1b - GF External Door Thresholds')">1b - GF External Door Thresholds</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'1c - GF Below DPC')">1c - GF Below DPC</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'2a - Wall Below-Above DPC Continuity')">2a - Wall Below-Above DPC Continuity</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'2b - Wall Structural Penetrating Elements')">2b - Wall Structural Penetrating Elements</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'3a - Roof Joist or Rafter Level')">3a - Roof Joist or Rafter Level</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'3b - Roof Eaves and Gable Edges')">3b - Roof Eaves and Gable Edges</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'4a - Window Position to Cavity Insulation')">4a - Window Position to Cavity Insulation</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'4b - Door Position to Cavity Insulation')">4b - Door Position to Cavity Insulation</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'5 - Airtightness of Junctions & Penetrations')">5 - Airtightness of Junctions & Penetrations</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'6a - Plant & Equipment Identification Labels')">6a - Plant & Equipment Identification Labels</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'6b - Insulation of Primary Pipework')">6b - Insulation of Primary Pipework</div>
+
+<div class="cat-chip" onclick="pickCategory(this,'6c - Vent Duct Insulation')">6c - Vent Duct Insulation</div>
         </div>
         <button class="btn btn-primary" style="margin-top:22px;" onclick="go('notes')">Continue</button>
       </div>
@@ -780,7 +802,9 @@
         <p style="color:var(--muted);font-size:13.5px;" id="saved-sub">Roof · Plot 17 · Oak View</p>
         <div style="width:100%;display:flex;flex-direction:column;gap:10px;margin-top:16px;">
           <button class="btn btn-primary" onclick="openCamera(state.photoProject)">Take Another Photo</button>
-          <button class="btn btn-secondary" onclick="openPlot(state.photoPlot)">Back to Plot</button>
+          <button class="btn btn-secondary"onclick="openPlot(state.plotId)">
+            Back to Plot
+</button>
         </div>
       </div>
       <!-- EVIDENCE DETAILS -->
@@ -1103,6 +1127,7 @@ saveData();
 console.log("GPS REQUESTED");
 
   state.photoNotes = document.getElementById('notes-input').value;
+  console.log("PHOTO PLOT =", state.photoPlot);
   const plotLbl = state.photoPlot ? plots[state.photoPlot].number : 'Unassigned plot';
   document.getElementById('saved-sub').textContent = (state.photoCategory||'Photo') + ' · ' + plotLbl + ' · ' + projects[state.photoProject].name;
   document.getElementById('notes-input').value='';
