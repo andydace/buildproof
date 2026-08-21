@@ -611,7 +611,22 @@
         <div class="gallery-grid" id="gallery-grid"></div>
       </div>
     </div>
+<!-- EVIDENCE VIEWER -->
+<div class="screen" id="screen-evidenceviewer">
 
+  <div class="topnav">
+    <button class="backbtn" onclick="back()">←</button>
+
+    <div class="topnav-title">
+      <h1>Evidence</h1>
+    </div>
+  </div>
+
+  <div class="screen-body" id="evidence-viewer-body">
+
+  </div>
+
+</div>
     <!-- REPORTS -->
     <div class="screen" id="screen-reports">
       <div class="topnav">
@@ -737,6 +752,15 @@
         </div>
         <span>Camera preview</span>
       </div>
+      <input
+  <input
+  type="file"
+  id="photo-input"
+  accept="image/*"
+  capture="environment"
+  style="display:none;"
+  onchange="photoSelected(event)"
+>
       <div class="cam-controls"><button class="shutter" onclick="capturePhoto()"></button></div>
     </div>
 
@@ -1038,13 +1062,54 @@ function openCameraFor(projectId, plotId, category){
   go('camera');
 }
 function capturePhoto(){
-  document.getElementById('cat-sub').textContent = (state.photoPlot? plots[state.photoPlot].number+' · ' : '') + projects[state.photoProject].name;
-  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('selected'));
-  if(state.photoCategory){
-    document.querySelectorAll('.cat-chip').forEach(c=>{ if(c.textContent.trim()===state.photoCategory) c.classList.add('selected'); });
-  }
-  go('category');
+
+  document.getElementById('photo-input').click();
+
 }
+function photoSelected(event){
+
+  const file = event.target.files[0];
+
+  if(!file){
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+
+    state.photoImage = e.target.result;
+
+    document.getElementById('cat-sub').textContent =
+      (state.photoPlot
+        ? plots[state.photoPlot].number + ' • '
+        : '') +
+      projects[state.photoProject].name;
+
+    document.querySelectorAll('.cat-chip')
+      .forEach(c => c.classList.remove('selected'));
+
+    if(state.photoCategory){
+
+      document.querySelectorAll('.cat-chip')
+        .forEach(c => {
+
+          if(c.textContent.trim() === state.photoCategory){
+            c.classList.add('selected');
+          }
+
+        });
+
+    }
+
+    go('category');
+
+  };
+
+  reader.readAsDataURL(file);
+
+}
+
 function pickCategory(el, name){
   document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected'); state.photoCategory = name;
@@ -1212,10 +1277,10 @@ function renderPlotList(filterText, statusFilter){
       <h2 class="section-heading" style="margin:0;">Evidence Gallery</h2>
       <button class="link" onclick="go('evidencegallery')">View All</button>
     </div>
-    <div class="gallery-grid">${p.gallery.slice(0,6).map(photo =>
+    <div class="gallery-grid">${p.gallery.slice(0,6).map((photo,index) =>
   `<div class="gallery-thumb"
       style="background:${photo.colour || '#1F8A4C'};"
-      onclick="go('evidencegallery')">
+onclick="showEvidence(state.plotId, ${index})">
 
       <span class="lbl">${photo.category}</span>
 
@@ -1269,7 +1334,9 @@ function showEvidence(plotId, photoIndex){
     );
     return;
   }
-
+  openEvidenceViewer(photo);
+return;
+/*
 const openMap = confirm(
 `BUILDPROOF EVIDENCE
 
@@ -1304,8 +1371,103 @@ if (openMap) {
   
 
 }
+*/
+
+}
+function openEvidenceViewer(photo){
+
+  document.getElementById(
+    'evidence-viewer-body'
+  ).innerHTML = `
+
+    <div class="card">
+
+      <img
+  src="${photo.image || ''}"
+  <div style="
+  height:220px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#1F8A4C,#2F6FAF);
+  color:white;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  margin-bottom:16px;
+">
+
+  <div style="font-size:48px;">📸</div>
+
+  <div style="font-weight:700;font-size:18px;">
+    Evidence Captured
+  </div>
+
+  <div style="margin-top:8px;font-size:14px;">
+    ${photo.category}
+  </div>
+
+</div>
+
+     <h2 style="
+  margin-bottom:8px;
+  color:var(--navy);
+">
+  ${photo.category}
+</h2>
+
+<div style="
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:18px;
+">
+  ${photo.project} • ${photo.plot}
+</div>
+
+<div style="
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+">
+
+  <div>
+    📅 ${photo.timestamp}
+  </div>
+
+  <div>
+    👤 ${photo.capturedBy || "Andrew Dace"}
+  </div>
+
+  <div>
+    📍 GPS Verified
+  </div>
+
+  <div>
+    Accuracy ±${photo.accuracy}m
+  </div>
+
+  <div>
+  Latitude: ${photo.latitude}
+</div>
+
+<div>
+  Longitude: ${photo.longitude}
+</div>
+
+<button
+  class="btn btn-primary"
+  onclick="window.location.href='https://www.google.com/maps/search/?api=1&query=${photo.latitude},${photo.longitude}'">
+
+  Open Location
+
+</button>
 
 
+
+    </div>
+  `;
+
+  go('evidenceviewer');
 }
 function levelDot(level){ return {red:'dot-red',amber:'dot-amber',green:'dot-green',blue:'dot-green'}[level]||'dot-amber'; }
 function renderNotifications(){
