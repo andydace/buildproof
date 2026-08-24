@@ -342,6 +342,9 @@
         <div style="text-align:center;margin-bottom:30px;">
           <div class="logo-mark" style="margin:0 auto 12px;">🏗️</div>
           <div class="brand-name">BUILDPROOF</div>
+          <div style="color:red;font-weight:bold;">
+FILE CHECK 24AUG
+</div>
           <div style="color:var(--muted);font-size:14px;margin-top:6px;">Welcome back</div>
         </div>
         <div class="field"><label>Email address</label><input type="email" value="andrew@acmehomes.co.uk"></div>
@@ -896,7 +899,7 @@ let plots = {
   status:'Not Started',
   score:0,
   last:'Just created',
-  checklist:[],
+  checklist: mkChecklist('missing'),
   missing:[],
   timeline:[],
   gallery:[]
@@ -1292,7 +1295,7 @@ function checklistRow(name, st, plotId){
   const iconMap = {done:['✓','done'], missing:['!','missing'], pending:['●','pending'], notstarted:['○','notstarted']};
   const labelMap = {done:'Complete', missing:'Missing', pending:'Pending Review', notstarted:'Not Started'};
   const [icon, cls] = iconMap[st];
-  const action = st==='missing' ? `openCameraFor('${plots[plotId].projectId}','${plotId}','${name.split(' - ')[0]}')` : `toast('${labelMap[st]}')`;
+  const action = st==='missing' ? `openCameraFor('${plots[plotId].projectId}','${plotId}','${name}')` : `toast('${labelMap[st]}')`;
   return `<div class="checklist-row" onclick="${action}">
     <div class="cl-icon ${cls}">${icon}</div>
     <div class="cl-name">${name}</div>
