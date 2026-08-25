@@ -1354,10 +1354,31 @@ function checklistRow(name, st, plotId){
   return `<div class="checklist-row" onclick="${action}">
     <div class="cl-icon ${cls}">${icon}</div>
     <div class="cl-name">${name}</div>
+   
    <div class="cl-status"
      style="color:${colourMap[st]};font-weight:700;">
+
   ${labelMap[st]}
-</div>
+
+  ${st === 'pending'
+    ? `<button
+         style="
+           margin-left:10px;
+           padding:4px 8px;
+           font-size:12px;
+           border:none;
+           border-radius:6px;
+           background:#1F8A4C;
+           color:white;
+           cursor:pointer;
+         "
+         onclick="event.stopPropagation();approveChecklistItem('${plotId}','${name}')">
+         Approve
+       </button>`
+    : ''
+  }
+
+</div> 
   </div>`;
 }
 function renderChecklist(){
@@ -1546,6 +1567,24 @@ function openEvidenceViewer(photo){
   `;
 
   go('evidenceviewer');
+}
+
+function approveChecklistItem(plotId, category){
+
+  const item = plots[plotId].checklist.find(
+    c => c[0] === category
+  );
+
+  if(item){
+
+    item[1] = 'done';
+
+  }
+
+  saveData();
+
+  renderChecklist();
+
 }
 
 function approveEvidence(category){
