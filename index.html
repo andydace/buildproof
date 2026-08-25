@@ -1517,7 +1517,14 @@ function openEvidenceViewer(photo){
   Open Location
 
 </button>
+<button
+  class="btn btn-secondary"
+  style="margin-top:10px;"
+  onclick="deleteEvidence('${photo.category}')">
 
+  Delete Evidence
+
+</button>
 
 
     </div>
@@ -1525,6 +1532,49 @@ function openEvidenceViewer(photo){
 
   go('evidenceviewer');
 }
+
+function deleteEvidence(category){
+
+  if(!confirm(
+    `Delete evidence for:\n\n${category}?`
+  )){
+    return;
+  }
+
+  const plotId = state.plotId;
+
+  const gallery = plots[plotId].gallery;
+
+  const index = gallery.findIndex(
+    p => p.category === category
+  );
+
+  if(index === -1){
+    return;
+  }
+
+  gallery.splice(index,1);
+
+  const evidenceStillExists = gallery.some(
+    p => p.category === category
+  );
+
+  const item = plots[plotId].checklist.find(
+    c => c[0] === category
+  );
+
+  if(item && !evidenceStillExists){
+
+    item[1] = 'missing';
+
+  }
+
+  saveData();
+
+  openPlot(plotId);
+
+}
+
 function levelDot(level){ return {red:'dot-red',amber:'dot-amber',green:'dot-green',blue:'dot-green'}[level]||'dot-amber'; }
 function renderNotifications(){
   const body = document.getElementById('notifications-body');
