@@ -1158,7 +1158,7 @@ function savePhoto(){
 
       image: state.photoImage,
 
-      image: state.photoImage,
+      testImage: state.photoImage ? "YES" : "NO",
 
     capturedBy: "Andrew Dace",
 
@@ -1491,7 +1491,10 @@ const progress =
         background-position:center;
       "
       onclick="showEvidence(state.plotId, ${index})">
-      <span class="lbl">${photo.category}</span>
+      <span class="lbl">
+${photo.category}
+${photo.testImage || ""}
+</span>
     </div>`
 
 ).join('') :
