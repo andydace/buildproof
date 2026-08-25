@@ -1279,6 +1279,24 @@ function renderPlotList(filterText, statusFilter){
 
     function renderPlotOverview(){
   const p = plots[state.plotId];
+
+  const approved =
+  p.checklist.filter(i => i[1] === 'done').length;
+
+const pending =
+  p.checklist.filter(i => i[1] === 'pending').length;
+
+const missing =
+  p.checklist.filter(i => i[1] === 'missing').length;
+
+const total =
+  p.checklist.length;
+
+const progress =
+  total
+    ? Math.round((approved / total) * 100)
+    : 0;
+
   document.getElementById('po-number').textContent = p.number;
   document.getElementById('po-project').textContent = projects[p.projectId].name;
   const m = statusMeta(p.status);
@@ -1308,7 +1326,39 @@ function renderPlotList(filterText, statusFilter){
       <button class="qa-btn" onclick="${p.missing.length? `toast('Complete missing evidence first')` : `go('reports')`}"><span class="ic">📄</span><span class="txt">Generate Report</span></button>
     </div>
     <h2 class="section-heading">Part L Checklist</h2>
-    <div class="card" style="padding:4px 16px;">
+
+<div class="card" style="margin-bottom:12px;">
+
+  <div style="
+    font-weight:700;
+    margin-bottom:10px;
+  ">
+    Compliance Progress
+  </div>
+
+  <div style="color:#1F8A4C;font-weight:700;">
+    Approved: ${approved}
+  </div>
+
+  <div style="color:#F59E0B;font-weight:700;">
+    Pending Review: ${pending}
+  </div>
+
+  <div style="color:#D32F2F;font-weight:700;">
+    Missing: ${missing}
+  </div>
+
+  <div style="
+    margin-top:8px;
+    font-weight:700;
+  ">
+    Progress: ${progress}%
+  </div>
+
+</div>
+
+<div class="card" style="padding:4px 16px;">
+``
       ${p.checklist.map(([name,st])=>checklistRow(name,st,p.id)).join('')}
     </div>
     <h2 class="section-heading">Recent Timeline</h2>
@@ -1385,13 +1435,58 @@ const labelMap = {
 function renderChecklist(){
   const p = plots[state.plotId];
   document.getElementById('cl-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
-  document.getElementById('checklist-body').innerHTML = `
-    <div class="card" style="padding:4px 16px;">${p.checklist.map(([name,st])=>checklistRow(name,st,p.id)).join('')}</div>
+  document.getElementById('checklist-body').innerHTML =
+  `
+  <div class="card" style="margin-bottom:12px;">
+
+    <h3 style="margin-bottom:10px;">
+      Compliance Progress
+    </h3>
+
+    <div style="color:#1F8A4C;font-weight:700;">
+      ✅ Approved: ${approved}
+    </div>
+
+    <div style="color:#F59E0B;font-weight:700;">
+      ⏳ Pending Review: ${pending}
+    </div>
+
+    <div style="color:#D32F2F;font-weight:700;">
+      ✕ Missing: ${missing}
+    </div>
+
+    <div style="
+      margin-top:10px;
+      font-weight:700;
+    ">
+      Progress: ${progress}%
+    </div>
+
+  </div>
+
+  <div class="card" style="padding:4px 16px;">
+  
+      ${p.checklist.map(([name,st])=>checklistRow(name,st,p.id)).join('')}</div>
     <p style="color:var(--muted);font-size:12.5px;text-align:center;margin-top:10px;">Tap a missing or pending item to capture evidence.</p>
   `;
 }
 function renderGallery(){
-  const p = plots[state.plotId] || plots.p17;
+  const p = plots[state.plotId];
+
+const approved =
+  p.checklist.filter(i => i[1] === 'done').length;
+
+const pending =
+  p.checklist.filter(i => i[1] === 'pending').length;
+
+const missing =
+  p.checklist.filter(i => i[1] === 'missing').length;
+
+const total = p.checklist.length;
+
+const progress =
+  Math.round((approved / total) * 100);
+
   document.getElementById('eg-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
   const grid = document.getElementById('gallery-grid');
   grid.innerHTML = p.gallery.length ? p.gallery.map((photo,index) =>
