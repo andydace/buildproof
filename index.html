@@ -1337,7 +1337,12 @@ function checklistRow(name, st, plotId){
   pending:['⏳','pending'],
   notstarted:['○','notstarted']
 };
-  const labelMap = {done:'Complete', missing:'Missing', pending:'Pending Review', notstarted:'Not Started'};
+  const labelMap = {
+  done:'Approved',
+  missing:'Missing',
+  pending:'Pending Review',
+  notstarted:'Not Started'
+};
   const colourMap = {
   done:'#1F8A4C',
   missing:'#D32F2F',
@@ -1517,6 +1522,16 @@ function openEvidenceViewer(photo){
   Open Location
 
 </button>
+
+<button
+  class="btn btn-primary"
+  style="margin-top:10px;"
+  onclick="approveEvidence('${photo.category}')">
+
+  Approve Evidence
+
+</button>
+
 <button
   class="btn btn-secondary"
   style="margin-top:10px;"
@@ -1532,6 +1547,27 @@ function openEvidenceViewer(photo){
 
   go('evidenceviewer');
 }
+
+function approveEvidence(category){
+
+  const plotId = state.plotId;
+
+  const item = plots[plotId].checklist.find(
+    c => c[0] === category
+  );
+
+  if(item){
+
+    item[1] = 'done';
+
+  }
+
+  saveData();
+
+  openPlot(plotId);
+
+}
+
 
 function deleteEvidence(category){
 
