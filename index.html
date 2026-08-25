@@ -1087,7 +1087,10 @@ function photoSelected(event){
 
   reader.onload = function(e){
 
-    state.photoImage = e.target.result;
+    state.photoImage = e.target.result.replace(
+      "data:application/octet-stream",
+      "data:image/png"
+    );
 
     document.getElementById('cat-sub').textContent =
       (state.photoPlot
@@ -1485,17 +1488,19 @@ const progress =
   grid.innerHTML = p.gallery.length ? p.gallery.map((photo,index) =>
 
 `<div class="gallery-thumb"
+    onclick="showEvidence(state.plotId, ${index})">
+
+    <img
+      src="${photo.image}"
       style="
-        background-image:url('${photo.image}');
-        background-size:cover;
-        background-position:center;
-      "
-      onclick="showEvidence(state.plotId, ${index})">
-      <span class="lbl">
-${photo.category}
-${photo.testImage || ""}
-</span>
-    </div>`
+        width:100%;
+        height:100%;
+        object-fit:cover;
+      ">
+
+    <span class="lbl">${photo.category}</span>
+
+</div>`
 
 ).join('') :
 
