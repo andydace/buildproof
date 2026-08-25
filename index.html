@@ -1337,12 +1337,13 @@ function checklistRow(name, st, plotId){
   pending:['⏳','pending'],
   notstarted:['○','notstarted']
 };
-  const labelMap = {
-  done:'Approved',
-  missing:'Missing',
-  pending:'Pending Review',
-  notstarted:'Not Started'
+const labelMap = {
+  done:'✅ Approved',
+  missing:'❌ Missing',
+  pending:'⏳ Pending Review',
+  notstarted:'⚪ Not Started'
 };
+
   const colourMap = {
   done:'#1F8A4C',
   missing:'#D32F2F',
