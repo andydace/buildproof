@@ -1325,7 +1325,12 @@ const progress =
       <button class="qa-btn" onclick="go('evidencegallery')"><span class="ic">🖼️</span><span class="txt">View Evidence</span></button>
       <button class="qa-btn" onclick="${p.missing.length? `toast('Complete missing evidence first')` : `go('reports')`}"><span class="ic">📄</span><span class="txt">Generate Report</span></button>
     </div>
-    
+    <h2 class="section-heading">Part L Checklist</h2>
+
+
+
+<div class="card" style="padding:4px 16px;">
+``
       ${p.checklist.map(([name,st])=>checklistRow(name,st,p.id)).join('')}
     </div>
     <h2 class="section-heading">Recent Timeline</h2>
