@@ -1497,13 +1497,17 @@ const progress =
   document.getElementById('eg-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
   const grid = document.getElementById('gallery-grid');
   grid.innerHTML = p.gallery.length ? p.gallery.map((photo,index) =>
+
 `<div class="gallery-thumb"
-      style="background:${photo.colour || '#1F8A4C'};"
+      style="
+        background-image:url('${photo.image}');
+        background-size:cover;
+        background-position:center;
+      "
       onclick="showEvidence(state.plotId, ${index})">
-
       <span class="lbl">${photo.category}</span>
-
     </div>`
+
 ).join('') :
 
     `<div class="empty-state" style="grid-column:1/-1;"><div class="ic">📷</div>No evidence captured yet.</div>`;
