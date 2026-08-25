@@ -1333,12 +1333,21 @@ onclick="showEvidence(state.plotId, ${index})">
 function checklistRow(name, st, plotId){
   const iconMap = {done:['✓','done'], missing:['!','missing'], pending:['●','pending'], notstarted:['○','notstarted']};
   const labelMap = {done:'Complete', missing:'Missing', pending:'Pending Review', notstarted:'Not Started'};
+  const colourMap = {
+  done:'#1F8A4C',
+  missing:'#D32F2F',
+  pending:'#F59E0B',
+  notstarted:'#6B7280'
+};
   const [icon, cls] = iconMap[st];
   const action = st==='missing' ? `openCameraFor('${plots[plotId].projectId}','${plotId}','${name}')` : `toast('${labelMap[st]}')`;
   return `<div class="checklist-row" onclick="${action}">
     <div class="cl-icon ${cls}">${icon}</div>
     <div class="cl-name">${name}</div>
-    <div class="cl-status">${labelMap[st]}</div>
+   <div class="cl-status"
+     style="color:${colourMap[st]};font-weight:700;">
+  ${labelMap[st]}
+</div>
   </div>`;
 }
 function renderChecklist(){
