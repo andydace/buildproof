@@ -1280,6 +1280,15 @@ function renderPlotList(filterText, statusFilter){
     function renderPlotOverview(){
   const p = plots[state.plotId];
 
+  if(!p.checklist || p.checklist.length === 0){
+
+  p.checklist =
+    PARTL_ITEMS.map(name => [name,'missing']);
+
+  saveData();
+
+}
+
   const approved =
   p.checklist.filter(i => i[1] === 'done').length;
 
