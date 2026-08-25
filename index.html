@@ -885,7 +885,14 @@ const PARTL_ITEMS = [
   '6b - Insulation of Primary Pipework',
   '6c - Vent Duct Insulation'
 ];
-function mkChecklist(statuses){ return PARTL_ITEMS.map((name,i)=>[name, statuses[i]]); }
+function mkChecklist(status){
+
+  return PARTL_ITEMS.map(name => [
+    name,
+    status
+  ]);
+
+}
 
 let plots = {
  
@@ -1174,7 +1181,30 @@ function savePhoto(){
 
 }); 
 
-saveData();
+
+
+
+const item = plots[state.photoPlot].checklist.find(
+  c => c[0] === state.photoCategory
+);
+
+
+if(item){
+
+  item[1] = 'pending';
+
+
+
+}
+``
+
+function saveData(){
+
+
+  console.log("SAVING", plots);
+
+
+}
 
 }
 
