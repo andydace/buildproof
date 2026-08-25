@@ -1331,7 +1331,12 @@ onclick="showEvidence(state.plotId, ${index})">
   `;
 }
 function checklistRow(name, st, plotId){
-  const iconMap = {done:['✓','done'], missing:['!','missing'], pending:['●','pending'], notstarted:['○','notstarted']};
+  const iconMap = {
+  done:['✓','done'],
+  missing:['✕','missing'],
+  pending:['⏳','pending'],
+  notstarted:['○','notstarted']
+};
   const labelMap = {done:'Complete', missing:'Missing', pending:'Pending Review', notstarted:'Not Started'};
   const colourMap = {
   done:'#1F8A4C',
