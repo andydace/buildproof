@@ -1087,10 +1087,42 @@ function photoSelected(event){
 
   reader.onload = function(e){
 
-    state.photoImage = e.target.result.replace(
-      "data:application/octet-stream",
-      "data:image/png"
+    const img = new Image();
+
+img.onload = function(){
+
+  const canvas = document.createElement("canvas");
+
+  const maxWidth = 800;
+
+  const scale =
+    maxWidth / img.width;
+
+  canvas.width = maxWidth;
+  canvas.height =
+    img.height * scale;
+
+  const ctx =
+    canvas.getContext("2d");
+
+  ctx.drawImage(
+    img,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  state.photoImage =
+    canvas.toDataURL(
+      "image/jpeg",
+      0.7
     );
+
+};
+
+img.src = e.target.result;
+   
 
     document.getElementById('cat-sub').textContent =
       (state.photoPlot
@@ -1147,6 +1179,11 @@ function savePhoto(){
   state.photoLng
 );
    if(state.photoPlot && plots[state.photoPlot]){
+
+    console.log(
+  "ADDING PHOTO TO GALLERY",
+  state.photoImage
+);
 
  plots[state.photoPlot].gallery.unshift({
 
@@ -1430,6 +1467,21 @@ const labelMap = {
 }
 function renderChecklist(){
   const p = plots[state.plotId];
+
+const approved =
+  p.checklist.filter(i => i[1] === 'done').length;
+
+const pending =
+  p.checklist.filter(i => i[1] === 'pending').length;
+
+const missing =
+  p.checklist.filter(i => i[1] === 'missing').length;
+
+const progress =
+  p.checklist.length
+    ? Math.round((approved / p.checklist.length) * 100)
+    : 0;
+
   document.getElementById('cl-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
   document.getElementById('checklist-body').innerHTML =
   `
@@ -1677,6 +1729,8 @@ function approveChecklistItem(plotId, category){
 
     item[1] = 'done';
 
+    updatePlotScore(plotId);
+
   }
 
   saveData();
@@ -1739,6 +1793,8 @@ function deleteEvidence(category){
   if(item && !evidenceStillExists){
 
     item[1] = 'missing';
+
+    updatePlotScore(plotId);
 
   }
 
@@ -1962,6 +2018,21 @@ if (!newStatus) return;
   toast("Plot updated");
 
   renderPlotOverview();
+}
+
+function updatePlotScore(plotId){
+
+  const plot = plots[plotId];
+
+  const approved =
+    plot.checklist.filter(i => i[1] === 'done').length;
+
+  plot.score =
+    Math.round(
+      (approved / plot.checklist.length) * 100
+    );
+
+  saveData();
 }
 
 /*-------------- TOAST ---------------- */
