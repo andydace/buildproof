@@ -985,8 +985,26 @@ function go(screen, push=true){
   if(el) el.scrollTop = 0;
 }
 function back(){
+
+  if(state.screen === 'plotoverview'){
+    go('projectdetails', false);
+    return;
+  }
+
+ if(state.screen === 'projectdetails'){
+    go('dashboard');
+    return;
+}
+
   const prev = state.history.pop();
-  if(prev) go(prev, false); else go('dashboard', false);
+
+  if(prev){
+    go(prev, false);
+  }
+  else{
+    go('dashboard', false);
+  }
+
 }
 function updateBottomNav(screen){
   const map = {dashboard:'dashboard', projects:'projects', projectdetails:'projects', plotoverview:'projects', reports:'reports', settings:'settings', notifications:'settings', userprofile:'settings', camera:'camera', category:'camera', notes:'camera', photoreview:'camera'};
@@ -1346,11 +1364,7 @@ const progress =
       <div style="font-size:12.5px;color:var(--muted);margin-top:4px;">${p.houseType} · ${p.stage}</div>
       <div style="font-size:12px;color:var(--muted);margin-top:6px;">Last activity: ${p.last}</div>
     </div>
-    <div class="card">
-      <div class="label-eyebrow">EVIDENCE SCORE</div>
-      <div class="row" style="align-items:flex-end;"><div style="font-size:32px;font-weight:800;color:var(--navy);">${p.score}%</div></div>
-      <div class="progress-track"><div class="progress-fill ${p.score>=90?'green':p.score>=70?'':p.score>=40?'amber':'red'}" style="width:${p.score}%;"></div></div>
-    </div>
+    
    
 
  
@@ -1358,6 +1372,10 @@ const progress =
       <div class="label-eyebrow" style="color:var(--red);">MISSING EVIDENCE</div>
       ${p.missing.map(m=>`<div style="font-size:13.5px;font-weight:600;padding:6px 0;">⚠️ ${m}</div>`).join('')}
     </div>` : ''}<div class="quick-actions">
+      <button class="qa-btn" onclick="go('dashboard')">
+  <span class="ic">🏠</span>
+  <span class="txt">Dashboard</span>
+</button>
       <button class="qa-btn" onclick="editPlot()"><span class="ic">✏️</span><span class="txt">Edit Plot</span></button>
       <button class="qa-btn" onclick="openCameraFor('${p.projectId}','${p.id}')"><span class="ic">📷</span><span class="txt">Take Photo</span></button>
       <button class="qa-btn" onclick="openChecklist('${p.id}')"><span class="ic">✅</span><span class="txt">Checklist</span></button>
@@ -2031,6 +2049,22 @@ function updatePlotScore(plotId){
     Math.round(
       (approved / plot.checklist.length) * 100
     );
+
+    if(plot.score === 0){
+
+  plot.status = "Not Started";
+
+}
+else if(plot.score < 100){
+
+  plot.status = "In Progress";
+
+}
+else{
+
+  plot.status = "Complete";
+
+}
 
   saveData();
 }
