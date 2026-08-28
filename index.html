@@ -422,14 +422,71 @@
           <button class="qa-btn" onclick="go('search')"><span class="ic">🔍</span><span class="txt">Search</span></button>
         </div>
 
-        <div class="card tap" onclick="openProject('oakview')">
-          <div class="label-eyebrow">PROJECT PROGRESS</div>
-          <div class="row"><span style="font-weight:700;color:var(--navy);">Oak View</span><span style="font-weight:800;color:var(--navy);">76%</span></div>
-          <div class="progress-track"><div class="progress-fill" style="width:76%;"></div></div>
-          <div class="row" style="margin-top:10px;font-size:12.5px;color:var(--muted);">
-            <span>63 plots</span><span>48 complete</span><span>11 in progress</span><span>4 not started</span>
-          </div>
-        </div>
+       <div class="card tap" onclick="openProject('doseley')">
+
+  <div class="label-eyebrow">SITE SUMMARY</div>
+
+  <div class="row">
+    <span
+  id="dash-project-name"
+  style="
+    font-weight:800;
+    color:var(--navy);
+    font-size:16px;
+  "
+>
+  Project
+</span>
+
+    <span
+      id="dash-project-progress"
+      style="
+        font-weight:800;
+        color:var(--navy);
+        font-size:20px;
+      "
+    >
+      0%
+    </span>
+  </div>
+
+  <div class="progress-track" style="margin-top:12px;">
+    <div
+      id="dash-project-progress-bar"
+      class="progress-fill"
+      style="width:0%;"
+    ></div>
+  </div>
+
+  <div
+    style="
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      font-size:13px;
+    "
+  >
+
+    <div id="dash-plots-active">
+      🏠 Plots: 0
+    </div>
+
+    <div id="dash-complete">
+      ✅ Complete: 0
+    </div>
+
+    <div id="dash-inprogress">
+      🟡 In Progress: 0
+    </div>
+
+    <div id="dash-notstarted">
+      ⚪ Not Started: 0
+    </div>
+
+  </div>
+
+</div>
 
         <h2 class="section-heading">Recent Activity</h2>
         <div class="card" style="padding:4px 16px;">
@@ -507,7 +564,12 @@
 </div>
         <div class="card" style="display:flex;justify-content:space-around;text-align:center;">
           <div><div style="font-weight:800;color:var(--navy);font-size:18px;">4</div><div style="font-size:11px;color:var(--muted);">Projects</div></div>
-          <div><div style="font-weight:800;color:var(--navy);font-size:18px;">63</div><div style="font-size:11px;color:var(--muted);">Plots active</div></div>
+          <div
+  id="project-plots-count"
+  style="font-weight:800;color:var(--navy);font-size:16px;">
+  0
+</div>
+<div style="font-size:11px;color:var(--muted);">Plots active</div></div>
           <div><div style="font-weight:800;color:var(--red);font-size:18px;">8</div><div style="font-size:11px;color:var(--muted);">Missing evidence</div></div>
           <div><div style="font-weight:800;color:var(--green);font-size:18px;">3</div><div style="font-size:11px;color:var(--muted);">Reports ready</div></div>
         </div>
@@ -557,10 +619,40 @@
         </div>
 
         <div class="card" style="display:flex;justify-content:space-around;text-align:center;">
-          <div><div style="font-weight:800;color:var(--navy);font-size:16px;">76%</div><div style="font-size:10.5px;color:var(--muted);">Progress</div></div>
-          <div><div style="font-weight:800;color:var(--navy);font-size:16px;">63</div><div style="font-size:10.5px;color:var(--muted);">Plots</div></div>
-          <div><div style="font-weight:800;color:var(--red);font-size:16px;">8</div><div style="font-size:10.5px;color:var(--muted);">Missing</div></div>
-          <div><div style="font-weight:800;color:var(--green);font-size:16px;">3</div><div style="font-size:10.5px;color:var(--muted);">Reports</div></div>
+          <div
+  id="project-progress-score"
+  style="font-weight:800;color:var(--navy);font-size:16px;">0%</div><div style="font-size:10.5px;color:var(--muted);">Progress</div></div>
+          <div><div
+  id="project-plots-count"
+  style="font-weight:800;color:var(--navy);font-size:16px;">
+  0
+</div><div style="font-size:10.5px;color:var(--muted);">Plots</div></div>
+          <div><div
+  id="project-missing-count"
+  style="font-weight:800;color:var(--red);font-size:16px;">
+  0
+</div>
+<div style="font-size:10.5px;color:var(--muted);">Missing</div></div>
+          <div><div
+  id="project-approved-count"
+  style="font-weight:800;color:var(--green);font-size:16px;">
+  0
+</div>
+<div style="font-size:10.5px;color:var(--muted);">
+  Approved
+</div>
+
+<div
+  id="project-pending-count"
+  style="font-weight:800;color:#F59E0B;font-size:16px;">
+  0
+</div>
+
+<div style="font-size:10.5px;color:var(--muted);">
+  Pending
+</div>
+
+</div>
         </div>
 
         <h2 class="section-heading">Plots</h2>
@@ -973,6 +1065,8 @@ function go(screen, push=true){
   updateBottomNav(screen);
   updateFab(screen);
   if(screen==='projects') renderProjects();
+  if(screen==='dashboard')
+  updateDashboardStats();
   if(screen==='projectdetails') renderPlotList();
   if(screen==='checklist') renderChecklist();
   if(screen==='evidencegallery') renderGallery();
@@ -1022,6 +1116,20 @@ function openProject(id){
 
   state.projectId = id;
 
+  const projectPlots =
+  Object.values(plots)
+    .filter(p => p.projectId === id);
+
+const progress =
+  projectPlots.length
+    ? Math.round(
+        projectPlots.reduce(
+          (total, plot) => total + plot.score,
+          0
+        ) / projectPlots.length
+      )
+    : 0;
+
   document.getElementById('pd-name').textContent =
     projects[id].name;
 
@@ -1034,6 +1142,16 @@ document.getElementById('pd-sitemanager').textContent =
   projects[id].siteManager || "Not set";
 
   console.log(projects[id]);
+
+// document.getElementById(
+//   'project-progress-score'
+// ).textContent =
+//   progress + "%";
+
+ // document.getElementById(
+ // 'project-plots-count'
+//).textContent =
+ // projectPlots.length;
 
   go('projectdetails');
 }
@@ -1309,6 +1427,95 @@ function statusMeta(s){
 }
 function renderPlotList(filterText, statusFilter){
   const list = Object.values(plots).filter(p=>p.projectId===state.projectId);
+  const progress =
+  list.length
+    ? Math.round(
+        list.reduce(
+          (total, plot) => total + plot.score,
+          0
+        ) / list.length
+      )
+    : 0;
+    const progressEl =
+  document.getElementById(
+    'project-progress-score'
+  );
+
+if(progressEl){
+  progressEl.textContent =
+    progress + "%";
+}
+
+const plotsEl =
+  document.getElementById(
+    'project-plots-count'
+  );
+
+if(plotsEl){
+  plotsEl.textContent =
+    list.length;
+}
+const missingCount =
+  list.reduce((total, plot) => {
+
+    return total +
+      plot.checklist.filter(
+        item => item[1] === 'missing'
+      ).length;
+
+  }, 0);
+
+const missingEl =
+  document.getElementById(
+    'project-missing-count'
+  );
+
+if(missingEl){
+  missingEl.textContent =
+    missingCount;
+
+   const approvedCount =
+  list.reduce((total, plot) => {
+
+    return total +
+      plot.checklist.filter(
+        item => item[1] === 'done'
+      ).length;
+
+  }, 0);
+
+const approvedEl =
+  document.getElementById(
+    'project-approved-count'
+  );
+
+if(approvedEl){
+  approvedEl.textContent =
+    approvedCount;
+} 
+
+const pendingCount =
+  list.reduce((total, plot) => {
+
+    return total +
+      plot.checklist.filter(
+        item => item[1] === 'pending'
+      ).length;
+
+  }, 0);
+
+const pendingEl =
+  document.getElementById(
+    'project-pending-count'
+  );
+
+if(pendingEl){
+  pendingEl.textContent =
+    pendingCount;
+}
+
+
+}
   const container = document.getElementById('plot-list');
   container.innerHTML = list.map(p=>{
     const m = statusMeta(p.status);
@@ -1887,6 +2094,77 @@ function filterPlots(q=""){
  container.innerHTML=list.map(p=>`<div class="card tap" onclick="openPlot('${p.id}')"><div class="row"><span style="font-weight:800;color:var(--navy);">${p.number}</span><span class="badge ${statusMeta(p.status).badge}">${p.status}</span></div><div style="font-size:12.5px;color:var(--muted);margin-top:2px;">${p.houseType}</div></div>`).join('');
 }
 function generateReportForPlot(id){toast('PDF generated for '+plots[id].number);}
+
+function updateDashboardStats(){
+
+  const plotList =
+    Object.values(plots);
+
+    const project =
+  projects[state.projectId];
+
+    const averageProgress =
+  plotList.length
+    ? Math.round(
+        plotList.reduce(
+          (total, plot) => total + plot.score,
+          0
+        ) / plotList.length
+      )
+    : 0;
+
+  const complete =
+    plotList.filter(
+      p => p.status === "Complete"
+    ).length;
+
+  const inProgress =
+    plotList.filter(
+      p => p.status === "In Progress"
+    ).length;
+
+  const notStarted =
+    plotList.filter(
+      p => p.status === "Not Started"
+    ).length;
+
+    document.getElementById(
+  'dash-project-name'
+).textContent =
+  project.name;
+
+    document.getElementById(
+  'dash-project-progress'
+).textContent =
+  averageProgress + "%";
+
+  document.getElementById(
+  'dash-project-progress-bar'
+).style.width =
+  averageProgress + "%";
+
+  document.getElementById(
+  'dash-plots-active'
+).textContent =
+  "🏠 Plots: " + plotList.length;
+
+  document.getElementById(
+    'dash-complete'
+  ).textContent =
+    "✅ Complete: " + complete;
+
+
+  document.getElementById(
+    'dash-inprogress'
+  ).textContent =
+    "🟡 In Progress: " + inProgress;
+
+  document.getElementById(
+    'dash-notstarted'
+  ).textContent =
+    "⚪ Not Started: " + notStarted;
+
+}
 
 
 
