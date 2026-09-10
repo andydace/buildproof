@@ -388,8 +388,8 @@
         <div class="card tap" onclick="go('sitehealth')">
           <div class="label-eyebrow">SITE HEALTH</div>
           <div class="row" style="align-items:flex-end;">
-            <div style="font-size:38px;font-weight:800;color:var(--navy);">91%</div>
-            <span class="badge badge-green">Excellent</span>
+            <div id="site-health-score" style="font-size:38px;font-weight:800;color:var(--navy);">0%</div>
+            <span id="site-health-badge"class="badge badge-green">Excellent</span>
           </div>
           <div class="progress-track"><div class="progress-fill" style="width:91%;"></div></div>
         </div>
@@ -2100,6 +2100,16 @@ function updateDashboardStats(){
   const plotList =
     Object.values(plots);
 
+    const siteHealth =
+  plotList.length
+    ? Math.round(
+        plotList.reduce(
+          (total, plot) => total + plot.score,
+          0
+        ) / plotList.length
+      )
+    : 0;
+
     const project =
   projects[state.projectId];
 
@@ -2164,9 +2174,39 @@ function updateDashboardStats(){
   ).textContent =
     "⚪ Not Started: " + notStarted;
 
+    const siteHealthEl =
+  document.getElementById(
+    'site-health-score'
+  );
+
+if(siteHealthEl){
+  siteHealthEl.textContent =
+    siteHealth + "%";
 }
 
+const badgeEl =
+  document.getElementById(
+    'site-health-badge'
+  );
 
+if(badgeEl){
+
+  if(siteHealth >= 90){
+    badgeEl.textContent = "Excellent";
+  }
+  else if(siteHealth >= 70){
+    badgeEl.textContent = "Good";
+  }
+  else if(siteHealth >= 40){
+    badgeEl.textContent = "Needs Attention";
+  }
+  else{
+    badgeEl.textContent = "Poor";
+  }
+
+}
+
+}
 
 function renderProjects() {
 
