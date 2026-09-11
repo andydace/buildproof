@@ -387,9 +387,8 @@
         Good Morning Andrew
     </h1>
 
-    <div class="sub" id="dash-project">
-        Oak View Development · Wed 29 July
-    </div>
+   <div class="sub" id="dash-project">
+</div>
 </div>
         <span class="sync-pill">● Synced</span>
         <button class="backbtn" style="position:relative;margin-left:8px;" onclick="go('notifications')">
@@ -404,74 +403,67 @@
 
         <!-- Quick Actions removed -->
        
+        <h2 class="section-heading">Projects</h2>
 
-       <div class="card tap" onclick="openProject('doseley')">
+<div class="card tap" onclick="openProject('doseley')">
 
-  <div class="label-eyebrow">SITE SUMMARY</div>
+    <div class="row">
+        <div>
+            <div style="font-weight:700;font-size:16px;">
+                🏗️ Doseley Halt
+            </div>
 
-  <div class="row">
-    <span
-  id="dash-project-name"
-  style="
-    font-weight:800;
-    color:var(--navy);
-    font-size:16px;
-  "
->
-  Project
-</span>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px;">
+                Tap to open project
+            </div>
+        </div>
 
-    <span
-      id="dash-project-progress"
-      style="
-        font-weight:800;
-        color:var(--navy);
-        font-size:20px;
-      "
-    >
-      0%
-    </span>
-  </div>
-
-  <div class="progress-track" style="margin-top:12px;">
-    <div
-      id="dash-project-progress-bar"
-      class="progress-fill"
-      style="width:0%;"
-    ></div>
-  </div>
-
-  <div
-    style="
-      margin-top:14px;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      font-size:13px;
-    "
-  >
-
-    <div id="dash-plots-active">
-      🏠 Plots: 0
+        <div style="font-weight:800;color:var(--navy);">
+            View →
+        </div>
     </div>
-
-    <div id="dash-complete">
-      ✅ Complete: 0
-    </div>
-
-    <div id="dash-inprogress">
-      🟡 In Progress: 0
-    </div>
-
-    <div id="dash-notstarted">
-      ⚪ Not Started: 0
-    </div>
-
-  </div>
 
 </div>
 
-        <h2 class="section-heading">Recent Activity</h2>
+      <div class="card">
+
+    <div class="label-eyebrow">COMPANY OVERVIEW</div>
+
+    <div
+        style="
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:12px;
+            margin-top:10px;
+            font-size:13px;
+        "
+    >
+
+        <div id="dash-projects-count">
+            🏗️ Projects: 0
+        </div>
+
+        <div id="dash-plots-active">
+            🏠 Plots: 0
+        </div>
+
+        <div id="dash-complete">
+            ✅ Approved: 0
+        </div>
+
+        <div id="dash-pending-count">
+            ⏳ Pending: 0
+        </div>
+
+        <div id="dash-notstarted">
+            ❌ Missing: 0
+        </div>
+
+    </div>
+
+</div>
+
+        
         <!-- Recent Activity removed -->
       </div>
     </div>
@@ -589,13 +581,7 @@
           <div class="row"><span style="color:var(--muted);font-size:13px;">Target completion</span><span style="font-weight:600;font-size:13px;">18 Dec 2026</span></div>
         </div>
 
-        <div class="quick-actions">
-          <button class="qa-btn" onclick="editProject()"><span class="ic">✏️</span><span class="txt">Edit Project</span></button>
-          <button class="qa-btn" onclick="openCamera('oakview')"><span class="ic">📷</span><span class="txt">Take Photo</span></button>
-          <button class="qa-btn" onclick="addPlot()"><span class="ic">➕</span><span class="txt">Add Plot</span></button>
-          <button class="qa-btn" onclick="setChip(null,'plotfilter','Needs Attention')"><span class="ic">⚠️</span><span class="txt">View Issues</span></button>
-          <button class="qa-btn" onclick="go('reports')"><span class="ic">📄</span><span class="txt">Reports</span></button>
-        </div>
+        
 
         <div class="card" style="display:flex;justify-content:space-around;text-align:center;">
           <div
@@ -635,15 +621,15 @@
         </div>
 
         <h2 class="section-heading">Plots</h2>
-        <div class="searchbar">🔍<input placeholder="Search by plot, type or status..." oninput="filterPlots(this.value)"></div>
-        <div class="chip-row">
-          <div class="chip active" onclick="setChip(this,'plotfilter')">All</div>
-          <div class="chip" onclick="setChip(this,'plotfilter')">Needs Attention</div>
-          <div class="chip" onclick="setChip(this,'plotfilter')">In Progress</div>
-          <div class="chip" onclick="setChip(this,'plotfilter')">Complete</div>
-          <div class="chip" onclick="setChip(this,'plotfilter')">Not Started</div>
-        </div>
+        <!-- Plot search and filters removed -->
         <div id="plot-list"></div>
+
+<div class="quick-actions">
+    <button class="qa-btn" onclick="addPlot()">
+        <span class="ic">➕</span>
+        <span class="txt">Add Plot</span>
+    </button>
+</div>
       </div>
     </div>
 
@@ -1396,12 +1382,23 @@ console.log("GPS REQUESTED");
 /* ---------------- RENDERERS ---------------- */
 function statusMeta(s){
   switch(s){
-    case 'Needs Attention': return {badge:'badge-red', dot:'dot-red'};
-    case 'Pending Review': return {badge:'badge-amber', dot:'dot-amber'};
-    case 'Report Ready': return {badge:'badge-green', dot:'dot-green'};
-    case 'In Progress': return {badge:'badge-blue', dot:'dot-green'};
-    case 'Not Started': return {badge:'badge-muted', dot:'dot-amber'};
-    default: return {badge:'badge-muted', dot:'dot-amber'};
+    case 'Needs Attention':
+      return {badge:'badge-red', dot:'dot-red', text:'Needs Attention'};
+
+    case 'Pending Review':
+      return {badge:'badge-amber', dot:'dot-amber', text:'Pending Review'};
+
+    case 'Report Ready':
+      return {badge:'badge-green', dot:'dot-green', text:'Report Ready'};
+
+    case 'In Progress':
+      return {badge:'badge-blue', dot:'dot-green', text:'In Progress'};
+
+    case 'Not Started':
+      return {badge:'badge-muted', dot:'dot-amber', text:'Not Started'};
+
+    default:
+      return {badge:'badge-muted', dot:'dot-amber', text:'In Progress'};
   }
 }
 function renderPlotList(filterText, statusFilter){
@@ -1497,15 +1494,51 @@ if(pendingEl){
 }
   const container = document.getElementById('plot-list');
   container.innerHTML = list.map(p=>{
-    const m = statusMeta(p.status);
-    return `<div class="card tap" onclick="openPlot('${p.id}')">
-      <div class="row"><span style="font-weight:800;color:var(--navy);">${p.number}</span><span class="badge ${m.badge}">${p.status}</span></div>
-      <div style="font-size:12.5px;color:var(--muted);margin-top:2px;">${p.houseType}</div>
-      <div class="progress-track"><div class="progress-fill ${p.score>=90?'green':p.score>=70?'':p.score>=40?'amber':'red'}" style="width:${p.score}%;"></div></div>
-      <div class="row" style="margin-top:8px;font-size:12px;color:var(--muted);">
-        <span>Evidence ${p.score}%</span><span>${p.last}</span>
-      </div>
-    </div>`;
+    const m =
+  statusMeta(p.status || "In Progress");
+    const approved =
+  p.checklist.filter(i => i[1] === 'done').length;
+
+const pending =
+  p.checklist.filter(i => i[1] === 'pending').length;
+
+const missing =
+  p.checklist.filter(i => i[1] === 'missing').length;
+
+return `<div class="card tap" onclick="openPlot('${p.id}')">
+  <div class="row">
+
+  <div style="display:flex;gap:6px;align-items:center;">
+
+    <span style="font-weight:800;color:var(--navy);">
+      ${p.number}
+    </span>
+
+    <span>✅${approved}</span>
+    <span>⏳${pending}</span>
+    <span>❌${missing}</span>
+    <span>📊${p.score}%</span>
+
+  </div>
+
+  <span class="badge ${m.badge}">${m.text}</span>
+
+</div>
+
+  
+
+  <!-- Plot stats moved into header row -->
+
+  <div class="progress-track" style="margin-top:8px;">
+    <div class="progress-fill ${p.score>=90?'green':p.score>=70?'amber':''}" style="width:${p.score}%"></div>
+  </div>
+
+  <div class="row" style="margin-top:8px;font-size:12px;color:var(--muted);">
+    <span>Progress ${p.score}%</span>
+    <span>${p.created || ''}</span>
+  </div>
+</div>`;
+    
   }).join('') || `<div class="empty-state"><div class="ic">📭</div>No plots match this filter.</div>`;
 }
 
@@ -2079,6 +2112,9 @@ function updateDashboardStats(){
   const plotList =
     Object.values(plots);
 
+    const projectCount =
+  Object.keys(projects).length;
+
     const siteHealth =
   plotList.length
     ? Math.round(
@@ -2107,46 +2143,72 @@ function updateDashboardStats(){
       p => p.status === "Complete"
     ).length;
 
+    const approvedCount =
+  plotList.reduce((total, plot) => {
+
+    return total +
+      plot.checklist.filter(
+        item => item[1] === 'done'
+      ).length;
+
+  }, 0);
+
   const inProgress =
     plotList.filter(
       p => p.status === "In Progress"
     ).length;
+
+   const pendingCount =
+  plotList.reduce((total, plot) => {
+
+    return total +
+      plot.checklist.filter(
+        item => item[1] === 'pending'
+      ).length;
+
+  }, 0); 
 
   const notStarted =
     plotList.filter(
       p => p.status === "Not Started"
     ).length;
 
-    document.getElementById(
-  'dash-project-name'
-).textContent =
-  project.name;
-
-    document.getElementById(
-  'dash-project-progress'
-).textContent =
-  averageProgress + "%";
-
+const projectsEl =
   document.getElementById(
-  'dash-project-progress-bar'
-).style.width =
-  averageProgress + "%";
+    'dash-projects-count'
+  );
+
+if(projectsEl){
+  projectsEl.textContent =
+    "🏗️ Projects: " + projectCount;
+}
 
   document.getElementById(
   'dash-plots-active'
 ).textContent =
   "🏠 Plots: " + plotList.length;
 
+const completeEl =
   document.getElementById(
     'dash-complete'
-  ).textContent =
-    "✅ Complete: " + complete;
+  );
+
+if(completeEl){
+  completeEl.textContent =
+    "✅ Approved: " + approvedCount;
+}
 
 
+const inProgressEl =
   document.getElementById(
     'dash-inprogress'
-  ).textContent =
-    "🟡 In Progress: " + inProgress;
+  );
+
+if(inProgressEl){
+  inProgressEl.textContent =
+    "⏳ Pending: " + pendingCount;
+}
+
 
   document.getElementById(
     'dash-notstarted'
