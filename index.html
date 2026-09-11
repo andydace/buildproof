@@ -2328,7 +2328,7 @@ document.getElementById(
   'dash-plots-active'
 ).textContent =
   "Plots: " + plotList.length;
-``  
+  
 
 const completeEl =
   document.getElementById(
@@ -2599,7 +2599,7 @@ function enhanceKeyboardAccess(){
 /* ---------------- BOOT ---------------- */
 loadData();
 
-go('dashboard', false);
+go('login', false);
 enhanceKeyboardAccess();
 const _origGo = go;
 go = function(...args){ _origGo(...args); enhanceKeyboardAccess(); };
