@@ -2599,7 +2599,7 @@ function enhanceKeyboardAccess(){
 /* ---------------- BOOT ---------------- */
 loadData();
 
-go('login', false);
+go('dashboard', false);
 enhanceKeyboardAccess();
 const _origGo = go;
 go = function(...args){ _origGo(...args); enhanceKeyboardAccess(); };
