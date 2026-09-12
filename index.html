@@ -678,7 +678,7 @@ transform:translate(-50%,-50%);
         <div class="card" style="display:flex;justify-content:space-around;text-align:center;">
           <div><div style="font-weight:800;color:var(--navy);font-size:18px;">4</div><div style="font-size:11px;color:var(--muted);">Projects</div></div>
           <div
-  id="project-plots-count"
+  id="project-screen-plots-count"
   style="font-weight:800;color:var(--navy);font-size:16px;">
   0
 </div>
@@ -757,6 +757,10 @@ transform:translate(-50%,-50%);
         <div id="plot-list"></div>
 
 <div class="quick-actions">
+  <button class="qa-btn" onclick="editProject()">
+    <span class="ic">✏️</span>
+    <span class="txt">Edit Project</span>
+</button>
     <button class="qa-btn" onclick="addPlot()">
         <span class="ic">➕</span>
         <span class="txt">Add Plot</span>
@@ -2260,23 +2264,11 @@ function updateDashboardStats(){
       )
     : 0;
 
-    const project =
-  projects[state.projectId];
+    
 
-    const averageProgress =
-  plotList.length
-    ? Math.round(
-        plotList.reduce(
-          (total, plot) => total + plot.score,
-          0
-        ) / plotList.length
-      )
-    : 0;
+    
 
-  const complete =
-    plotList.filter(
-      p => p.status === "Complete"
-    ).length;
+  
 
     const approvedCount =
   plotList.reduce((total, plot) => {
@@ -2288,10 +2280,7 @@ function updateDashboardStats(){
 
   }, 0);
 
-  const inProgress =
-    plotList.filter(
-      p => p.status === "In Progress"
-    ).length;
+  
 
    const pendingCount =
   plotList.reduce((total, plot) => {
@@ -2340,14 +2329,14 @@ if(completeEl){
 }
 
 
-const inProgressEl =
+const pendingEl =
   document.getElementById(
-    'dash-inprogress'
+    'dash-pending-count'
   );
 
-if(inProgressEl){
- inProgressEl.textContent =
-  "Pending: " + pendingCount; 
+if(pendingEl){
+  pendingEl.textContent =
+    "Pending: " + pendingCount;
 }
 
 
@@ -2391,6 +2380,16 @@ if(badgeEl){
 }
 
 function renderProjects() {
+
+  const projectsScreenPlotsEl =
+  document.getElementById(
+    'projects-screen-plots-count'
+  );
+
+if(projectsScreenPlotsEl){
+  projectsScreenPlotsEl.textContent =
+    Object.keys(plots).length;
+}
 
   const projectCards = Object.values(projects)
     .map(project => `
@@ -2500,9 +2499,12 @@ console.log("PLOT ADDED", id);
     </div>
     `
   );
-  console.log("ABOUT TO SAVE");
-  saveData();
-  toast("Plot added");
+  console.log('ABOUT TO SAVE');
+saveData();
+
+renderPlotList();
+
+toast("Plot added");
 }
 function editPlot() {
 
@@ -2532,6 +2534,8 @@ if (!newStatus) return;
   plot.status = newStatus;
 
   saveData();
+
+  renderPlotList();
 
   toast("Plot updated");
 
