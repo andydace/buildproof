@@ -78,11 +78,7 @@ linear-gradient(
     scrollbar-width:none;
   }
   #screen-evidencedetails{
-    position:absolute;
-    inset:0;
-    background:white;
-    z-index:9999;
-    min-height:100%;
+    display:none;
 }
   .screen::-webkit-scrollbar{display:none;}
   .screen.active{display:flex;animation:screenIn .26s ease;}
@@ -426,12 +422,11 @@ transform:translate(-50%,-50%);
       <div class="screen-body" style="padding-top:60px;">
         <div style="text-align:center;margin-bottom:30px;">
           <div class="logo-mark" id="plotvault-logo">
-    <img src="plotvault-logo.png"
-         class="pv-logo"
-         alt
-
-          
-          <div style="color:red;font-weight:bold;">
+    <img
+        src="plotvault-logo.png"
+        class="pv-logo"
+        alt="PlotVault Logo"
+    />
 </div>
         <div style="color:var(--muted);font-size:14px;margin-top:6px;">
     Capture • Verify • Comply
@@ -457,7 +452,7 @@ transform:translate(-50%,-50%);
         <button class="link" style="display:block;text-align:center;width:100%;" onclick="toast('Account creation coming soon')">Create account</button>
       </div>
     </div>
-
+</div>
     <!-- COMPANY SETUP -->
     <div class="screen" id="screen-companysetup">
       <div class="screen-body" style="padding-top:30px;">
@@ -473,6 +468,8 @@ transform:translate(-50%,-50%);
 
     <!-- DASHBOARD -->
     <div class="screen" id="screen-dashboard">
+      
+
       <div class="topnav">
         <div
     class="topnav-title"
@@ -947,7 +944,6 @@ transform:translate(-50%,-50%);
         <span>Camera preview</span>
       </div>
       <input
-  <input
   type="file"
   id="photo-input"
   accept="image/*"
@@ -1165,8 +1161,11 @@ function go(screen, push=true){
   updateBottomNav(screen);
   updateFab(screen);
   if(screen==='projects') renderProjects();
-  if(screen==='dashboard')
+  if(screen==='dashboard'){
   updateDashboardStats();
+}
+
+console.log("Dashboard loaded");
   if(screen==='projectdetails') renderPlotList();
   if(screen==='checklist') renderChecklist();
   if(screen==='evidencegallery') renderGallery();
@@ -2598,8 +2597,6 @@ function enhanceKeyboardAccess(){
 
 /* ---------------- BOOT ---------------- */
 loadData();
-
-alert("SCRIPT IS RUNNING");
 
 go('login', false);
 enhanceKeyboardAccess();
