@@ -761,13 +761,53 @@ transform:translate(-50%,-50%);
     <span class="ic">✏️</span>
     <span class="txt">Edit Project</span>
 </button>
-    <button class="qa-btn" onclick="addPlot()">
+    <button class="qa-btn" onclick="go('addplot')">
         <span class="ic">➕</span>
         <span class="txt">Add Plot</span>
     </button>
 </div>
       </div>
     </div>
+
+    <!-- ADD PLOT -->
+<div class="screen" id="screen-addplot">
+
+    <div class="topnav">
+        <button class="backbtn" onclick="back()">←</button>
+
+        <div class="topnav-title">
+            <h1>Add Plot</h1>
+            <div class="sub">
+                Create a new plot
+            </div>
+        </div>
+    </div>
+
+    <div class="screen-body">
+
+        <div class="field">
+            <label>Plot Number</label>
+            <input
+                id="new-plot-number"
+                type="text"
+                placeholder="e.g. Plot 17">
+        </div>
+
+        <div class="field">
+    <label>House Type</label>
+    <input
+        id="new-house-type"
+        type="text"
+        placeholder="e.g. Detached">
+</div>
+
+        <button class="btn primary" onclick="createPlotFromForm()">
+    Create Plot
+</button>
+
+    </div>
+
+</div>
 
     <!-- PLOT OVERVIEW -->
     <div class="screen" id="screen-plotoverview">
@@ -1541,7 +1581,21 @@ function statusMeta(s){
 }
 function renderPlotList(filterText, statusFilter){
   const list =
-  Object.values(plots);
+    Object.values(plots)
+    .sort((a, b) => {
+
+        const numA =
+            parseInt(
+                String(a.number).replace(/\D/g, '')
+            ) || 0;
+
+        const numB =
+            parseInt(
+                String(b.number).replace(/\D/g, '')
+            ) || 0;
+
+        return numA - numB;
+    });
   const progress =
   list.length
     ? Math.round(
@@ -2455,7 +2509,56 @@ saveData();
 
   toast("Project added");
 }
+function createPlotFromForm() {
 
+    const plotNumber =
+        document.getElementById(
+            'new-plot-number'
+        ).value.trim();
+
+        const houseType =
+    document.getElementById(
+        'new-house-type'
+    ).value.trim();
+
+    if (!plotNumber) {
+        toast("Enter a plot number");
+        return;
+    }
+
+    const id = "plot" + Date.now();
+
+    plots[id] = {
+        id: id,
+        projectId: state.projectId,
+        number: plotNumber,
+        houseType: "New Plot",
+        stage: "Not Started",
+        status: "Not Started",
+        score: 0,
+        last: "Just created",
+        checklist: [],
+        missing: [],
+        timeline: [],
+        gallery: []
+    };
+
+    saveData();
+
+    renderPlotList();
+
+    document.getElementById(
+        'new-plot-number'
+    ).value = '';
+
+    document.getElementById(
+    'new-house-type'
+).value = '';
+
+    go('projectdetails');
+
+    toast("Plot added");
+}
 function addPlot() {
  
 
