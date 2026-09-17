@@ -1203,6 +1203,9 @@ const state = {
   history:[],
   projectId:'doseley',
   plotId:'p1',
+  checklistExpanded: false,
+  timelineExpanded:false,
+
   photoCategory:null,
   photoProject:'doseley',
   photoPlot:'p1',
@@ -1213,6 +1216,7 @@ const state = {
   photoAccuracy:null,
 
   selectedPhoto:null
+  
 };
 
 
@@ -1763,7 +1767,23 @@ return `<div class="card tap" onclick="openPlot('${p.id}')">
     
   }).join('') || `<div class="empty-state"><div class="ic">📭</div>No plots match this filter.</div>`;
 }
+function toggleChecklist(){
 
+    state.checklistExpanded =
+        !state.checklistExpanded;
+
+    renderPlotOverview();
+
+}
+
+function toggleTimeline(){
+
+    state.timelineExpanded =
+        !state.timelineExpanded;
+
+    renderPlotOverview();
+
+}
 
 
     function renderPlotOverview(){
@@ -1796,31 +1816,182 @@ const progress =
     : 0;
 
   document.getElementById('po-number').textContent = p.number;
-  document.getElementById('po-project').textContent = projects[p.projectId].name;
+  document.getElementById('po-project')
+    .textContent = '';
   const m = statusMeta(p.status);
   const body = document.getElementById('po-body');
   body.innerHTML = `
-    <div class="card">
-      <div class="row"><span style="font-weight:800;color:var(--navy);font-size:16px;">${p.number}</span><span class="badge ${m.badge}">${p.status}</span></div>
-      <div style="font-size:12.5px;color:var(--muted);margin-top:4px;">${p.houseType} · ${p.stage}</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:6px;">Last activity: ${p.last}</div>
-    </div>
+
+  <div style="
+    min-height:auto;
+
+    background:
+    linear-gradient(
+        rgba(255,255,255,0.75),
+        rgba(255,255,255,0.75)
+
+    ),
+
+    url('IMG_4679.jpg');
+    
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    opacity:0.8;
+
+    padding:20px;
+
+    color:white;
+">
+      
     
    
 
- 
+ <div style="
+    text-align:center;
+    padding:20px 20px 20px 20px;
+">
+
+    <div style="
+    font-size:32px;
+    font-weight:800;
+    letter-spacing:2px;
+    color:white;
+    text-shadow:
+        0 2px 12px rgba(0,0,0,0.35);
+">
+    ${p.number}
+</div>
+
+    <div style="
+    margin-top:12px;
+    font-size:16px;
+    font-weight:600;
+    color:white;
+">
+    ${p.houseType}
+</div>
+
+    <div style="
+        margin-top:14px;
+    ">
+        <span class="badge ${m.badge}">
+            ${p.status}
+        </span>
+    </div>
+
+</div>
     ${p.missing.length? `<div class="card" style="border-left:4px solid var(--red);">
       <div class="label-eyebrow" style="color:var(--red);">MISSING EVIDENCE</div>
       ${p.missing.map(m=>`<div style="font-size:13.5px;font-weight:600;padding:6px 0;">⚠️ ${m}</div>`).join('')}
     </div>` : ''}<div class="quick-actions">
       
-      <button class="qa-btn" onclick="editPlot()"><span class="ic">✏️</span><span class="txt">Edit Plot</span></button>
-      <button class="qa-btn" onclick="openCameraFor('${p.projectId}','${p.id}')"><span class="ic">📷</span><span class="txt">Take Photo</span></button>
-      <button class="qa-btn" onclick="openChecklist('${p.id}')"><span class="ic">✅</span><span class="txt">Checklist</span></button>
-      <button class="qa-btn" onclick="go('evidencegallery')"><span class="ic">🖼️</span><span class="txt">Gallery</span></button>
-      <button class="qa-btn" onclick="${p.missing.length? `toast('Complete missing evidence first')` : `go('reports')`}"><span class="ic">📄</span><span class="txt">Generate Report</span></button>
+      <div style="margin:16px 0;">
+   <button
+    style="
+    width:100%;
+    padding:16px;
+    font-size:16px;
+    font-weight:700;
+
+    background:#1F8A4C;
+
+border:none;
+
+box-shadow:0 6px 18px rgba(0,0,0,0.25);
+
+border-radius:18px;
+
+color:white;
+    "
+    onclick="openCameraFor('${p.projectId}','${p.id}')">
+    TAKE PHOTO
+</button>       
+</div>
+<div style="
+    display:flex;
+    justify-content:space-around;
+    margin:12px 0 18px 0;
+    font-weight:700;
+    color:white;
+">
+
+    <span>✅ ${approved}</span>
+
+    <span>⏳ ${pending}</span>
+
+    <span>❌ ${missing}</span>
+
+</div>
+
+
+     <div style="
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+"> 
+      <div
+    onclick="toggleChecklist()"
+    style="
+        cursor:pointer;
+        padding:12px 0;
+        border-bottom:1px solid rgba(255,255,255,0.25);
+    ">
+
+    ${state.checklistExpanded ? '▼' : '▶'}
+    Checklist (${p.checklist.length})
+
+<div style="
+    margin-top:6px;
+    font-size:12px;
+    color:var(--muted);
+">
+
+    ${approved} Complete •
+    ${pending} Pending •
+    ${missing} Missing
+
+</div>
+
+
+</div>
+${state.checklistExpanded ? `
+
+<div class="card">
+
+    ${p.checklist.map(i => `
+
+        <div style="
+            padding:8px 0;
+            border-bottom:1px solid #eee;
+        ">
+
+            ${i[1]==='done' ? '✅' :
+              i[1]==='pending' ? '⏳' :
+              '❌'}
+
+            ${i[0]}
+
+        </div>
+
+    `).join('')}
+
+</div>
+
+` : ''}
+      <div
+     style="cursor:pointer;margin-bottom:10px;">
+
+    ▶ Gallery (${p.gallery.length})
+
+</div>
+      
     </div>
-    <h2 class="section-heading">Compliance Progress</h2>
+    
+    <!--
+      <h2 class="section-heading">Compliance Progress</h2>
 
     <div class="card" style="margin-bottom:12px;">
 
@@ -1843,6 +2014,7 @@ const progress =
   </div>
 
 </div>
+-->
 
 <!-- Checklist moved to dedicated screen -->
     <h2 class="section-heading">Recent Timeline</h2>
