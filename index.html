@@ -37,7 +37,7 @@ linear-gradient(
     display:flex;
     align-items:flex-start;
     justify-content:center;
-    min-height:100vh;
+    min-height:300px;
     padding:24px 12px;
   }
   #frame{
@@ -399,6 +399,25 @@ transform:translate(-50%,-50%);
   .bd-card:active{transform:scale(.97);}
   .bd-card .sc{font-size:22px;font-weight:800;color:var(--navy);}
   .bd-card .nm{font-size:12px;color:var(--muted);font-weight:600;margin-top:2px;}
+
+  .take-photo-btn{
+    width:100%;
+    padding:16px;
+
+    background:#1F8A4C;
+
+    color:white;
+
+    border:none;
+
+    border-radius:18px;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -1823,16 +1842,7 @@ const progress =
   body.innerHTML = `
 
   <div style="
-    min-height:auto;
-
-    background:
-    linear-gradient(
-        rgba(255,255,255,0.75),
-        rgba(255,255,255,0.75)
-
-    ),
-
-    url('IMG_4679.jpg');
+    background:#F4F6F8;
     
 
     background-size:cover;
@@ -1841,9 +1851,9 @@ const progress =
 
     opacity:0.8;
 
-    padding:20px;
+    padding:0px;
 
-    color:white;
+    color:var(--navy);
 ">
       
     
@@ -1851,14 +1861,14 @@ const progress =
 
  <div style="
     text-align:center;
-    padding:20px 20px 20px 20px;
+    padding:20px 20px 12px 20px;
 ">
 
     <div style="
     font-size:32px;
     font-weight:800;
     letter-spacing:2px;
-    color:white;
+    color:var(--navy);
     text-shadow:
         0 2px 12px rgba(0,0,0,0.35);
 ">
@@ -1866,16 +1876,16 @@ const progress =
 </div>
 
     <div style="
-    margin-top:12px;
+    margin-top:6px;
     font-size:16px;
     font-weight:600;
-    color:white;
+    color:var(--muted);
 ">
     ${p.houseType}
 </div>
 
     <div style="
-        margin-top:14px;
+        margin-top:4px;
     ">
         <span class="badge ${m.badge}">
             ${p.status}
@@ -1888,35 +1898,19 @@ const progress =
       ${p.missing.map(m=>`<div style="font-size:13.5px;font-weight:600;padding:6px 0;">⚠️ ${m}</div>`).join('')}
     </div>` : ''}<div class="quick-actions">
       
-      <div style="margin:16px 0;">
+      <div style="
+margin:20px 0 12px 0;
+text-align:center;
+">
+
    <button
-    style="
-    width:100%;
-    padding:16px;
-    font-size:16px;
-    font-weight:700;
-
-    background:#1F8A4C;
-
-border:none;
-
-box-shadow:0 6px 18px rgba(0,0,0,0.25);
-
-border-radius:18px;
-
-color:white;
-    "
+class="take-photo-btn"
     onclick="openCameraFor('${p.projectId}','${p.id}')">
     TAKE PHOTO
 </button>       
 </div>
 <div style="
-    display:flex;
-    justify-content:space-around;
-    margin:12px 0 18px 0;
-    font-weight:700;
-    color:white;
-">
+    <div class="plot-summary" style="justify-content:center;gap:24px;">
 
     <span>✅ ${approved}</span>
 
@@ -1927,21 +1921,24 @@ color:white;
 </div>
 
 
-     <div style="
-    display:flex;
-    justify-content:space-between;
-    gap:20px;
-"> 
+      
       <div
     onclick="toggleChecklist()"
     style="
-        cursor:pointer;
-        padding:12px 0;
-        border-bottom:1px solid rgba(255,255,255,0.25);
-    ">
+    cursor:pointer;
+    padding:16px;
+    margin-top:12px;
 
+    background:#FFFFFF;
+
+    border-radius:12px;
+"
+
+    <div style="color:var(--navy);font-weight:700;">
     ${state.checklistExpanded ? '▼' : '▶'}
     Checklist (${p.checklist.length})
+</div>
+    
 
 <div style="
     margin-top:6px;
@@ -1981,16 +1978,15 @@ ${state.checklistExpanded ? `
 </div>
 
 ` : ''}
-      <div
-     style="cursor:pointer;margin-bottom:10px;">
-
-    ▶ Gallery (${p.gallery.length})
-
-</div>
-      
-    </div>
-    
-    <!--
+  <div
+style="
+cursor:pointer;
+margin-bottom:10px;
+color:var(--navy);
+font-weight:700;
+"
+>    
+ <!--
       <h2 class="section-heading">Compliance Progress</h2>
 
     <div class="card" style="margin-bottom:12px;">
@@ -2017,12 +2013,41 @@ ${state.checklistExpanded ? `
 -->
 
 <!-- Checklist moved to dedicated screen -->
+
+<div
+onclick="toggleGallery(1)"
+style="
+cursor:pointer;
+padding:16px;
+margin-bottom:12px;
+background:#FFFFFF;
+border-radius:12px;
+font-weight:700;
+color:var(--navy);
+">
+    ${expandedGallery === 1 ? '▼' : '▶'} Gallery (${p.gallery.length})
+</div>
     <h2 class="section-heading">Recent Timeline</h2>
     <div class="card" style="padding:4px 16px;">
       ${p.timeline.map(([t,d])=>`<div class="timeline-item"><div class="timeline-dot"></div><div><div class="tt">${d}</div><div class="td">${t}</div></div></div>`).join('') || '<div style="padding:12px 0;color:var(--muted);font-size:13px;">No activity yet.</div>'}
     </div>
+    
     <!-- Evidence Gallery moved to dedicated screen -->
+
+    </div>
   `;
+}
+let expandedGallery = null;
+function toggleGallery(plotId){
+
+
+    if(expandedGallery === plotId){
+        expandedGallery = null;
+    } else {
+        expandedGallery = plotId;
+    }
+
+    renderPlotOverview();
 }
 function checklistRow(name, st, plotId){
   const iconMap = {
