@@ -1865,25 +1865,59 @@ const progress =
    
 
  <div style="
-    text-align:left;
-    padding:32px;
-    min-height:320px;
-    margin:12px;
-    background:linear-gradient(
-135deg,
-#0B2B45 0%,
-#274B63 100%
+position:relative;
+text-align:left;
+padding:32px 24px 24px 24px;
+min-height:220px;
+
+background:linear-gradient(
+120deg,
+#081D33 0%,
+#17324D 35%,
+#385875 65%,
+#89A1B8 100%
 );
-    border-radius:20px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+
+border-radius:28px;
+box-shadow:0 20px 40px rgba(11,30,52,0.25);
+margin:12px;
+overflow:hidden;
+">
+<img
+src="house-ghost.png"
+style="
+position:absolute;
+right:20px;
+top:28px;
+width:320px;
+height:230px;
+opacity:0.24;
+pointer-events:none;
 ">
 <div style="
-font-size:14px;
+position:absolute;
+right:75px;
+bottom:60px;
+text-align:right;
+font-size:15px;
+font-style:italic;
+letter-spacing:0.3px;
+font-weight:600;
+opacity:0.85;
+color:rgba(255,255,255,0.75);
+line-height:1.05;
+pointer-events:none;
+">
+Build better<br>
+compliance
+</div>
+
+<div style="
+font-size:18px;
 font-weight:700;
-letter-spacing:3px;
-opacity:0.8;
-color:rgba(255,255,255,0.7);
-margin-bottom:0px;
+letter-spacing:4px;
+color:white;
+margin-bottom:8px;
 ">
 PLOT
 </div>
@@ -1905,7 +1939,7 @@ PLOT
 
     <div style="
     margin-top:6px;
-    font-size:16px;
+    font-size:24px;
     font-weight:600;
     color:rgba(255,255,255,0.8);
 ">
@@ -1913,7 +1947,7 @@ PLOT
 </div>
 
     <div style="
-        margin-top:4px;
+        margin-top:14px;
     ">
         <span class="badge ${m.badge}" style="
 padding:8px 18px;
@@ -1923,6 +1957,44 @@ border-radius:999px;
 ">
     ● ${p.status}
 </span>  
+
+<div style="
+margin-top:18px;
+display:flex;
+align-items:center;
+gap:12px;
+">
+
+    <div style="
+    width:55%;
+    height:12px;
+    background:rgba(255,255,255,0.20);
+    border-radius:999px;
+    overflow:hidden;
+    ">
+
+        <div style="
+        width:45%;
+        height:100%;
+        background:#8ED45B;
+        border-radius:999px;
+        ">
+        </div>
+
+    </div>
+
+    <div style="
+    font-size:12px;
+    font-weight:700;
+    color:rgba(255,255,255,0.85);
+    min-width:24px;
+    text-align:right;
+    ">
+        45%
+    </div>
+
+</div>
+
     </div>
 
 </div>
