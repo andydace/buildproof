@@ -145,7 +145,12 @@ linear-gradient(
   .btn-destructive{background:#fff;color:var(--red);border:2px solid #F3D3D3;}
   .btn-sm{height:42px;font-size:14px;border-radius:8px;}
 
-  .quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+  ..quick-actions{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+  margin-bottom:12px;
+}
   .qa-btn{
     background:var(--card);border-radius:var(--radius);padding:16px 10px;
     display:flex;flex-direction:column;align-items:center;gap:6px;
@@ -1861,7 +1866,11 @@ const progress =
 
  <div style="
     text-align:center;
-    padding:20px 20px 12px 20px;
+    padding:20px;
+    margin:12px;
+    background:#ffffff;
+    border-radius:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
 ">
 
     <div style="
@@ -1899,26 +1908,56 @@ const progress =
     </div>` : ''}<div class="quick-actions">
       
       <div style="
-margin:20px 0 12px 0;
+margin:8px auto;
 text-align:center;
 ">
 
    <button
 class="take-photo-btn"
+style="width:220px;"
     onclick="openCameraFor('${p.projectId}','${p.id}')">
     TAKE PHOTO
 </button>       
 </div>
+
+    
+
+<div class="card" style="
+background:#FFFFFF;
+padding:12px;
+border-radius:12px;
+box-shadow:0 2px 8px rgba(0,0,0,0.08);
+margin:12px 0;
+">
+
 <div style="
-    <div class="plot-summary" style="justify-content:center;gap:24px;">
-
-    <span>✅ ${approved}</span>
-
-    <span>⏳ ${pending}</span>
-
-    <span>❌ ${missing}</span>
-
+font-size:14px;
+font-weight:700;
+margin-bottom:10px;
+color:#333;
+">
+COMPLIANCE
 </div>
+
+<div style="display:flex;margin-top:6px;">
+  <span style="display:inline-block;width:100px;">✅ Complete</span>
+  <span style="width:30px;text-align:center;">${approved}</span>
+</div>
+
+<div style="display:flex;margin-top:6px;">
+  <span style="width:100px;">⏳ Pending</span>
+  <span style="width:30px;text-align:center;">${pending}</span>
+</div>
+
+
+
+<div style="display:flex;margin-top:6px;">
+  <span style="width:100px;">❌ Missing</span>
+  <span style="width:30px;text-align:center;">${missing}</span>
+</div>
+</div>
+
+
 
 
       
@@ -1932,6 +1971,7 @@ class="take-photo-btn"
     background:#FFFFFF;
 
     border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
 "
 
     <div style="color:var(--navy);font-weight:700;">
@@ -1939,19 +1979,6 @@ class="take-photo-btn"
     Checklist (${p.checklist.length})
 </div>
     
-
-<div style="
-    margin-top:6px;
-    font-size:12px;
-    color:var(--muted);
-">
-
-    ${approved} Complete •
-    ${pending} Pending •
-    ${missing} Missing
-
-</div>
-
 
 </div>
 ${state.checklistExpanded ? `
@@ -2019,6 +2046,7 @@ onclick="toggleGallery(1)"
 style="
 cursor:pointer;
 padding:16px;
+margin-top:8px;
 margin-bottom:12px;
 background:#FFFFFF;
 border-radius:12px;
@@ -2027,6 +2055,33 @@ color:var(--navy);
 ">
     ${expandedGallery === 1 ? '▼' : '▶'} Gallery (${p.gallery.length})
 </div>
+${expandedGallery === 1 ? `
+<div style="
+    background:#ffffff;
+    padding:20px;
+text-align:center;
+    margin-bottom:20px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    border:1px solid #e5e7eb;
+">
+
+  <img
+src="${p.gallery[0].image}"
+style="
+width:160px;
+height:120px;
+object-fit:cover;
+border-radius:8px;
+display:block;
+margin:0 auto;
+"
+>
+</div>
+
+<div style="height:16px;"></div>
+
+` : ''}
     <h2 class="section-heading">Recent Timeline</h2>
     <div class="card" style="padding:4px 16px;">
       ${p.timeline.map(([t,d])=>`<div class="timeline-item"><div class="timeline-dot"></div><div><div class="tt">${d}</div><div class="td">${t}</div></div></div>`).join('') || '<div style="padding:12px 0;color:var(--muted);font-size:13px;">No activity yet.</div>'}
