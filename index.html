@@ -1865,30 +1865,49 @@ const progress =
    
 
  <div style="
-    text-align:center;
-    padding:20px;
+    text-align:left;
+    padding:32px;
+    min-height:320px;
     margin:12px;
-    background:#ffffff;
+    background:linear-gradient(
+135deg,
+#0B2B45 0%,
+#274B63 100%
+);
     border-radius:20px;
     box-shadow:0 4px 12px rgba(0,0,0,0.08);
 ">
-
+<div style="
+font-size:14px;
+font-weight:700;
+letter-spacing:3px;
+opacity:0.8;
+color:rgba(255,255,255,0.7);
+margin-bottom:0px;
+">
+PLOT
+</div>
     <div style="
-    font-size:32px;
+    font-size:96px;
     font-weight:800;
     letter-spacing:2px;
-    color:var(--navy);
+    color:white;
     text-shadow:
         0 2px 12px rgba(0,0,0,0.35);
 ">
-    ${p.number}
+
+
+
+    ${p.number.replace('Plot ','')}
+
+    
 </div>
 
     <div style="
     margin-top:6px;
     font-size:16px;
     font-weight:600;
-    color:var(--muted);
+    color:rgba(255,255,255,0.8);
 ">
     ${p.houseType}
 </div>
@@ -1896,9 +1915,14 @@ const progress =
     <div style="
         margin-top:4px;
     ">
-        <span class="badge ${m.badge}">
-            ${p.status}
-        </span>
+        <span class="badge ${m.badge}" style="
+padding:8px 18px;
+font-size:14px;
+font-weight:700;
+border-radius:999px;
+">
+    ● ${p.status}
+</span>  
     </div>
 
 </div>
@@ -1914,7 +1938,13 @@ text-align:center;
 
    <button
 class="take-photo-btn"
-style="width:220px;"
+style="
+width:100%;
+height:56px;
+font-size:15px;
+font-weight:600;
+border-radius:12px;
+"
     onclick="openCameraFor('${p.projectId}','${p.id}')">
     TAKE PHOTO
 </button>       
