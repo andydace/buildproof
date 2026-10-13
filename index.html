@@ -1568,7 +1568,7 @@ if(item){
 
 saveData();
 
-
+renderPlotOverview();
 
 
 }
@@ -1594,6 +1594,8 @@ console.log("GPS REQUESTED");
   const plotLbl = state.photoPlot ? plots[state.photoPlot].number : 'Unassigned plot';
   document.getElementById('saved-sub').textContent = (state.photoCategory||'Photo') + ' · ' + plotLbl + ' · ' + projects[state.photoProject].name;
   document.getElementById('notes-input').value='';
+
+  renderPlotOverview();
 
   go('photoreview');
 
@@ -1811,6 +1813,8 @@ function toggleTimeline(){
 
 
     function renderPlotOverview(){
+console.log("RENDER PLOT OVERVIEW");
+
   const p = plots[state.plotId];
 
   if(!p.checklist || p.checklist.length === 0){
@@ -2072,7 +2076,7 @@ margin-top:12px;
 flex:1;
 background:#EEF8EF;
 border-radius:22px;
-padding:10px;
+padding:6px;
 text-align:center;
 ">
 
@@ -2084,8 +2088,8 @@ gap:8px;
 ">
 
 <div style="
-width:34px;
-height:34px;
+width:28px;
+height:28px;
 border-radius:50%;
 background:#69B85A;
 display:flex;
@@ -2099,7 +2103,7 @@ font-weight:700;
 </div>
 
 <div style="
-font-size:22px;
+font-size:18px;
 font-weight:700;
 ">
 ${approved}
@@ -2121,7 +2125,7 @@ Complete
 flex:1;
 background:#FFF7E8;
 border-radius:22px;
-padding:10px;
+padding:6px;
 text-align:center;
 ">
 
@@ -2133,8 +2137,8 @@ gap:8px;
 ">
 
 <div style="
-width:34px;
-height:34px;
+width:28px;
+height:28px;
 border-radius:50%;
 background:#E0A92D;
 display:flex;
@@ -2148,7 +2152,7 @@ font-weight:700;
 </div>
 
 <div style="
-font-size:22px;
+font-size:18px;
 font-weight:700;
 ">
 ${pending}
@@ -2172,7 +2176,7 @@ Pending
 flex:1;
 background:#FDEEEE;
 border-radius:22px;
-padding:10px;
+padding:6px;
 text-align:center;
 ">
 
@@ -2184,8 +2188,8 @@ gap:8px;
 ">
 
 <div style="
-width:34px;
-height:34px;
+width:28px;
+height:28px;
 border-radius:50%;
 background:#D96A6A;
 display:flex;
@@ -2199,7 +2203,7 @@ font-weight:700;
 </div>
 
 <div style="
-font-size:22px;
+font-size:18px;
 font-weight:700;
 ">
 ${missing}
@@ -2224,23 +2228,32 @@ Missing
 </div>
 
     
-      <div
-    onclick="toggleChecklist()"
+   <div
+    class="card tap"
+    onclick="openChecklist('${p.id}')"
     style="
-    cursor:pointer;
-    padding:16px;
-    margin-top:12px;
+        margin-top:12px;
+        padding:16px;
+    "
+>
 
-    background:#FFFFFF;
+    <div style="
+        font-size:16px;
+        font-weight:700;
+        color:var(--navy);
+        margin-bottom:6px;
+    ">
+        📋 Checklist (${p.checklist.length})
+    </div>
 
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
-"
+    <div style="
+        font-size:13px;
+        color:var(--muted);
+    ">
+        View compliance items
+    </div>
 
-    <div style="color:var(--navy);font-weight:700;">
-    ${state.checklistExpanded ? '▼' : '▶'}
-    Checklist (${p.checklist.length})
-</div>
+
     
 
 </div>
@@ -2305,50 +2318,57 @@ font-weight:700;
 <!-- Checklist moved to dedicated screen -->
 
 <div
-onclick="toggleGallery(1)"
-style="
-cursor:pointer;
-padding:16px;
-margin-top:8px;
-margin-bottom:12px;
-background:#FFFFFF;
-border-radius:12px;
-font-weight:700;
-color:var(--navy);
-">
-    ${expandedGallery === 1 ? '▼' : '▶'} Gallery (${p.gallery.length})
-</div>
-${expandedGallery === 1 ? `
-<div style="
-    background:#ffffff;
-    padding:20px;
-text-align:center;
-    margin-bottom:20px;
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
-    border:1px solid #e5e7eb;
-">
-
-  <img
-src="${p.gallery[0].image}"
-style="
-width:160px;
-height:120px;
-object-fit:cover;
-border-radius:8px;
-display:block;
-margin:0 auto;
-"
+    class="card tap"
+    onclick="go('evidencegallery')"
+    style="
+        padding:16px;
+        margin-top:8px;
+    "
 >
+
+    <div style="
+        font-size:16px;
+        font-weight:700;
+        color:var(--navy);
+        margin-bottom:6px;
+    ">
+        📷 Gallery (${p.gallery.length})
+    </div>
+
+    <div style="
+        font-size:13px;
+        color:var(--muted);
+    ">
+        View evidence photos
+    </div>
+
 </div>
 
-<div style="height:16px;"></div>
+    <div
+    class="card"
+    style="
+        margin-top:8px;
+        padding:16px;
+    "
+>
 
-` : ''}
-    <h2 class="section-heading">Recent Timeline</h2>
-    <div class="card" style="padding:4px 16px;">
-      ${p.timeline.map(([t,d])=>`<div class="timeline-item"><div class="timeline-dot"></div><div><div class="tt">${d}</div><div class="td">${t}</div></div></div>`).join('') || '<div style="padding:12px 0;color:var(--muted);font-size:13px;">No activity yet.</div>'}
+    <div style="
+        font-size:16px;
+        font-weight:700;
+        color:var(--navy);
+        margin-bottom:6px;
+    ">
+        ⏱ Recent Timeline
     </div>
+
+    <div style="
+        font-size:13px;
+        color:var(--muted);
+    ">
+        ${p.timeline.length ? p.timeline[0][1] : 'No activity yet'}
+    </div>
+
+</div>
     
     <!-- Evidence Gallery moved to dedicated screen -->
 
@@ -2575,7 +2595,7 @@ function openEvidenceViewer(photo){
   src="${photo.image}"
   style="
     width:100%;
-    max-height:400px;
+    max-height:250px;
     object-fit:cover;
     border-radius:12px;
     margin-bottom:16px;
