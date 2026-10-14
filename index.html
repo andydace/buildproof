@@ -1,731 +1,1467 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PlotVault TEST123</title>
-<style>
-  :root{
-    --navy:#0F2A3D;
-    --blue:#1E6B8C;
-    --green:#1F8A4C;
-    --amber:#F2A900;
-    --red:#C62828;
-    --bg:#F4F6F8;
-    --card:#FFFFFF;
-    --text:#1F2933;
-    --muted:#6B7280;
-    --radius:14px;
-    --radius-sm:10px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  :focus-visible{outline:2.5px solid var(--blue);outline-offset:2px;border-radius:6px;}
-  button:focus-visible, .card.tap:focus-visible, .qa-btn:focus-visible{outline-offset:3px;}
-  input:focus-visible, textarea:focus-visible{outline-offset:0;}
-  html,body{height:100%;}
-  body{
-   background:
-linear-gradient(
-    180deg,
-    #FFFFFF 0%,
-    #F4F8FB 40%,
-    #ECF3F8 100%
-);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlotVault TEST123</title>
+  <style>
+    :root {
+      --navy: #0F2A3D;
+      --blue: #1E6B8C;
+      --green: #1F8A4C;
+      --amber: #F2A900;
+      --red: #C62828;
+      --bg: #F4F6F8;
+      --card: #FFFFFF;
+      --text: #1F2933;
+      --muted: #6B7280;
+      --radius: 14px;
+      --radius-sm: 10px;
+    }
 
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    color:var(--text);
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-    min-height:300px;
-    padding:24px 12px;
-  }
-  #frame{
-    width:100%;
-    min-height:844px;
-    background:var(--bg);
-    border-radius:0;
-    
-    overflow:hidden;
-    position:relative;
-    display:flex;
-    flex-direction:column;
-  }
-  #statusbar{
-    height:30px;
-    background:var(--bg);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 22px;
-    font-size:12px;
-    font-weight:600;
-    color:var(--navy);
-    flex-shrink:0;
-  }
-  #screens{
-    flex:1;
-    position:relative;
-    overflow:hidden;
-  }
-  .screen{
-    position:absolute;
-    inset:0;
-    overflow-y:auto;
-    display:none;
-    flex-direction:column;
-    -ms-overflow-style:none;
-    scrollbar-width:none;
-  }
-  #screen-evidencedetails{
-    display:none;
-}
-  .screen::-webkit-scrollbar{display:none;}
-  .screen.active{display:flex;animation:screenIn .26s ease;}
-  @keyframes screenIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-  @media (prefers-reduced-motion: reduce){
-    .screen.active{animation:none;}
-    .spinner{animation:none;border-top-color:var(--blue);}
-    *{transition-duration:.01ms !important;}
-  }
-  .screen-body{
-    padding:16px 16px 100px 16px;
-    flex:1;
-  }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  /* ---------- Top nav ---------- */
-  .topnav{
-    display:flex;align-items:center;gap:10px;
-    padding:14px 16px;background:var(--bg);
-    position:sticky;top:0;z-index:5;
-  }
-  .backbtn{
-    width:36px;height:36px;border-radius:50%;background:var(--card);
-    border:none;display:flex;align-items:center;justify-content:center;
-    font-size:18px;color:var(--navy);cursor:pointer;flex-shrink:0;
-    box-shadow:0 1px 3px rgba(15,42,61,.12);
-  }
-  .backbtn:active{transform:scale(.94);}
-  .topnav-title{flex:1;}
-  .topnav-title h1{font-size:17px;font-weight:700;color:var(--navy);line-height:1.2;}
-  .topnav-title .sub{font-size:12px;color:var(--muted);margin-top:1px;}
-  .sync-pill{
-    font-size:11px;font-weight:600;padding:4px 9px;border-radius:20px;
-    background:#E4F3EA;color:var(--green);white-space:nowrap;
-  }
-  .sync-pill.offline{background:#F1F2F4;color:var(--muted);}
+    :focus-visible {
+      outline: 2.5px solid var(--blue);
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
 
-  /* ---------- Cards ---------- */
-  .card{
-    background:var(--card);border-radius:var(--radius);
-    padding:16px;margin-bottom:12px;
-    box-shadow:0 1px 2px rgba(15,42,61,.06);
-  }
-  .card.tap{cursor:pointer;transition:transform .12s;}
-  .card.tap:active{transform:scale(.98);}
-  .row{display:flex;align-items:center;justify-content:space-between;}
-  .label-eyebrow{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+    button:focus-visible,
+    .card.tap:focus-visible,
+    .qa-btn:focus-visible {
+      outline-offset: 3px;
+    }
 
-  h2.section-heading{font-size:18px;font-weight:700;color:var(--navy);margin:20px 0 10px;}
-  h2.section-heading:first-child{margin-top:0;}
+    input:focus-visible,
+    textarea:focus-visible {
+      outline-offset: 0;
+    }
 
-  /* ---------- Buttons ---------- */
-  .btn{
-    display:flex;align-items:center;justify-content:center;gap:8px;
-    height:56px;border-radius:var(--radius-sm);font-size:16px;font-weight:700;
-    border:none;cursor:pointer;width:100%;
-  }
-  .btn:active{transform:scale(.98);}
-  .btn-primary{
-    background:#0B2B45;
-    color:#fff;
-    box-shadow:0 8px 20px rgba(11,43,69,.18);
-}
-  .btn-secondary{background:#fff;color:var(--blue);border:2px solid var(--blue);}
-  .btn-destructive{background:#fff;color:var(--red);border:2px solid #F3D3D3;}
-  .btn-sm{height:42px;font-size:14px;border-radius:8px;}
+    html,
+    body {
+      height: 100%;
+    }
 
-  ..quick-actions{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-  margin-bottom:12px;
-}
-  .qa-btn{
-    background:var(--card);border-radius:var(--radius);padding:16px 10px;
-    display:flex;flex-direction:column;align-items:center;gap:6px;
-    box-shadow:0 1px 2px rgba(15,42,61,.06);cursor:pointer;border:none;
-    font-family:inherit;
-  }
-  .qa-btn:active{transform:scale(.96);}
-  .qa-btn .ic{font-size:22px;}
-  .qa-btn span.txt{font-size:13px;font-weight:600;color:var(--navy);}
+    body {
+      background:
+        linear-gradient(180deg,
+          #FFFFFF 0%,
+          #F4F8FB 40%,
+          #ECF3F8 100%);
 
-  /* ---------- Status badges ---------- */
-  .badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;}
-  .badge-green{background:#E4F3EA;color:var(--green);}
-  .badge-amber{background:#FDF0D5;color:#8a6100;}
-  .badge-red{background:#FBE4E4;color:var(--red);}
-  .badge-blue{background:#E4EEF3;color:var(--blue);}
-  .badge-muted{background:#EEF0F2;color:var(--muted);}
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-height: 300px;
+      padding: 24px 12px;
+    }
 
-  .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
-  .dot-red{background:var(--red);}
-  .dot-amber{background:var(--amber);}
-  .dot-green{background:var(--green);}
+    #frame {
+      width: 100%;
+      min-height: 844px;
+      background: var(--bg);
+      border-radius: 0;
 
-  /* ---------- progress ---------- */
-  .progress-track{height:8px;background:#E7EBEE;border-radius:20px;overflow:hidden;margin-top:8px;}
-  .progress-fill{height:100%;background:var(--blue);border-radius:20px;}
-  .progress-fill.green{background:var(--green);}
-  .progress-fill.amber{background:var(--amber);}
-  .progress-fill.red{background:var(--red);}
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
 
-  /* ---------- priority list ---------- */
-  .priority-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #EEF0F2;cursor:pointer;}
-  .priority-item:last-child{border-bottom:none;}
-  .priority-item:active{background:#F7F9FA;}
-  .priority-item .pi-text .t{font-weight:700;font-size:14px;color:var(--navy);}
-  .priority-item .pi-text .d{font-size:13px;color:var(--muted);margin-top:2px;}
-  .priority-item .chev{margin-left:auto;color:var(--muted);align-self:center;}
+    #statusbar {
+      height: 30px;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+      flex-shrink: 0;
+    }
 
-  /* ---------- bottom nav ---------- */
-  #bottomnav{
-    display:flex;align-items:center;justify-content:space-around;
-    height:64px;background:var(--card);
-    border-top:1px solid #E7EBEE;flex-shrink:0;position:relative;z-index:10;
-    padding-bottom:env(safe-area-inset-bottom);
-  }
-  .nav-item{
-    display:flex;flex-direction:column;align-items:center;gap:2px;
-    background:none;border:none;cursor:pointer;color:var(--muted);
-    font-family:inherit;padding:6px 10px;
-  }
-  .nav-item.active{color:var(--blue);}
-  .nav-item .ic{font-size:20px;}
-  .nav-item .txt{font-size:10px;font-weight:600;}
+    #screens {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
 
-  .fab{
-    position:absolute;right:16px;bottom:80px;width:58px;height:58px;border-radius:50%;
-    background:var(--blue);color:#fff;font-size:22px;border:none;
-    box-shadow:0 8px 18px rgba(30,107,140,.45);z-index:15;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .fab:active{transform:scale(.94);}
+    .screen {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      display: none;
+      flex-direction: column;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
 
-  /* ---------- Login / splash ---------- */
-  .center-screen{
-  align-items:center;
-  justify-content:flex-start;
-  display:flex;
-  flex-direction:column;
-  height:100%;
-  padding:48px 32px 32px;
-  text-align:center;
-  gap:14px;
-}
-  .logo-mark{
-    margin:0 auto 20px;
-    padding:24px;
-    border-radius:24px;
-    position:relative;
+    #screen-evidencedetails {
+      display: none;
+    }
 
-    background:#ffffff;
+    .screen::-webkit-scrollbar {
+      display: none;
+    }
 
-    backdrop-filter:blur(12px);
+    .screen.active {
+      display: flex;
+      animation: screenIn .26s ease;
+    }
 
-    box-shadow:
-        0 10px 40px rgba(15,42,66,.08);
+    @keyframes screenIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
 
-    display:flex;
-    justify-content:center;
-}
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-.logo-mark::after{
-    content:"";
-    position:absolute;
+    @media (prefers-reduced-motion: reduce) {
+      .screen.active {
+        animation: none;
+      }
 
-    width:220px;
-    height:220px;
+      .spinner {
+        animation: none;
+        border-top-color: var(--blue);
+      }
 
-    top:50%;
-left:50%;
-transform:translate(-50%,-50%);
+      * {
+        transition-duration: .01ms !important;
+      }
+    }
 
-    border-radius:50%;
+    .screen-body {
+      padding: 16px 16px 100px 16px;
+      flex: 1;
+    }
 
-    background:rgba(105,212,79,.10);
+    /* ---------- Top nav ---------- */
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
 
-    filter:blur(50px);
+    .backbtn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--card);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--navy);
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(15, 42, 61, .12);
+    }
 
-    z-index:-1;
-}
+    .backbtn:active {
+      transform: scale(.94);
+    }
 
-.pv-logo{
-    width:420px;
-    max-width:85%;
-    height:auto;
-    display:block;
-}
+    .topnav-title {
+      flex: 1;
+    }
 
-.pv-icon{
-    width:120px;
-    height:120px;
-    border-radius:28px;
+    .topnav-title h1 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.2;
+    }
 
-    background:linear-gradient(
-        135deg,
-        #0B2B45,
-        #153B5A
-    );
+    .topnav-title .sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
 
-    color:#FFFFFF;
+    .sync-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 20px;
+      background: #E4F3EA;
+      color: var(--green);
+      white-space: nowrap;
+    }
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    .sync-pill.offline {
+      background: #F1F2F4;
+      color: var(--muted);
+    }
 
-    font-size:64px;
-    font-weight:800;
+    /* ---------- Cards ---------- */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 2px rgba(15, 42, 61, .06);
+    }
 
-    box-shadow:
-      0 12px 30px rgba(15,42,66,.18);
-}
+    .card.tap {
+      cursor: pointer;
+      transition: transform .12s;
+    }
 
-  .brand-name{font-size:28px;font-weight:800;color:var(--navy);letter-spacing:1px;}
-  .brand-tag{font-size:13px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
-  .spinner{width:22px;height:22px;border:3px solid #E7EBEE;border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite;margin-top:10px;}
-  @keyframes spin{to{transform:rotate(360deg);}}
+    .card.tap:active {
+      transform: scale(.98);
+    }
 
-  .field{margin-bottom:14px;text-align:left;}
-  .field label{font-size:13px;font-weight:600;color:var(--navy);display:block;margin-bottom:6px;}
-  .field input{
-    width:100%;height:50px;border-radius:10px;border:1.5px solid #DCE1E5;
-    padding:0 14px;font-size:15px;font-family:inherit;background:#fff;color:var(--text);
-  }
-  .field input:focus{outline:none;border-color:var(--blue);}
-  .link{color:var(--blue);font-size:13px;font-weight:600;text-decoration:none;background:none;border:none;cursor:pointer;font-family:inherit;}
-  .hr-text{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:18px 0;}
-  .hr-text::before,.hr-text::after{content:"";flex:1;height:1px;background:#E7EBEE;}
-  .checkbox-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text);margin-bottom:16px;}
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-  /* filter chips */
-  .chip-row{display:flex;gap:8px;overflow-x:auto;padding:2px 0 14px;-ms-overflow-style:none;scrollbar-width:none;}
-  .chip-row::-webkit-scrollbar{display:none;}
-  .chip{
-    flex-shrink:0;padding:8px 16px;border-radius:20px;background:#fff;border:1.5px solid #E1E5E8;
-    font-size:13px;font-weight:600;color:var(--text);cursor:pointer;white-space:nowrap;
-  }
-  .chip.active{background:var(--navy);border-color:var(--navy);color:#fff;}
+    .label-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
 
-  .searchbar{
-    display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;
-    padding:12px 14px;margin-bottom:14px;border:1.5px solid #E1E5E8;
-  }
-  .searchbar input{border:none;outline:none;font-size:15px;flex:1;font-family:inherit;background:transparent;}
+    h2.section-heading {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 20px 0 10px;
+    }
 
-  .timeline-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #EEF0F2;}
-  .timeline-item:last-child{border-bottom:none;}
-  .timeline-dot{width:10px;height:10px;border-radius:50%;background:var(--green);margin-top:5px;flex-shrink:0;}
-  .timeline-item .tt{font-weight:700;font-size:14px;color:var(--navy);}
-  .timeline-item .td{font-size:12px;color:var(--muted);margin-top:1px;}
+    h2.section-heading:first-child {
+      margin-top: 0;
+    }
 
-  .checklist-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid #EEF0F2;cursor:pointer;}
-  .checklist-row:last-child{border-bottom:none;}
-  .checklist-row:active{background:#F7F9FA;}
-  .cl-icon{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;flex-shrink:0;}
-  .cl-icon.done{background:var(--green);}
-  .cl-icon.missing{background:var(--red);}
-  .cl-icon.pending{background:var(--amber);}
-  .cl-icon.notstarted{background:#C6CDD3;}
-  .cl-name{font-weight:600;font-size:14.5px;flex:1;}
-  .cl-status{font-size:12px;color:var(--muted);}
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 56px;
+      border-radius: var(--radius-sm);
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
 
-  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-  .gallery-thumb{
-    aspect-ratio:1;border-radius:10px;position:relative;overflow:hidden;
-    display:flex;align-items:flex-end;padding:6px;color:#fff;font-size:10px;font-weight:700;
-    cursor:pointer;
-  }
-  .gallery-thumb .lbl{background:rgba(0,0,0,.45);border-radius:4px;padding:2px 5px;}
+    .btn:active {
+      transform: scale(.98);
+    }
 
-  /* toast */
-  #toast{
-    position:absolute;left:16px;right:16px;bottom:82px;background:var(--navy);color:#fff;
-    padding:14px 16px;border-radius:12px;font-size:14px;font-weight:600;
-    display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.25);
-    opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none;z-index:50;
-  }
-  #toast.show{opacity:1;transform:translateY(0);}
+    .btn-primary {
+      background: #0B2B45;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(11, 43, 69, .18);
+    }
 
-  /* camera */
-  .cam-viewfinder{
-    flex:1;background:linear-gradient(160deg,#2b3d47,#0F2A3D);
-    display:flex;align-items:center;justify-content:center;position:relative;color:rgba(255,255,255,.6);
-    font-size:13px;min-height:400px;
-  }
-  .cam-controls{
-    padding:26px 16px 30px;background:#0F2A3D;display:flex;align-items:center;justify-content:center;
-  }
-  .shutter{
-    width:74px;height:74px;border-radius:50%;background:#fff;border:5px solid rgba(255,255,255,.35);
-    cursor:pointer;
-  }
-  .shutter:active{transform:scale(.92);}
-  .cam-context{
-    position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;
-  }
-  .cam-context .pill{background:rgba(0,0,0,.4);color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;}
+    .btn-secondary {
+      background: #fff;
+      color: var(--blue);
+      border: 2px solid var(--blue);
+    }
 
-  .category-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
-  .cat-chip{
-    background:#fff;border:2px solid #E1E5E8;border-radius:12px;padding:16px 10px;text-align:center;
-    font-weight:700;font-size:14px;color:var(--navy);cursor:pointer;
-  }
-  .cat-chip.selected{border-color:var(--blue);background:#EAF3F8;color:var(--blue);}
+    .btn-destructive {
+      background: #fff;
+      color: var(--red);
+      border: 2px solid #F3D3D3;
+    }
 
-  textarea{
-    width:100%;min-height:90px;border-radius:10px;border:1.5px solid #DCE1E5;padding:12px 14px;
-    font-family:inherit;font-size:14px;resize:vertical;
-  }
-  textarea:focus{outline:none;border-color:var(--blue);}
+    .btn-sm {
+      height: 42px;
+      font-size: 14px;
+      border-radius: 8px;
+    }
 
-  .empty-state{text-align:center;padding:50px 20px;color:var(--muted);}
-  .empty-state .ic{font-size:34px;margin-bottom:10px;}
+    .quick-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
 
-  .settings-row{display:flex;align-items:center;gap:14px;padding:15px 0;border-bottom:1px solid #EEF0F2;cursor:pointer;}
-  .settings-row:last-child{border-bottom:none;}
-  .settings-row .ic{font-size:18px;width:22px;text-align:center;}
-  .settings-row .txt{flex:1;font-weight:600;font-size:14.5px;}
-  .settings-row .chev{color:var(--muted);}
+    .qa-btn {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 1px 2px rgba(15, 42, 61, .06);
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
 
-  .breakdown-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .bd-card{background:#fff;border-radius:var(--radius);padding:14px;box-shadow:0 1px 2px rgba(15,42,61,.06);cursor:pointer;}
-  .bd-card:active{transform:scale(.97);}
-  .bd-card .sc{font-size:22px;font-weight:800;color:var(--navy);}
-  .bd-card .nm{font-size:12px;color:var(--muted);font-weight:600;margin-top:2px;}
+    .qa-btn:active {
+      transform: scale(.96);
+    }
 
-  .take-photo-btn{
-    width:100%;
-    padding:16px;
+    .qa-btn .ic {
+      font-size: 22px;
+    }
 
-    background:#1F8A4C;
+    .qa-btn span.txt {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+    }
 
-    color:white;
+    /* ---------- Status badges ---------- */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
 
-    border:none;
+    .badge-green {
+      background: #E4F3EA;
+      color: var(--green);
+    }
 
-    border-radius:18px;
+    .badge-amber {
+      background: #FDF0D5;
+      color: #8a6100;
+    }
 
-    font-size:16px;
+    .badge-red {
+      background: #FBE4E4;
+      color: var(--red);
+    }
 
-    font-weight:700;
+    .badge-blue {
+      background: #E4EEF3;
+      color: var(--blue);
+    }
 
-    cursor:pointer;
-}
-</style>
+    .badge-muted {
+      background: #EEF0F2;
+      color: var(--muted);
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-red {
+      background: var(--red);
+    }
+
+    .dot-amber {
+      background: var(--amber);
+    }
+
+    .dot-green {
+      background: var(--green);
+    }
+
+    /* ---------- progress ---------- */
+    .progress-track {
+      height: 8px;
+      background: #E7EBEE;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 20px;
+    }
+
+    .progress-fill.green {
+      background: var(--green);
+    }
+
+    .progress-fill.amber {
+      background: var(--amber);
+    }
+
+    .progress-fill.red {
+      background: var(--red);
+    }
+
+    /* ---------- priority list ---------- */
+    .priority-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #EEF0F2;
+      cursor: pointer;
+    }
+
+    .priority-item:last-child {
+      border-bottom: none;
+    }
+
+    .priority-item:active {
+      background: #F7F9FA;
+    }
+
+    .priority-item .pi-text .t {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--navy);
+    }
+
+    .priority-item .pi-text .d {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .priority-item .chev {
+      margin-left: auto;
+      color: var(--muted);
+      align-self: center;
+    }
+
+    /* ---------- bottom nav ---------- */
+    #bottomnav {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      height: 64px;
+      background: var(--card);
+      border-top: 1px solid #E7EBEE;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-family: inherit;
+      padding: 6px 10px;
+    }
+
+    .nav-item.active {
+      color: var(--blue);
+    }
+
+    .nav-item .ic {
+      font-size: 20px;
+    }
+
+    .nav-item .txt {
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .fab {
+      position: absolute;
+      right: 16px;
+      bottom: 80px;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-size: 22px;
+      border: none;
+      box-shadow: 0 8px 18px rgba(30, 107, 140, .45);
+      z-index: 15;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fab:active {
+      transform: scale(.94);
+    }
+
+    /* ---------- Login / splash ---------- */
+    .center-screen {
+      align-items: center;
+      justify-content: flex-start;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: 48px 32px 32px;
+      text-align: center;
+      gap: 14px;
+    }
+
+    .logo-mark {
+      margin: 0 auto 20px;
+      padding: 24px;
+      border-radius: 24px;
+      position: relative;
+
+      background: #ffffff;
+
+      backdrop-filter: blur(12px);
+
+      box-shadow:
+        0 10px 40px rgba(15, 42, 66, .08);
+
+      display: flex;
+      justify-content: center;
+    }
+
+    .logo-mark::after {
+      content: "";
+      position: absolute;
+
+      width: 220px;
+      height: 220px;
+
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      border-radius: 50%;
+
+      background: rgba(105, 212, 79, .10);
+
+      filter: blur(50px);
+
+      z-index: -1;
+    }
+
+    .pv-logo {
+      width: 420px;
+      max-width: 85%;
+      height: auto;
+      display: block;
+    }
+
+    .pv-icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+
+      background: linear-gradient(135deg,
+          #0B2B45,
+          #153B5A);
+
+      color: #FFFFFF;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 64px;
+      font-weight: 800;
+
+      box-shadow:
+        0 12px 30px rgba(15, 42, 66, .18);
+    }
+
+    .brand-name {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 1px;
+    }
+
+    .brand-tag {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .spinner {
+      width: 22px;
+      height: 22px;
+      border: 3px solid #E7EBEE;
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-top: 10px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .field {
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .field input {
+      width: 100%;
+      height: 50px;
+      border-radius: 10px;
+      border: 1.5px solid #DCE1E5;
+      padding: 0 14px;
+      font-size: 15px;
+      font-family: inherit;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .field input:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+
+    .link {
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .hr-text {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      margin: 18px 0;
+    }
+
+    .hr-text::before,
+    .hr-text::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #E7EBEE;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    /* filter chips */
+    .chip-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 0 14px;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .chip-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1.5px solid #E1E5E8;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chip.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #fff;
+    }
+
+    .searchbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      border: 1.5px solid #E1E5E8;
+    }
+
+    .searchbar input {
+      border: none;
+      outline: none;
+      font-size: 15px;
+      flex: 1;
+      font-family: inherit;
+      background: transparent;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #EEF0F2;
+    }
+
+    .timeline-item:last-child {
+      border-bottom: none;
+    }
+
+    .timeline-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .timeline-item .tt {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--navy);
+    }
+
+    .timeline-item .td {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .checklist-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid #EEF0F2;
+      cursor: pointer;
+    }
+
+    .checklist-row:last-child {
+      border-bottom: none;
+    }
+
+    .checklist-row:active {
+      background: #F7F9FA;
+    }
+
+    .cl-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .cl-icon.done {
+      background: var(--green);
+    }
+
+    .cl-icon.missing {
+      background: var(--red);
+    }
+
+    .cl-icon.pending {
+      background: var(--amber);
+    }
+
+    .cl-icon.notstarted {
+      background: #C6CDD3;
+    }
+
+    .cl-name {
+      font-weight: 600;
+      font-size: 14.5px;
+      flex: 1;
+    }
+
+    .cl-status {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .gallery-thumb {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 6px;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .gallery-thumb .lbl {
+      background: rgba(0, 0, 0, .45);
+      border-radius: 4px;
+      padding: 2px 5px;
+    }
+
+    /* toast */
+    #toast {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 82px;
+      background: var(--navy);
+      color: #fff;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all .25s;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* camera */
+    .cam-viewfinder {
+      flex: 1;
+      background: linear-gradient(160deg, #2b3d47, #0F2A3D);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      color: rgba(255, 255, 255, .6);
+      font-size: 13px;
+      min-height: 400px;
+    }
+
+    .cam-controls {
+      padding: 26px 16px 30px;
+      background: #0F2A3D;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shutter {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      background: #fff;
+      border: 5px solid rgba(255, 255, 255, .35);
+      cursor: pointer;
+    }
+
+    .shutter:active {
+      transform: scale(.92);
+    }
+
+    .cam-context {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .cam-context .pill {
+      background: rgba(0, 0, 0, .4);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .cat-chip {
+      background: #fff;
+      border: 2px solid #E1E5E8;
+      border-radius: 12px;
+      padding: 16px 10px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--navy);
+      cursor: pointer;
+    }
+
+    .cat-chip.selected {
+      border-color: var(--blue);
+      background: #EAF3F8;
+      color: var(--blue);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 90px;
+      border-radius: 10px;
+      border: 1.5px solid #DCE1E5;
+      padding: 12px 14px;
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--blue);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state .ic {
+      font-size: 34px;
+      margin-bottom: 10px;
+    }
+
+    .settings-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px 0;
+      border-bottom: 1px solid #EEF0F2;
+      cursor: pointer;
+    }
+
+    .settings-row:last-child {
+      border-bottom: none;
+    }
+
+    .settings-row .ic {
+      font-size: 18px;
+      width: 22px;
+      text-align: center;
+    }
+
+    .settings-row .txt {
+      flex: 1;
+      font-weight: 600;
+      font-size: 14.5px;
+    }
+
+    .settings-row .chev {
+      color: var(--muted);
+    }
+
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .bd-card {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: 0 1px 2px rgba(15, 42, 61, .06);
+      cursor: pointer;
+    }
+
+    .bd-card:active {
+      transform: scale(.97);
+    }
+
+    .bd-card .sc {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .bd-card .nm {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .take-photo-btn {
+      width: 100%;
+      padding: 16px;
+
+      background: #1F8A4C;
+
+      color: white;
+
+      border: none;
+
+      border-radius: 18px;
+
+      font-size: 16px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+  </style>
 </head>
+
 <body>
-<div id="frame">
-  <div id="statusbar"><span></span><span></span><span></span></div>
-  <div id="screens">
+  <div id="frame">
+    <div id="statusbar"><span></span><span></span><span></span></div>
+    <div id="screens">
 
-    <!-- SPLASH -->
-    <div class="screen active" id="screen-splash">
-      <div class="center-screen">
-        <div class="logo-mark" id="plotvault-logo"></div>
+      <!-- SPLASH -->
+      <div class="screen active" id="screen-splash">
+        <div class="center-screen">
+          <div class="logo-mark" id="plotvault-logo"></div>
 
-        <!-- Brand name included in logo -->
-        <div class="brand-tag">Capture • Verify • Comply</div>
-        <div class="spinner"></div>
-      </div>
-    </div>
-
-    <!-- LOGIN -->
-    <div class="screen" id="screen-login">
-      <div class="screen-body" style="padding-top:60px;">
-        <div style="text-align:center;margin-bottom:30px;">
-          <div class="logo-mark" id="plotvault-logo">
-    <img
-        src="plotvault-logo.png"
-        class="pv-logo"
-        alt="PlotVault Logo"
-    />
-</div>
-        <div style="color:var(--muted);font-size:14px;margin-top:6px;">
-    Capture • Verify • Comply
-</div>
-
-<div style="margin-top:18px;font-size:24px;font-weight:700;color:var(--navy);">
-    Welcome Back
-</div>
-
-<div style="margin-top:6px;font-size:14px;color:var(--muted);margin-bottom:18px;">
-    Sign in to access your PlotVault workspace
-</div>
-
-<div class="field">
-    <label>Email address</label><input type="email" value="adace@daceconsulting.co.uk"></div>
-        <div class="field"><label>Password</label><input type="password" value="••••••••••"></div>
-        <div class="row" style="margin-bottom:20px;">
-          <label class="checkbox-row" style="margin:0;"><input type="checkbox" checked> Remember me</label>
-          <button class="link" onclick="toast('Password reset link sent')">Forgot password?</button>
+          <!-- Brand name included in logo -->
+          <div class="brand-tag">Capture • Verify • Comply</div>
+          <div class="spinner"></div>
         </div>
-        <button class="btn btn-primary" onclick="go('companysetup')">SIGN IN</button>
-        <div class="hr-text">or</div>
-        <button class="link" style="display:block;text-align:center;width:100%;" onclick="toast('Account creation coming soon')">Create account</button>
       </div>
-    </div>
-</div>
-    <!-- COMPANY SETUP -->
-    <div class="screen" id="screen-companysetup">
-      <div class="screen-body" style="padding-top:30px;">
-        <h2 class="section-heading" style="margin-top:10px;">Set up your company</h2>
-        <p style="color:var(--muted);font-size:13.5px;margin-bottom:20px;">Shown once — this appears on your reports.</p>
-        <div class="field"><label>Company name</label><input value="Acme Homes"></div>
-        <div class="field"><label>Site address</label><input value="Oak View, Leeds"></div>
-        <div class="field"><label>Telephone</label><input value="0113 555 0148"></div>
-        <div class="field"><label>Email</label><input value="office@acmehomes.co.uk"></div>
-        <button class="btn btn-primary" onclick="go('dashboard')">Continue</button>
+
+      <!-- LOGIN -->
+      <div class="screen" id="screen-login">
+        <div class="screen-body" style="padding-top:60px;">
+          <div style="text-align:center;margin-bottom:30px;">
+            <div class="logo-mark" id="plotvault-logo">
+              <img src="plotvault-logo.png" class="pv-logo" alt="PlotVault Logo" />
+            </div>
+            <div style="color:var(--muted);font-size:14px;margin-top:6px;">
+              Capture • Verify • Comply
+            </div>
+
+            <div style="margin-top:18px;font-size:24px;font-weight:700;color:var(--navy);">
+              Welcome Back
+            </div>
+
+            <div style="margin-top:6px;font-size:14px;color:var(--muted);margin-bottom:18px;">
+              Sign in to access your PlotVault workspace
+            </div>
+
+            <div class="field">
+              <label>Email address</label><input type="email" value="adace@daceconsulting.co.uk">
+            </div>
+            <div class="field"><label>Password</label><input type="password" value="••••••••••"></div>
+            <div class="row" style="margin-bottom:20px;">
+              <label class="checkbox-row" style="margin:0;"><input type="checkbox" checked> Remember me</label>
+              <button class="link" onclick="toast('Password reset link sent')">Forgot password?</button>
+            </div>
+            <button class="btn btn-primary" onclick="go('projects')">SIGN IN</button>
+            <div class="hr-text">or</div>
+            <button class="link" style="display:block;text-align:center;width:100%;"
+              onclick="toast('Account creation coming soon')">Create account</button>
+          </div>
+        </div>
       </div>
-    </div>
+      <!-- COMPANY SETUP -->
+      <div class="screen" id="screen-companysetup">
+        <div class="screen-body" style="padding-top:30px;">
+          <h2 class="section-heading" style="margin-top:10px;">Set up your company</h2>
+          <p style="color:var(--muted);font-size:13.5px;margin-bottom:20px;">Shown once — this appears on your reports.
+          </p>
+          <div class="field"><label>Company name</label><input value="Acme Homes"></div>
+          <div class="field"><label>Site address</label><input value="Oak View, Leeds"></div>
+          <div class="field"><label>Telephone</label><input value="0113 555 0148"></div>
+          <div class="field"><label>Email</label><input value="office@acmehomes.co.uk"></div>
+          <button class="btn btn-primary" onclick="go('dashboard')">Continue</button>
+        </div>
+      </div>
 
-    <!-- DASHBOARD -->
-    <div class="screen" id="screen-dashboard">
-      
+      <!-- DASHBOARD -->
+      <div class="screen" id="screen-dashboard">
 
-      <div class="topnav">
-        <div
-    class="topnav-title"
-    style="
+
+        <div class="topnav">
+          <div class="topnav-title" style="
         background:linear-gradient(135deg,#14324A,#274B63);
         padding:20px;
         border-radius:18px;
         color:white;
         margin-bottom:18px;
-    "
->
+    ">
 
-    <div
-        style="
+            <div style="
             font-size:30px;
             font-weight:800;
             letter-spacing:2px;
-        "
-    >
-        PLOTVAULT
-    </div>
+        ">
+              PLOTVAULT
+            </div>
 
-    <div
-        style="
+            <div style="
             font-size:13px;
             opacity:.9;
             margin-top:4px;
-        "
-    >
-        Capture • Verify • Comply
-    </div>
-
-    
+        ">
+              Capture • Verify • Comply
+            </div>
 
 
 
-    <div
-        style="
+
+
+            <div style="
             font-size:12px;
             opacity:.75;
             margin-top:14px;
-        "
-    >
-        Dace Homes
-    </div>
-
-</div>
-
-<h1 id="dash-greeting">
-    Good Morning Andrew
-</h1>
-        <span class="sync-pill">● Synced</span>
-        <button class="backbtn" style="position:relative;margin-left:8px;" onclick="go('notifications')">
-          🔔<span id="dash-notif-badge" style="display:none;position:absolute;top:2px;right:2px;width:9px;height:9px;border-radius:50%;background:var(--red);border:1.5px solid #fff;"></span>
-        </button>
-      </div>
-      <div class="screen-body">
-
-       <!-- Site Health card removed -->
-
-        <!-- Today's Priorities removed -->
-
-        <!-- Quick Actions removed -->
-       
-        <h2 class="section-heading">Projects</h2>
-
-<div class="card tap" onclick="openProject('doseley')">
-
-    <div class="row">
-        <div>
-            <div style="font-weight:700;font-size:16px;">
-                🏗️ Doseley Halt
+        ">
+              Dace Homes
             </div>
 
-            <div style="font-size:12px;color:var(--muted);margin-top:4px;">
-                Tap to open project
+          </div>
+
+          <h1 id="dash-greeting">
+            Good Morning Andrew
+          </h1>
+          <span class="sync-pill">● Synced</span>
+          <button class="backbtn" style="position:relative;margin-left:8px;" onclick="go('notifications')">
+            🔔<span id="dash-notif-badge"
+              style="display:none;position:absolute;top:2px;right:2px;width:9px;height:9px;border-radius:50%;background:var(--red);border:1.5px solid #fff;"></span>
+          </button>
+        </div>
+        <div class="screen-body">
+
+          <!-- Site Health card removed -->
+
+          <!-- Today's Priorities removed -->
+
+          <!-- Quick Actions removed -->
+
+          <h2 class="section-heading">Projects</h2>
+
+          <div class="card tap" onclick="openProject('doseley')">
+
+            <div class="row">
+              <div>
+                <div style="font-weight:700;font-size:16px;">
+                  🏗️ Doseley Halt
+                </div>
+
+                <div style="font-size:12px;color:var(--muted);margin-top:4px;">
+                  Tap to open project
+                </div>
+              </div>
+
+              <div style="font-weight:800;color:var(--navy);">
+                View →
+              </div>
             </div>
-        </div>
 
-        <div style="font-weight:800;color:var(--navy);">
-            View →
-        </div>
-    </div>
+          </div>
 
-</div>
+          <div class="card">
 
-      <div class="card">
-
-    <div
-    style="
+            <div style="
         font-size:12px;
         letter-spacing:1px;
         text-transform:uppercase;
         color:var(--muted);
         font-weight:700;
         margin-bottom:12px;
-    "
->
-    Company Overview
-</div>
+    ">
+              Company Overview
+            </div>
 
-    <div
-        style="
+            <div style="
             display:grid;
             grid-template-columns:1fr 1fr;
             gap:12px;
             margin-top:10px;
             font-size:13px;
-        "
-    >
+        ">
 
-        <div id="dash-projects-count">
-            Projects: 0
-        </div>
+              <div id="dash-projects-count">
+                Projects: 0
+              </div>
 
-        <div id="dash-plots-active">
-            🏠 Plots: 0
-        </div>
+              <div id="dash-plots-active">
+                🏠 Plots: 0
+              </div>
 
-        <div id="dash-complete">
-            Approved: 0
-        </div>
+              <div id="dash-complete">
+                Approved: 0
+              </div>
 
-        <div id="dash-pending-count">
-            Pending: 0
-        </div>
+              <div id="dash-pending-count">
+                Pending: 0
+              </div>
 
-        <div id="dash-notstarted">
-            Missing: 0
-        </div>
+              <div id="dash-notstarted">
+                Missing: 0
+              </div>
 
-    </div>
+            </div>
 
-</div>
-
-        
-        <!-- Recent Activity removed -->
-      </div>
-    </div>
-
-    <!-- SITE HEALTH BREAKDOWN -->
-    <div class="screen" id="screen-sitehealth">
-      <div class="topnav">
-        <button class="backbtn" onclick="back()">←</button>
-        <div class="topnav-title"><h1>Site Health</h1><div class="sub">Oak View Development</div></div>
-      </div>
-      <div class="screen-body">
-        <div class="card">
-          <div class="row" style="align-items:flex-end;">
-            <div style="font-size:44px;font-weight:800;color:var(--navy);">91%</div>
-            <span class="badge badge-green">Excellent</span>
           </div>
-          <div class="progress-track"><div class="progress-fill" style="width:91%;"></div></div>
-          <p style="font-size:13px;color:var(--muted);margin-top:10px;">Most required evidence is complete and reports are up to date.</p>
-          <p style="font-size:11.5px;color:var(--muted);margin-top:6px;">Last updated 09:32 today</p>
-        </div>
 
-        <h2 class="section-heading">Breakdown</h2>
-        <div class="breakdown-grid">
-          <div class="bd-card" onclick="go('evidencegallery')"><div class="sc">98%</div><div class="nm">Evidence</div><div class="progress-track"><div class="progress-fill green" style="width:98%;"></div></div></div>
-          <div class="bd-card" onclick="go('reports')"><div class="sc">94%</div><div class="nm">Reports</div><div class="progress-track"><div class="progress-fill green" style="width:94%;"></div></div></div>
-          <div class="bd-card" onclick="openProject('oakview')"><div class="sc">86%</div><div class="nm">Inspections</div><div class="progress-track"><div class="progress-fill amber" style="width:86%;"></div></div></div>
-          <div class="bd-card" onclick="openProject('oakview')"><div class="sc">90%</div><div class="nm">Compliance</div><div class="progress-track"><div class="progress-fill green" style="width:90%;"></div></div></div>
-        </div>
 
-        <h2 class="section-heading">Top Issues</h2>
-        <div class="card" style="padding:4px 16px;">
-          <div class="priority-item" onclick="openPlot('p17')"><span class="dot dot-red" style="margin-top:5px;"></span><div class="pi-text"><div class="t">Plot 17</div><div class="d">3a - Roof Joist or Rafter Level evidence missing</div></div><span class="chev">›</span></div>
-          <div class="priority-item" onclick="openPlot('p21')"><span class="dot dot-amber" style="margin-top:5px;"></span><div class="pi-text"><div class="t">Plot 21</div><div class="d">Window evidence pending after installation</div></div><span class="chev">›</span></div>
-          <div class="priority-item" onclick="openPlot('p8')"><span class="dot dot-amber" style="margin-top:5px;"></span><div class="pi-text"><div class="t">Plot 8</div><div class="d">Report blocked by incomplete checklist</div></div><span class="chev">›</span></div>
-        </div>
-
-        <h2 class="section-heading">Recommended Actions</h2>
-        <div class="card" style="padding:4px 16px;">
-          <div class="priority-item" onclick="openCameraFor('oakview','p17','3a')"><span class="dot dot-red" style="margin-top:5px;"></span><div class="pi-text"><div class="t">Capture evidence for 3a - Roof Joist or Rafter Level</div><div class="d">Plot 17 · mandatory evidence gap</div></div><span class="chev">›</span></div>
-          <div class="priority-item" onclick="openChecklist('p8')"><span class="dot dot-amber" style="margin-top:5px;"></span><div class="pi-text"><div class="t">Review Plot 8 checklist</div><div class="d">Report can't generate until complete</div></div><span class="chev">›</span></div>
-          <div class="priority-item" onclick="go('reports')"><span class="dot dot-green" style="margin-top:5px;"></span><div class="pi-text"><div class="t">Generate reports for completed plots</div><div class="d">3 plots ready and waiting</div></div><span class="chev">›</span></div>
-        </div>
-
-        <h2 class="section-heading">Recent Improvements</h2>
-        <div class="card" style="padding:4px 16px;">
-          <div class="timeline-item"><div class="timeline-dot"></div><div><div class="tt">Plot 12 roof insulation captured</div><div class="td">09:32</div></div></div>
-          <div class="timeline-item"><div class="timeline-dot"></div><div><div class="tt">Plot 9 heating evidence synced</div><div class="td">08:48</div></div></div>
-          <div class="timeline-item"><div class="timeline-dot"></div><div><div class="tt">Overall score improved 88% → 91%</div><div class="td">Today</div></div></div>
+          <!-- Recent Activity removed -->
         </div>
       </div>
-    </div>
 
-    <!-- PROJECTS -->
-    <div class="screen" id="screen-projects">
-      <div class="topnav">
-        <div class="topnav-title"><h1>Projects</h1></div>
-        <button class="backbtn" onclick="addProject()">＋</button>
+      <!-- SITE HEALTH BREAKDOWN -->
+      <div class="screen" id="screen-sitehealth">
+        <div class="topnav">
+          <button class="backbtn" onclick="back()">←</button>
+          <div class="topnav-title">
+            <h1>Site Health</h1>
+            <div class="sub">Oak View Development</div>
+          </div>
+        </div>
+        <div class="screen-body">
+          <div class="card">
+            <div class="row" style="align-items:flex-end;">
+              <div style="font-size:44px;font-weight:800;color:var(--navy);">91%</div>
+              <span class="badge badge-green">Excellent</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width:91%;"></div>
+            </div>
+            <p style="font-size:13px;color:var(--muted);margin-top:10px;">Most required evidence is complete and reports
+              are up to date.</p>
+            <p style="font-size:11.5px;color:var(--muted);margin-top:6px;">Last updated 09:32 today</p>
+          </div>
+
+          <h2 class="section-heading">Breakdown</h2>
+          <div class="breakdown-grid">
+            <div class="bd-card" onclick="go('evidencegallery')">
+              <div class="sc">98%</div>
+              <div class="nm">Evidence</div>
+              <div class="progress-track">
+                <div class="progress-fill green" style="width:98%;"></div>
+              </div>
+            </div>
+            <div class="bd-card" onclick="go('reports')">
+              <div class="sc">94%</div>
+              <div class="nm">Reports</div>
+              <div class="progress-track">
+                <div class="progress-fill green" style="width:94%;"></div>
+              </div>
+            </div>
+            <div class="bd-card" onclick="openProject('oakview')">
+              <div class="sc">86%</div>
+              <div class="nm">Inspections</div>
+              <div class="progress-track">
+                <div class="progress-fill amber" style="width:86%;"></div>
+              </div>
+            </div>
+            <div class="bd-card" onclick="openProject('oakview')">
+              <div class="sc">90%</div>
+              <div class="nm">Compliance</div>
+              <div class="progress-track">
+                <div class="progress-fill green" style="width:90%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <h2 class="section-heading">Top Issues</h2>
+          <div class="card" style="padding:4px 16px;">
+            <div class="priority-item" onclick="openPlot('p17')"><span class="dot dot-red"
+                style="margin-top:5px;"></span>
+              <div class="pi-text">
+                <div class="t">Plot 17</div>
+                <div class="d">3a - Roof Joist or Rafter Level evidence missing</div>
+              </div><span class="chev">›</span>
+            </div>
+            <div class="priority-item" onclick="openPlot('p21')"><span class="dot dot-amber"
+                style="margin-top:5px;"></span>
+              <div class="pi-text">
+                <div class="t">Plot 21</div>
+                <div class="d">Window evidence pending after installation</div>
+              </div><span class="chev">›</span>
+            </div>
+            <div class="priority-item" onclick="openPlot('p8')"><span class="dot dot-amber"
+                style="margin-top:5px;"></span>
+              <div class="pi-text">
+                <div class="t">Plot 8</div>
+                <div class="d">Report blocked by incomplete checklist</div>
+              </div><span class="chev">›</span>
+            </div>
+          </div>
+
+          <h2 class="section-heading">Recommended Actions</h2>
+          <div class="card" style="padding:4px 16px;">
+            <div class="priority-item" onclick="openCameraFor('oakview','p17','3a')"><span class="dot dot-red"
+                style="margin-top:5px;"></span>
+              <div class="pi-text">
+                <div class="t">Capture evidence for 3a - Roof Joist or Rafter Level</div>
+                <div class="d">Plot 17 · mandatory evidence gap</div>
+              </div><span class="chev">›</span>
+            </div>
+            <div class="priority-item" onclick="openChecklist('p8')"><span class="dot dot-amber"
+                style="margin-top:5px;"></span>
+              <div class="pi-text">
+                <div class="t">Review Plot 8 checklist</div>
+                <div class="d">Report can't generate until complete</div>
+              </div><span class="chev">›</span>
+            </div>
+            <div class="priority-item" onclick="go('reports')"><span class="dot dot-green"
+                style="margin-top:5px;"></span>
+              <div class="pi-text">
+                <div class="t">Generate reports for completed plots</div>
+                <div class="d">3 plots ready and waiting</div>
+              </div><span class="chev">›</span>
+            </div>
+          </div>
+
+          <h2 class="section-heading">Recent Improvements</h2>
+          <div class="card" style="padding:4px 16px;">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div>
+                <div class="tt">Plot 12 roof insulation captured</div>
+                <div class="td">09:32</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div>
+                <div class="tt">Plot 9 heating evidence synced</div>
+                <div class="td">08:48</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div>
+                <div class="tt">Overall score improved 88% → 91%</div>
+                <div class="td">Today</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="screen-body">
-        <div class="searchbar">🔍<input placeholder="Search projects, plots, clients..." oninput="filterProjects(this.value)"></div>
-      <div class="chip-row">
-  <div class="chip active" onclick="setChip(this,'galfilter')">All</div>
-  <div class="chip" onclick="setChip(this,'galfilter')">Foundations</div>
-  <div class="chip" onclick="setChip(this,'galfilter')">Walls</div>
-  <div class="chip" onclick="setChip(this,'galfilter')">Roof</div>
-  <div class="chip" onclick="setChip(this,'galfilter')">Openings</div>
-  <div class="chip" onclick="setChip(this,'galfilter')">Airtightness</div>
-  <div class="chip" onclick="setChip(this,'galfilter')">Services</div>
-</div>
-        <div class="card" style="display:flex;justify-content:space-around;text-align:center;">
-          <div><div style="font-weight:800;color:var(--navy);font-size:18px;">4</div><div style="font-size:11px;color:var(--muted);">Projects</div></div>
-          <div
-  id="project-screen-plots-count"
-  style="font-weight:800;color:var(--navy);font-size:16px;">
-  0
-</div>
-<div style="font-size:11px;color:var(--muted);">Plots active</div></div>
-          <div><div style="font-weight:800;color:var(--red);font-size:18px;">8</div><div style="font-size:11px;color:var(--muted);">Missing evidence</div></div>
-          <div><div style="font-weight:800;color:var(--green);font-size:18px;">3</div><div style="font-size:11px;color:var(--muted);">Reports ready</div></div>
+
+      <!-- PROJECTS -->
+      <div class="screen" id="screen-projects">
+        <div class="topnav">
+          <div class="topnav-title">
+            <h1>Projects</h1>
+          </div>
+          <button class="backbtn" onclick="addProject()">＋</button>
+        </div>
+        <div class="screen-body">
+          <div class="searchbar">🔍<input placeholder="Search projects, plots, clients..."
+              oninput="filterProjects(this.value)"></div>
+          <div class="chip-row">
+            <div class="chip active" onclick="setChip(this,'galfilter')">All</div>
+            <div class="chip" onclick="setChip(this,'galfilter')">Foundations</div>
+            <div class="chip" onclick="setChip(this,'galfilter')">Walls</div>
+            <div class="chip" onclick="setChip(this,'galfilter')">Roof</div>
+            <div class="chip" onclick="setChip(this,'galfilter')">Openings</div>
+            <div class="chip" onclick="setChip(this,'galfilter')">Airtightness</div>
+            <div class="chip" onclick="setChip(this,'galfilter')">Services</div>
+          </div>
+          <div class="card" style="display:flex;justify-content:space-around;text-align:center;">
+            <div>
+              <div style="font-weight:800;color:var(--navy);font-size:18px;">4</div>
+              <div style="font-size:11px;color:var(--muted);">Projects</div>
+            </div>
+            <div id="project-screen-plots-count" style="font-weight:800;color:var(--navy);font-size:16px;">
+              0
+            </div>
+            <div style="font-size:11px;color:var(--muted);">Plots active</div>
+          </div>
+          <div>
+            <div style="font-weight:800;color:var(--red);font-size:18px;">8</div>
+            <div style="font-size:11px;color:var(--muted);">Missing evidence</div>
+          </div>
+          <div>
+            <div style="font-weight:800;color:var(--green);font-size:18px;">3</div>
+            <div style="font-size:11px;color:var(--muted);">Reports ready</div>
+          </div>
         </div>
 
         <div class="card tap" onclick="openProject('oakview')">
-          <div class="row"><span style="font-weight:800;color:var(--navy);font-size:16px;">Oak View Development</span><span class="badge badge-green">Active</span></div>
+          <div class="row"><span style="font-weight:800;color:var(--navy);font-size:16px;">Oak View
+              Development</span><span class="badge badge-green">Active</span></div>
           <div style="font-size:12.5px;color:var(--muted);margin-top:2px;">Leeds</div>
-          <div class="progress-track"><div class="progress-fill" style="width:76%;"></div></div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:76%;"></div>
+          </div>
           <div class="row" style="margin-top:10px;font-size:12.5px;color:var(--muted);">
-            <span>48 of 63 complete</span><span style="color:var(--red);font-weight:600;">4 missing</span><span>2 reports ready</span>
+            <span>48 of 63 complete</span><span style="color:var(--red);font-weight:600;">4 missing</span><span>2
+              reports ready</span>
           </div>
         </div>
 
         <div class="card tap" onclick="openProject('greenmeadows')">
-          <div class="row"><span style="font-weight:800;color:var(--navy);font-size:16px;">Green Meadows</span><span class="badge badge-amber">Needs Attention</span></div>
+          <div class="row"><span style="font-weight:800;color:var(--navy);font-size:16px;">Green Meadows</span><span
+              class="badge badge-amber">Needs Attention</span></div>
           <div style="font-size:12.5px;color:var(--muted);margin-top:2px;">Wakefield</div>
-          <div class="progress-track"><div class="progress-fill amber" style="width:38%;"></div></div>
+          <div class="progress-track">
+            <div class="progress-fill amber" style="width:38%;"></div>
+          </div>
           <div class="row" style="margin-top:10px;font-size:12.5px;color:var(--muted);">
-            <span>12 of 32 complete</span><span style="color:var(--red);font-weight:600;">5 missing</span><span>1 report ready</span>
+            <span>12 of 32 complete</span><span style="color:var(--red);font-weight:600;">5 missing</span><span>1 report
+              ready</span>
           </div>
         </div>
       </div>
@@ -735,1019 +1471,1184 @@ transform:translate(-50%,-50%);
     <div class="screen" id="screen-projectdetails">
       <div class="topnav">
         <button class="backbtn" onclick="back()">←</button>
-        <div class="topnav-title"><h1 id="pd-name">Oak View Development</h1><div class="sub">Active</div></div>
+        <div class="topnav-title">
+          <h1 id="pd-name">Oak View Development</h1>
+          <div class="sub">Active</div>
+        </div>
         <span class="sync-pill">● Synced</span>
       </div>
       <div class="screen-body">
         <div class="card">
-          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Client</span><span id="pd-client" style="font-weight:600;font-size:13px;">Acme Homes</span></div>
-<div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Site Manager</span><span id="pd-sitemanager" style="font-weight:600;font-size:13px;">Andrew Dace</span></div>
-          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Address</span><span id="pd-location" style="font-weight:600;font-size:13px;">Oak View, Leeds</span></div>
-          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Start date</span><span style="font-weight:600;font-size:13px;">12 May 2026</span></div>
-          <div class="row"><span style="color:var(--muted);font-size:13px;">Target completion</span><span style="font-weight:600;font-size:13px;">18 Dec 2026</span></div>
+          <div class="row" style="margin-bottom:8px;"><span
+              style="color:var(--muted);font-size:13px;">Client</span><span id="pd-client"
+              style="font-weight:600;font-size:13px;">Acme Homes</span></div>
+          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Site
+              Manager</span><span id="pd-sitemanager" style="font-weight:600;font-size:13px;">Andrew Dace</span></div>
+          <div class="row" style="margin-bottom:8px;"><span
+              style="color:var(--muted);font-size:13px;">Address</span><span id="pd-location"
+              style="font-weight:600;font-size:13px;">Oak View, Leeds</span></div>
+          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Start
+              date</span><span style="font-weight:600;font-size:13px;">12 May 2026</span></div>
+          <div class="row"><span style="color:var(--muted);font-size:13px;">Target completion</span><span
+              style="font-weight:600;font-size:13px;">18 Dec 2026</span></div>
         </div>
 
-        
+
 
         <div class="card">
 
-    <div
-        style="
+          <div style="
             display:flex;
             justify-content:space-between;
             align-items:center;
             font-size:16px;
             font-weight:800;
-        "
-    >
+        ">
 
-      <span>📊 <span id="project-progress-score">0%</span></span>
+            <span>📊 <span id="project-progress-score">0%</span></span>
 
-<span title="Plots">🏠 <span id="project-plots-count">0</span></span>
+            <span title="Plots">🏠 <span id="project-plots-count">0</span></span>
 
-<span title="Approved">✅ <span id="project-approved-count">0</span></span>
+            <span title="Approved">✅ <span id="project-approved-count">0</span></span>
 
-<span title="Pending">⏳ <span id="project-pending-count">0</span></span>
+            <span title="Pending">⏳ <span id="project-pending-count">0</span></span>
 
-<span title="Missing">❌ <span id="project-missing-count">0</span></span>  
+            <span title="Missing">❌ <span id="project-missing-count">0</span></span>
 
-    </div>
+          </div>
 
-</div>
         </div>
+      </div>
 
-        <h2 class="section-heading">Plots</h2>
-        <!-- Plot search and filters removed -->
-        <div id="plot-list"></div>
+      <h2 class="section-heading">Plots</h2>
+      <!-- Plot search and filters removed -->
+      <div id="plot-list"></div>
 
-<div class="quick-actions">
-  <button class="qa-btn" onclick="editProject()">
-    <span class="ic">✏️</span>
-    <span class="txt">Edit Project</span>
-</button>
-    <button class="qa-btn" onclick="go('addplot')">
-        <span class="ic">➕</span>
-        <span class="txt">Add Plot</span>
-    </button>
-</div>
+      <div class="quick-actions">
+        <button class="qa-btn" onclick="editProject()">
+          <span class="ic">✏️</span>
+          <span class="txt">Edit Project</span>
+        </button>
+        <button class="qa-btn" onclick="go('addplot')">
+          <span class="ic">➕</span>
+          <span class="txt">Add Plot</span>
+        </button>
       </div>
     </div>
+  </div>
 
-    <!-- ADD PLOT -->
-<div class="screen" id="screen-addplot">
+  <!-- ADD PLOT -->
+  <div class="screen" id="screen-addplot">
 
     <div class="topnav">
-        <button class="backbtn" onclick="back()">←</button>
+      <button class="backbtn" onclick="back()">←</button>
 
-        <div class="topnav-title">
-            <h1>Add Plot</h1>
-            <div class="sub">
-                Create a new plot
-            </div>
+      <div class="topnav-title">
+        <h1>Add Plot</h1>
+        <div class="sub">
+          Create a new plot
         </div>
+      </div>
     </div>
 
     <div class="screen-body">
 
-        <div class="field">
-            <label>Plot Number</label>
-            <input
-                id="new-plot-number"
-                type="text"
-                placeholder="e.g. Plot 17">
-        </div>
-
-        <div class="field">
-    <label>House Type</label>
-    <select id="new-house-type">
-
-    <option value="Detached">
-        Detached
-    </option>
-
-    <option value="Semi Detached">
-        Semi Detached
-    </option>
-
-    <option value="Terrace">
-        Terrace
-    </option>
-
-    <option value="Apartment">
-        Apartment
-    </option>
-
-    <option value="Custom">
-        Custom
-    </option>
-
-</select>
-</div>
-
-        <button class="btn primary" onclick="createPlotFromForm()">
-    Create Plot
-</button>
-
-    </div>
-
-</div>
-
-    <!-- PLOT OVERVIEW -->
-    <div class="screen" id="screen-plotoverview">
-      <div class="topnav">
-        <button class="backbtn" onclick="back()">←</button>
-        <div class="topnav-title"><h1 id="po-number">Plot 17</h1><div class="sub" id="po-project">Oak View Development</div></div>
-        <span class="sync-pill">● Synced</span>
+      <div class="field">
+        <label>Plot Number</label>
+        <input id="new-plot-number" type="text" placeholder="e.g. Plot 17">
       </div>
-      <div class="screen-body" id="po-body"></div>
-    </div>
 
-    <!-- CHECKLIST -->
-    <div class="screen" id="screen-checklist">
-      <div class="topnav">
-        <button class="backbtn" onclick="back()">←</button>
-        <div class="topnav-title"><h1>Part L Checklist</h1><div class="sub" id="cl-sub">Plot 17</div></div>
+      <div class="field">
+        <label>House Type</label>
+        <select id="new-house-type">
+
+          <option value="Detached">
+            Detached
+          </option>
+
+          <option value="Semi Detached">
+            Semi Detached
+          </option>
+
+          <option value="Terrace">
+            Terrace
+          </option>
+
+          <option value="Apartment">
+            Apartment
+          </option>
+
+          <option value="Custom">
+            Custom
+          </option>
+
+        </select>
       </div>
-      <div class="screen-body" id="checklist-body"></div>
+
+      <button class="btn primary" onclick="createPlotFromForm()">
+        Create Plot
+      </button>
+
     </div>
-
-    <!-- EVIDENCE GALLERY -->
-    <div class="screen" id="screen-evidencegallery">
-      <div class="topnav">
-        <button class="backbtn" onclick="back()">←</button>
-        <div class="topnav-title"><h1>Evidence Gallery</h1><div class="sub" id="eg-sub">Plot 17</div></div>
-      </div>
-      <div class="screen-body">
-        <div class="chip-row">
-          <div class="chip active" onclick="setChip(this,'galfilter')">All</div>
-          <div class="chip" onclick="setChip(this,'galfilter')">Insulation</div>
-          <div class="chip" onclick="setChip(this,'galfilter')">Windows</div>
-          <div class="chip" onclick="setChip(this,'galfilter')">Heating</div>
-          <div class="chip" onclick="setChip(this,'galfilter')">Roof</div>
-          <div class="chip" onclick="setChip(this,'galfilter')">Services</div>
-        </div>
-        <div class="gallery-grid" id="gallery-grid"></div>
-      </div>
-    </div>
-<!-- EVIDENCE VIEWER -->
-<div class="screen" id="screen-evidenceviewer">
-
-  <div class="topnav">
-    <button class="backbtn" onclick="back()">←</button>
-
-    <div class="topnav-title">
-      <h1>Evidence</h1>
-    </div>
-  </div>
-
-  <div class="screen-body" id="evidence-viewer-body">
 
   </div>
 
-</div>
-    <!-- REPORTS -->
-    <div class="screen" id="screen-reports">
-      <div class="topnav">
-        <div class="topnav-title"><h1>Reports</h1></div>
+  <!-- PLOT OVERVIEW -->
+  <div class="screen" id="screen-plotoverview">
+    <div class="topnav">
+      <button class="backbtn" onclick="back()">←</button>
+      <div class="topnav-title">
+        <h1 id="po-number">Plot 17</h1>
+        <div class="sub" id="po-project">Oak View Development</div>
       </div>
-      <div class="screen-body">
-        <div class="chip-row">
-          <div class="chip active" onclick="setChip(this,'repfilter')">All</div>
-          <div class="chip" onclick="setChip(this,'repfilter')">Ready</div>
-          <div class="chip" onclick="setChip(this,'repfilter')">Blocked</div>
-          <div class="chip" onclick="setChip(this,'repfilter')">Generated</div>
-        </div>
+      <span class="sync-pill">● Synced</span>
+    </div>
+    <div class="screen-body" id="po-body"></div>
+  </div>
 
-        <div class="card">
-          <div class="row"><span style="font-weight:700;color:var(--navy);">Plot 5 · Part L</span><span class="badge badge-green">Ready</span></div>
-          <div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px;">Oak View Development · All mandatory evidence complete</div>
-          <button class="btn btn-primary btn-sm" onclick="toast('Generating PDF…')">Generate PDF</button>
-        </div>
-        <div class="card">
-          <div class="row"><span style="font-weight:700;color:var(--navy);">Plot 22 · Part L</span><span class="badge badge-green">Ready</span></div>
-          <div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px;">Oak View Development · All mandatory evidence complete</div>
-          <button class="btn btn-primary btn-sm" onclick="toast('Generating PDF…')">Generate PDF</button>
-        </div>
-        <div class="card">
-          <div class="row"><span style="font-weight:700;color:var(--navy);">Plot 8 · Part L</span><span class="badge badge-red">Blocked</span></div>
-          <div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px;">Checklist incomplete — resolve before generating</div>
-          <button class="btn btn-secondary btn-sm" onclick="openChecklist('p8')">Review Checklist</button>
-        </div>
-        <div class="card">
-          <div class="row"><span style="font-weight:700;color:var(--navy);">Plot 12 · Part L</span><span class="badge badge-blue">Generated</span></div>
-          <div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px;">Generated yesterday, 16:40</div>
-          <div style="display:flex;gap:8px;">
-            <button class="btn btn-secondary btn-sm" onclick="toast('Opening share sheet…')" style="flex:1;">Share</button>
-            <button class="btn btn-secondary btn-sm" onclick="toast('Sending to printer…')" style="flex:1;">Print</button>
-          </div>
-        </div>
+  <!-- CHECKLIST -->
+  <div class="screen" id="screen-checklist">
+    <div class="topnav">
+      <button class="backbtn" onclick="back()">←</button>
+      <div class="topnav-title">
+        <h1>Part L Checklist</h1>
+        <div class="sub" id="cl-sub">Plot 17</div>
+      </div>
+    </div>
+    <div class="screen-body" id="checklist-body"></div>
+  </div>
+
+  <!-- EVIDENCE GALLERY -->
+  <div class="screen" id="screen-evidencegallery">
+    <div class="topnav">
+      <button class="backbtn" onclick="back()">←</button>
+      <div class="topnav-title">
+        <h1>Evidence Gallery</h1>
+        <div class="sub" id="eg-sub">Plot 17</div>
+      </div>
+    </div>
+    <div class="screen-body">
+
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+  </div>
+  <!-- EVIDENCE VIEWER -->
+  <div class="screen" id="screen-evidenceviewer">
+
+    <div class="topnav">
+      <button class="backbtn" onclick="back()">←</button>
+
+      <div class="topnav-title">
+        <h1>Evidence</h1>
       </div>
     </div>
 
-    <!-- SEARCH -->
-    <div class="screen" id="screen-search">
-      <div class="topnav">
-        <button class="backbtn" onclick="back()">←</button>
-        <div class="topnav-title"><h1>Search</h1></div>
-      </div>
-      <div class="screen-body">
-        <div class="searchbar">🔍<input id="global-search" placeholder="Search projects, plots, reports..." autofocus oninput="renderSearch(this.value)"></div>
-        <div id="search-results">
-          <p style="color:var(--muted);font-size:13px;text-align:center;margin-top:30px;">Start typing to search across every project.</p>
-        </div>
-      </div>
+    <div class="screen-body" id="evidence-viewer-body">
+
     </div>
 
-    <!-- SETTINGS -->
-    <div class="screen" id="screen-settings">
-      <div class="topnav"><div class="topnav-title"><h1>Settings</h1></div></div>
-      <div class="screen-body">
-        <div class="card tap" style="display:flex;align-items:center;gap:14px;" onclick="go('userprofile')">
-          <div style="width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">AD</div>
-          <div style="flex:1;"><div style="font-weight:700;color:var(--navy);">Andrew Dace</div><div style="font-size:12.5px;color:var(--muted);">Site Manager · Acme Homes</div></div>
-          <span class="chev">›</span>
-        </div>
-        <div class="card" style="padding:4px 16px;">
-          <div class="settings-row" onclick="go('userprofile')"><span class="ic">👤</span><span class="txt">Profile</span><span class="chev">›</span></div>
-          <div class="settings-row" onclick="go('companysetup')"><span class="ic">🏢</span><span class="txt">Company</span><span class="chev">›</span></div>
-          <div class="settings-row" onclick="go('notifications')"><span class="ic">🔔</span><span class="txt">Notifications</span><span class="badge badge-red" id="settings-notif-badge" style="display:none;"></span><span class="chev">›</span></div>
-          <div class="settings-row" onclick="toast('142 photos stored locally')"><span class="ic">💾</span><span class="txt">Storage</span><span class="chev">›</span></div>
-          <div class="settings-row" onclick="toast('Camera & location permissions')"><span class="ic">🔐</span><span class="txt">Permissions</span><span class="chev">›</span></div>
-          <div class="settings-row" onclick="toast('Opening support chat…')"><span class="ic">💬</span><span class="txt">Support</span><span class="chev">›</span></div>
-          <div class="settings-row" onclick="toast('PlotVault v1.0.0')"><span class="ic">ℹ️</span><span class="txt">About PlotVault</span><span class="chev">›</span></div>
-        </div>
-        <button class="btn btn-destructive" onclick="go('login')">Sign Out</button>
+  </div>
+  <!-- REPORTS -->
+  <div class="screen" id="screen-reports">
+    <div class="topnav">
+      <div class="topnav-title">
+        <h1>Reports</h1>
       </div>
     </div>
-
-    <!-- NOTIFICATIONS -->
-    <div class="screen" id="screen-notifications">
-      <div class="topnav">
-        <button class="backbtn" onclick="back()">←</button>
-        <div class="topnav-title"><h1>Notifications</h1></div>
-        <button class="link" onclick="markAllRead()">Mark all read</button>
+    <div class="screen-body">
+      <div class="chip-row">
+        <div class="chip active" onclick="setChip(this,'repfilter')">All</div>
+        <div class="chip" onclick="setChip(this,'repfilter')">Ready</div>
+        <div class="chip" onclick="setChip(this,'repfilter')">Blocked</div>
+        <div class="chip" onclick="setChip(this,'repfilter')">Generated</div>
       </div>
-      <div class="screen-body" id="notifications-body"></div>
-    </div>
 
-    <!-- USER PROFILE -->
-    <div class="screen" id="screen-userprofile">
-      <div class="topnav">
-        <button class="backbtn" onclick="back()">←</button>
-        <div class="topnav-title"><h1>My Profile</h1></div>
+      <div class="card">
+        <div class="row"><span style="font-weight:700;color:var(--navy);">Plot 5 · Part L</span><span
+            class="badge badge-green">Ready</span></div>
+        <div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px;">Oak View Development · All mandatory
+          evidence complete</div>
+        <button class="btn btn-primary btn-sm" onclick="toast('Generating PDF…')">Generate PDF</button>
       </div>
-      <div class="screen-body">
-        <div class="card" style="text-align:center;">
-          <div style="width:72px;height:72px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:24px;margin:0 auto 12px;">AD</div>
-          <div style="font-weight:800;color:var(--navy);font-size:17px;">Andrew Dace</div>
-          <div style="font-size:13px;color:var(--muted);margin-top:2px;">Site Manager</div>
-          <span class="badge badge-blue" style="margin-top:10px;">Acme Homes</span>
-        </div>
-
-        <h2 class="section-heading">Details</h2>
-        <div class="field"><label>Full name</label><input value="Andrew Dace"></div>
-        <div class="field"><label>Email address</label><input value="andrew@acmehomes.co.uk"></div>
-        <div class="field"><label>Phone</label><input value="07700 900123"></div>
-        <div class="field"><label>Role</label><input value="Site Manager"></div>
-
-        <h2 class="section-heading">Assigned Projects</h2>
-        <div class="card" style="padding:4px 16px;">
-          <div class="priority-item" onclick="openProject('oakview')"><span class="dot dot-green" style="margin-top:5px;"></span><div class="pi-text"><div class="t">Oak View Development</div><div class="d">Leeds · Site Manager</div></div><span class="chev">›</span></div>
-          <div class="priority-item" onclick="openProject('greenmeadows')"><span class="dot dot-amber" style="margin-top:5px;"></span><div class="pi-text"><div class="t">Green Meadows</div><div class="d">Wakefield · Site Manager</div></div><span class="chev">›</span></div>
-        </div>
-
-        <button class="btn btn-primary" onclick="toast('Profile updated')">Save Changes</button>
-        <button class="btn btn-secondary" style="margin-top:10px;" onclick="toast('Password reset email sent')">Change Password</button>
+      <div class="card">
+        <div class="row"><span style="font-weight:700;color:var(--navy);">Plot 22 · Part L</span><span
+            class="badge badge-green">Ready</span></div>
+        <div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px;">Oak View Development · All mandatory
+          evidence complete</div>
+        <button class="btn btn-primary btn-sm" onclick="toast('Generating PDF…')">Generate PDF</button>
       </div>
-    </div>
-
-    <!-- CAMERA -->
-    <div class="screen" id="screen-camera">
-      <div class="cam-viewfinder">
-        <div class="cam-context">
-          <span class="pill" id="cam-context-pill">Oak View · Plot 17</span>
-          <button class="backbtn" style="background:rgba(255,255,255,.2);color:#fff;" onclick="back()">✕</button>
-        </div>
-        <span>Camera preview</span>
+      <div class="card">
+        <div class="row"><span style="font-weight:700;color:var(--navy);">Plot 8 · Part L</span><span
+            class="badge badge-red">Blocked</span></div>
+        <div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px;">Checklist incomplete — resolve before
+          generating</div>
+        <button class="btn btn-secondary btn-sm" onclick="openChecklist('p8')">Review Checklist</button>
       </div>
-      <input
-  type="file"
-  id="photo-input"
-  accept="image/*"
-  capture="environment"
-  style="display:none;"
-  onchange="photoSelected(event)"
->
-      <div class="cam-controls"><button class="shutter" onclick="capturePhoto()"></button></div>
-    </div>
-
-    <!-- PHOTO CATEGORY -->
-    <div class="screen" id="screen-category">
-      <div class="topnav">
-        <button class="backbtn" onclick="back()">←</button>
-        <div class="topnav-title"><h1>Choose Category</h1><div class="sub" id="cat-sub">Plot 17</div></div>
-      </div>
-      <div class="screen-body">
-        <div style="aspect-ratio:16/10;background:#0F2A3D;border-radius:14px;margin-bottom:18px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:13px;">Captured photo</div>
-        <div class="category-grid" id="category-grid">
-         <div class="cat-chip" onclick="pickCategory(this,'1a - GF Perimeter Insulation Upstand')">1a - GF Perimeter Insulation Upstand</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'1b - GF External Door Thresholds')">1b - GF External Door Thresholds</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'1c - GF Below DPC')">1c - GF Below DPC</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'2a - Wall Below-Above DPC Continuity')">2a - Wall Below-Above DPC Continuity</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'2b - Wall Structural Penetrating Elements')">2b - Wall Structural Penetrating Elements</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'3a - Roof Joist or Rafter Level')">3a - Roof Joist or Rafter Level</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'3b - Roof Eaves and Gable Edges')">3b - Roof Eaves and Gable Edges</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'4a - Window Position to Cavity Insulation')">4a - Window Position to Cavity Insulation</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'4b - Door Position to Cavity Insulation')">4b - Door Position to Cavity Insulation</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'5 - Airtightness of Junctions & Penetrations')">5 - Airtightness of Junctions & Penetrations</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'6a - Plant & Equipment Identification Labels')">6a - Plant & Equipment Identification Labels</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'6b - Insulation of Primary Pipework')">6b - Insulation of Primary Pipework</div>
-
-<div class="cat-chip" onclick="pickCategory(this,'6c - Vent Duct Insulation')">6c - Vent Duct Insulation</div>
-        </div>
-        <button class="btn btn-primary" style="margin-top:22px;" onclick="go('notes')">Continue</button>
-      </div>
-    </div>
-
-    <!-- NOTES -->
-    <div class="screen" id="screen-notes">
-      <div class="topnav">
-        <button class="backbtn" onclick="back()">←</button>
-        <div class="topnav-title"><h1>Add Notes</h1><div class="sub">Optional</div></div>
-      </div>
-      <div class="screen-body">
-        <div class="field">
-          <label>Notes</label>
-          <textarea id="notes-input" placeholder="e.g. Loft insulation fitted to 270mm, all joists covered"></textarea>
-        </div>
-        <button class="btn btn-primary" onclick="savePhoto()">Save</button>
-      </div>
-    </div>
-</div>
-    <!-- PHOTO REVIEW / SAVED -->
-    <div class="screen" id="screen-photoreview">
-      <div class="screen-body center-screen" style="height:100%;">
-        <div style="width:72px;height:72px;border-radius:50%;background:#E4F3EA;display:flex;align-items:center;justify-content:center;font-size:32px;">✅</div>
-        <h1 style="font-size:19px;color:var(--navy);margin-top:4px;">Evidence saved</h1>
-        <p style="color:var(--muted);font-size:13.5px;" id="saved-sub">Roof · Plot 17 · Oak View</p>
-        <div style="width:100%;display:flex;flex-direction:column;gap:10px;margin-top:16px;">
-          <button class="btn btn-primary" onclick="openCamera(state.photoProject)">Take Another Photo</button>
-          <button class="btn btn-secondary"onclick="openPlot(state.plotId)">
-            Back to Plot
-</button>
+      <div class="card">
+        <div class="row"><span style="font-weight:700;color:var(--navy);">Plot 12 · Part L</span><span
+            class="badge badge-blue">Generated</span></div>
+        <div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px;">Generated yesterday, 16:40</div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-secondary btn-sm" onclick="toast('Opening share sheet…')"
+            style="flex:1;">Share</button>
+          <button class="btn btn-secondary btn-sm" onclick="toast('Sending to printer…')" style="flex:1;">Print</button>
         </div>
       </div>
-      <!-- EVIDENCE DETAILS -->
-<div class="screen" id="screen-evidencedetails">
-  <div class="topnav">
-    <button class="backbtn" onclick="back()">←</button>
-
-    <div class="topnav-title">
-      <h1>Evidence Details</h1>
     </div>
   </div>
 
-  <div class="screen-body" id="evidence-details-body">
+  <!-- SEARCH -->
+  <div class="screen" id="screen-search">
+    <div class="topnav">
+      <button class="backbtn" onclick="back()">←</button>
+      <div class="topnav-title">
+        <h1>Search</h1>
+      </div>
+    </div>
+    <div class="screen-body">
+      <div class="searchbar">🔍<input id="global-search" placeholder="Search projects, plots, reports..." autofocus
+          oninput="renderSearch(this.value)"></div>
+      <div id="search-results">
+        <p style="color:var(--muted);font-size:13px;text-align:center;margin-top:30px;">Start typing to search across
+          every project.</p>
+      </div>
+    </div>
   </div>
-</div>
-  <div id="toast"></div>
 
-  <button class="fab" onclick="openCamera(state.projectId||'oakview')" id="fabbtn">📷</button>
-
-  <div id="bottomnav">
-    <button class="nav-item active" data-nav="dashboard" onclick="go('dashboard')"><span class="ic">🏠</span><span class="txt">Dashboard</span></button>
-    <button class="nav-item" data-nav="projects" onclick="go('projects')"><span class="ic">📁</span><span class="txt">Projects</span></button>
-    <button class="nav-item" data-nav="camera" onclick="openCamera(state.projectId||'oakview')"><span class="ic">📷</span><span class="txt">Camera</span></button>
-    <button class="nav-item" data-nav="reports" onclick="go('reports')"><span class="ic">📄</span><span class="txt">Reports</span></button>
-    <button class="nav-item" data-nav="settings" onclick="go('settings')"><span class="ic">⚙️</span><span class="txt">Settings</span></button>
+  <!-- SETTINGS -->
+  <div class="screen" id="screen-settings">
+    <div class="topnav">
+      <div class="topnav-title">
+        <h1>Settings</h1>
+      </div>
+    </div>
+    <div class="screen-body">
+      <div class="card tap" style="display:flex;align-items:center;gap:14px;" onclick="go('userprofile')">
+        <div
+          style="width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">
+          AD</div>
+        <div style="flex:1;">
+          <div style="font-weight:700;color:var(--navy);">Andrew Dace</div>
+          <div style="font-size:12.5px;color:var(--muted);">Site Manager · Acme Homes</div>
+        </div>
+        <span class="chev">›</span>
+      </div>
+      <div class="card" style="padding:4px 16px;">
+        <div class="settings-row" onclick="go('userprofile')"><span class="ic">👤</span><span
+            class="txt">Profile</span><span class="chev">›</span></div>
+        <div class="settings-row" onclick="go('companysetup')"><span class="ic">🏢</span><span
+            class="txt">Company</span><span class="chev">›</span></div>
+        <div class="settings-row" onclick="go('notifications')"><span class="ic">🔔</span><span
+            class="txt">Notifications</span><span class="badge badge-red" id="settings-notif-badge"
+            style="display:none;"></span><span class="chev">›</span></div>
+        <div class="settings-row" onclick="toast('142 photos stored locally')"><span class="ic">💾</span><span
+            class="txt">Storage</span><span class="chev">›</span></div>
+        <div class="settings-row" onclick="toast('Camera & location permissions')"><span class="ic">🔐</span><span
+            class="txt">Permissions</span><span class="chev">›</span></div>
+        <div class="settings-row" onclick="toast('Opening support chat…')"><span class="ic">💬</span><span
+            class="txt">Support</span><span class="chev">›</span></div>
+        <div class="settings-row" onclick="toast('PlotVault v1.0.0')"><span class="ic">ℹ️</span><span class="txt">About
+            PlotVault</span><span class="chev">›</span></div>
+      </div>
+      <button class="btn btn-destructive" onclick="go('login')">Sign Out</button>
+    </div>
   </div>
-</div>
-
-<script>
-/* ---------------- DATA ---------------- */
-let projects = {
-  doseley:{
-    id:'doseley',
-    name:'Doseley Halt',
-    location:'Telford'
-  }
-};
-
-const PARTL_ITEMS = [
-  '1a - GF Perimeter Insulation Upstand',
-  '1b - GF External Door Thresholds',
-  '1c - GF Below DPC',
-  '2a - Wall Below-Above DPC Continuity',
-  '2b - Wall Structural Penetrating Elements (lintels etc)',
-  '3a - Roof Joist or Rafter Level',
-  '3b - Roof Eaves and Gable Edges',
-  '4a - Window Position to Cavity Insulation',
-  '4b - Door Position to Cavity Insulation',
-  '5 - Airtightness of Junctions & Penetrations',
-  '6a - Plant & Equipment Identification Labels',
-  '6b - Insulation of Primary Pipework',
-  '6c - Vent Duct Insulation'
-];
-function mkChecklist(status){
-
-  return PARTL_ITEMS.map(name => [
-    name,
-    status
-  ]);
-
-}
-
-let plots = {
- 
-
-   p1:{
-  id:'p1',
-  projectId:'doseley',
-  number:'Plot 1',
-  houseType:'New Plot',
-  stage:'Not Started',
-  status:'Not Started',
-  score:0,
-  last:'Just created',
-  checklist: mkChecklist('missing'),
-  missing:[],
-  timeline:[],
-  gallery:[]
-}
-
-};
-
-let notifications = [];
-function saveData() {
-  console.log("SAVEDATA RUNNING");
-  console.log("SAVING", plots);
-  localStorage.setItem(
-    "plotvaultProjects",
-    JSON.stringify(projects)
-  );
-
-  localStorage.setItem(
-    "plotvaultPlots",
-    JSON.stringify(plots)
-  );
-}
-
-function loadData() {
-
-  const savedProjects =
-    localStorage.getItem("plotvaultProjects");
-
-  const savedPlots =
-    localStorage.getItem("plotvaultPlots");
-
-  if (savedProjects) {
-    projects = JSON.parse(savedProjects);
-  }
-
-  if (savedPlots) {
-    plots = JSON.parse(savedPlots);
-  }
-}
-
-
-/* ---------------- STATE ---------------- */
-const state = {
-  screen:'splash',
-  history:[],
-  projectId:'doseley',
-  plotId:'p1',
-  checklistExpanded: false,
-  timelineExpanded:false,
-
-  photoCategory:null,
-  photoProject:'doseley',
-  photoPlot:'p1',
-  photoNotes:'',
-  photoLat:null,
-  photoLng:null,
-  photoAltitude:null,
-  photoAccuracy:null,
-
-  selectedPhoto:null
-  
-};
-
-
-function go(screen, push=true){
-  if(push && state.screen!==screen) state.history.push(state.screen);
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('screen-'+screen).classList.add('active');
-  state.screen = screen;
-  updateBottomNav(screen);
-  updateFab(screen);
-  if(screen==='projects') renderProjects();
-  if(screen==='dashboard'){
-  updateDashboardStats();
-}
-
-console.log("Dashboard loaded");
-  if(screen==='projectdetails') renderPlotList();
-  if(screen==='checklist') renderChecklist();
-  if(screen==='evidencegallery') renderGallery();
-  if(screen==='plotoverview') renderPlotOverview();
-  if(screen==='notifications') renderNotifications();
-  if(screen==='search') renderSearch(document.getElementById('global-search') ? document.getElementById('global-search').value : '');
-  updateNotifBadges();
-  document.getElementById('screens').scrollTop = 0;
-  const el = document.getElementById('screen-'+screen);
-  if(el) el.scrollTop = 0;
-}
-function back(){
-
-  if(state.screen === 'plotoverview'){
-    go('projectdetails', false);
-    return;
-  }
-
- if(state.screen === 'projectdetails'){
-    go('dashboard');
-    return;
-}
-
-  const prev = state.history.pop();
-
-  if(prev){
-    go(prev, false);
-  }
-  else{
-    go('dashboard', false);
-  }
-
-}
-function updateBottomNav(screen){
-  const map = {dashboard:'dashboard', projects:'projects', projectdetails:'projects', plotoverview:'projects', reports:'reports', settings:'settings', notifications:'settings', userprofile:'settings', camera:'camera', category:'camera', notes:'camera', photoreview:'camera'};
-  const active = map[screen];
-  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active', b.dataset.nav===active));
-  document.getElementById('bottomnav').style.display = ['splash','login','companysetup','camera','category','notes','photoreview'].includes(screen) ? 'none' : 'flex';
-}
-function updateFab(screen){
-  document.getElementById('fabbtn').style.display = ['dashboard','projects','projectdetails','plotoverview','reports','settings','notifications','userprofile'].includes(screen) ? 'flex' : 'none';
-}
-
-/* ---------------- NAVIGATION HELPERS ---------------- */
-
-function openProject(id){
-
-  state.projectId = id;
-
-  const projectPlots =
-  Object.values(plots)
-    .filter(p => p.projectId === id);
-
-const progress =
-  projectPlots.length
-    ? Math.round(
-        projectPlots.reduce(
-          (total, plot) => total + plot.score,
-          0
-        ) / projectPlots.length
-      )
-    : 0;
-
-  document.getElementById('pd-name').textContent =
-    projects[id].name;
-
-  document.getElementById('pd-location').textContent =
-    projects[id].location || "Not set";
-    document.getElementById('pd-client').textContent =
-  projects[id].client || "Not set";
-
-document.getElementById('pd-sitemanager').textContent =
-  projects[id].siteManager || "Not set";
-
-  console.log(projects[id]);
 
-// document.getElementById(
-//   'project-progress-score'
-// ).textContent =
-//   progress + "%";
-
- // document.getElementById(
- // 'project-plots-count'
-//).textContent =
- // projectPlots.length;
-
-  go('projectdetails');
-}
-
-function editProject() {
-
-  const project = projects[state.projectId];
-
-  const newName =
-    prompt("Project Name", project.name);
-
-  if (!newName) return;
-
-  const newLocation =
-    prompt("Location", project.location);
-
-  if (!newLocation) return;
-  const newClient =
-  prompt("Client", project.client || "");
-
-const newSiteManager =
-  prompt("Site Manager", project.siteManager || "");
-
-  project.name = newName;
-project.location = newLocation;
-project.client = newClient;
-project.siteManager = newSiteManager;
-
-  saveData();
-
-  document.getElementById('pd-name').textContent =
-    project.name;
-
-  document.getElementById('pd-location').textContent =
-    project.location;
-    document.getElementById('pd-client').textContent =
-  project.client || "Not set";
-
-document.getElementById('pd-sitemanager').textContent =
-  project.siteManager || "Not set";
-
-
-  toast("Project updated");
-}
-
-function openPlot(id){ state.plotId = id; state.projectId = plots[id].projectId; go('plotoverview'); }
-function openChecklist(id){ state.plotId = id; go('checklist'); }
-function openCamera(projectId){ state.photoProject = projectId; state.photoPlot = null; state.photoCategory = null;
-  document.getElementById('cam-context-pill').textContent = projects[projectId].name; go('camera'); }
-function openCameraFor(projectId, plotId, category){
-  state.photoProject = projectId; state.photoPlot = plotId; state.photoCategory = category||null;
-  document.getElementById('cam-context-pill').textContent = projects[projectId].name + (plotId? ' · '+plots[plotId].number : '');
-  go('camera');
-}
-function capturePhoto(){
-
-  document.getElementById('photo-input').click();
-
-}
-function photoSelected(event){
-
-  const file = event.target.files[0];
-
-  if(!file){
-    return;
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = function(e){
-
-    const img = new Image();
-
-img.onload = function(){
-
-  const canvas = document.createElement("canvas");
-
-  const maxWidth = 800;
-
-  const scale =
-    maxWidth / img.width;
-
-  canvas.width = maxWidth;
-  canvas.height =
-    img.height * scale;
-
-  const ctx =
-    canvas.getContext("2d");
-
-  ctx.drawImage(
-    img,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-  state.photoImage =
-    canvas.toDataURL(
-      "image/jpeg",
-      0.7
-    );
-
-};
-
-img.src = e.target.result;
-   
-
-    document.getElementById('cat-sub').textContent =
-      (state.photoPlot
-        ? plots[state.photoPlot].number + ' • '
-        : '') +
-      projects[state.photoProject].name;
-
-    document.querySelectorAll('.cat-chip')
-      .forEach(c => c.classList.remove('selected'));
-
-    if(state.photoCategory){
-
-      document.querySelectorAll('.cat-chip')
-        .forEach(c => {
-
-          if(c.textContent.trim() === state.photoCategory){
-            c.classList.add('selected');
-          }
-
-        });
+  <!-- NOTIFICATIONS -->
+  <div class="screen" id="screen-notifications">
+    <div class="topnav">
+      <button class="backbtn" onclick="back()">←</button>
+      <div class="topnav-title">
+        <h1>Notifications</h1>
+      </div>
+      <button class="link" onclick="markAllRead()">Mark all read</button>
+    </div>
+    <div class="screen-body" id="notifications-body"></div>
+  </div>
+
+  <!-- USER PROFILE -->
+  <div class="screen" id="screen-userprofile">
+    <div class="topnav">
+      <button class="backbtn" onclick="back()">←</button>
+      <div class="topnav-title">
+        <h1>My Profile</h1>
+      </div>
+    </div>
+    <div class="screen-body">
+      <div class="card" style="text-align:center;">
+        <div
+          style="width:72px;height:72px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:24px;margin:0 auto 12px;">
+          AD</div>
+        <div style="font-weight:800;color:var(--navy);font-size:17px;">Andrew Dace</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px;">Site Manager</div>
+        <span class="badge badge-blue" style="margin-top:10px;">Acme Homes</span>
+      </div>
+
+      <h2 class="section-heading">Details</h2>
+      <div class="field"><label>Full name</label><input value="Andrew Dace"></div>
+      <div class="field"><label>Email address</label><input value="andrew@acmehomes.co.uk"></div>
+      <div class="field"><label>Phone</label><input value="07700 900123"></div>
+      <div class="field"><label>Role</label><input value="Site Manager"></div>
+
+      <h2 class="section-heading">Assigned Projects</h2>
+      <div class="card" style="padding:4px 16px;">
+        <div class="priority-item" onclick="openProject('oakview')"><span class="dot dot-green"
+            style="margin-top:5px;"></span>
+          <div class="pi-text">
+            <div class="t">Oak View Development</div>
+            <div class="d">Leeds · Site Manager</div>
+          </div><span class="chev">›</span>
+        </div>
+        <div class="priority-item" onclick="openProject('greenmeadows')"><span class="dot dot-amber"
+            style="margin-top:5px;"></span>
+          <div class="pi-text">
+            <div class="t">Green Meadows</div>
+            <div class="d">Wakefield · Site Manager</div>
+          </div><span class="chev">›</span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" onclick="toast('Profile updated')">Save Changes</button>
+      <button class="btn btn-secondary" style="margin-top:10px;" onclick="toast('Password reset email sent')">Change
+        Password</button>
+    </div>
+  </div>
+
+  <!-- CAMERA -->
+  <div class="screen" id="screen-camera">
+    <div class="cam-viewfinder">
+      <div class="cam-context">
+        <span class="pill" id="cam-context-pill">Oak View · Plot 17</span>
+        <button class="backbtn" style="background:rgba(255,255,255,.2);color:#fff;" onclick="back()">✕</button>
+      </div>
+      <span>Camera preview</span>
+    </div>
+    <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none;"
+      onchange="photoSelected(event)">
+    <div class="cam-controls"><button class="shutter" onclick="capturePhoto()"></button></div>
+  </div>
+
+  <!-- PHOTO CATEGORY -->
+  <div class="screen" id="screen-category">
+    <div class="topnav">
+      <button class="backbtn" onclick="back()">←</button>
+      <div class="topnav-title">
+        <h1>Choose Category</h1>
+        <div class="sub" id="cat-sub">Plot 17</div>
+      </div>
+    </div>
+    <div class="screen-body">
+      <div
+        style="aspect-ratio:16/10;background:#0F2A3D;border-radius:14px;margin-bottom:18px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:13px;">
+        Captured photo</div>
+      <div class="category-grid" id="category-grid">
+        <div class="cat-chip" onclick="pickCategory(this,'1a - GF Perimeter Insulation Upstand')">1a - GF Perimeter
+          Insulation Upstand</div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'1b - GF External Door Thresholds')">1b - GF External Door
+          Thresholds</div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'1c - GF Below DPC')">1c - GF Below DPC</div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'2a - Wall Below-Above DPC Continuity')">2a - Wall Below-Above
+          DPC Continuity</div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'2b - Wall Structural Penetrating Elements (lintels etc)')">
+          2b - Wall Structural Penetrating Elements (lintels etc)
+        </div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'3a - Roof Joist or Rafter Level')">3a - Roof Joist or Rafter
+          Level</div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'3b - Roof Eaves and Gable Edges')">3b - Roof Eaves and Gable
+          Edges</div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'4a - Window Position to Cavity Insulation')">4a - Window
+          Position to Cavity Insulation</div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'4b - Door Position to Cavity Insulation')">4b - Door Position
+          to Cavity Insulation</div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'5 - Airtightness of Junctions & Penetrations')">5 -
+          Airtightness of Junctions & Penetrations</div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'6a - Plant & Equipment Identification Labels')">6a - Plant &
+          Equipment Identification Labels</div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'6b - Insulation of Primary Pipework')">6b - Insulation of
+          Primary Pipework</div>
+
+        <div class="cat-chip" onclick="pickCategory(this,'6c - Vent Duct Insulation')">6c - Vent Duct Insulation</div>
+      </div>
+      <button class="btn btn-primary" style="margin-top:22px;" onclick="go('notes')">Continue</button>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="screen" id="screen-notes">
+    <div class="topnav">
+      <button class="backbtn" onclick="back()">←</button>
+      <div class="topnav-title">
+        <h1>Add Notes</h1>
+        <div class="sub">Optional</div>
+      </div>
+    </div>
+    <div class="screen-body">
+      <div class="field">
+        <label>Notes</label>
+        <textarea id="notes-input" placeholder="e.g. Loft insulation fitted to 270mm, all joists covered"></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="savePhoto()">Save</button>
+    </div>
+  </div>
+  </div>
+  <!-- PHOTO REVIEW / SAVED -->
+  <div class="screen" id="screen-photoreview">
+    <div class="screen-body center-screen" style="height:100%;">
+      <div
+        style="width:72px;height:72px;border-radius:50%;background:#E4F3EA;display:flex;align-items:center;justify-content:center;font-size:32px;">
+        ✅</div>
+      <h1 style="font-size:19px;color:var(--navy);margin-top:4px;">Evidence saved</h1>
+      <p style="color:var(--muted);font-size:13.5px;" id="saved-sub">Roof · Plot 17 · Oak View</p>
+      <div style="width:100%;display:flex;flex-direction:column;gap:10px;margin-top:16px;">
+        <button class="btn btn-primary" onclick="openCamera(state.photoProject)">Take Another Photo</button>
+        <button class="btn btn-secondary" onclick="openPlot(state.plotId)">
+          Back to Plot
+        </button>
+      </div>
+    </div>
+    <!-- EVIDENCE DETAILS -->
+    <div class="screen" id="screen-evidencedetails">
+      <div class="topnav">
+        <button class="backbtn" onclick="back()">←</button>
+
+        <div class="topnav-title">
+          <h1>Evidence Details</h1>
+        </div>
+      </div>
+
+      <div class="screen-body" id="evidence-details-body">
+      </div>
+    </div>
+    <div id="toast"></div>
+
+    <div id="loading-overlay" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    z-index:9999;
+    align-items:center;
+    justify-content:center;
+">
+
+      <div style="
+        background:white;
+        padding:24px;
+        border-radius:16px;
+        text-align:center;
+        width:220px;
+    ">
+
+        <div style="
+            font-size:32px;
+            margin-bottom:12px;
+        ">
+          📍
+        </div>
+
+        <div style="
+            font-size:18px;
+            font-weight:700;
+            color:var(--navy);
+            margin-bottom:8px;
+        ">
+          Saving Evidence
+        </div>
+
+        <div style="
+            font-size:14px;
+            color:#6b7280;
+        ">
+          Acquiring GPS and updating checklist...
+        </div>
+
+      </div>
+
+    </div>
+
+    <button class="fab" onclick="openCamera(state.projectId||'oakview')" id="fabbtn">📷</button>
+
+    <div id="bottomnav">
+      <button class="nav-item active" data-nav="dashboard" onclick="go('dashboard')"><span class="ic">🏠</span><span
+          class="txt">Dashboard</span></button>
+      <button class="nav-item" data-nav="projects" onclick="go('projects')"><span class="ic">📁</span><span
+          class="txt">Projects</span></button>
+      <button class="nav-item" data-nav="camera" onclick="openCamera(state.projectId||'oakview')"><span
+          class="ic">📷</span><span class="txt">Camera</span></button>
+      <button class="nav-item" data-nav="reports" onclick="go('reports')"><span class="ic">📄</span><span
+          class="txt">Reports</span></button>
+      <button class="nav-item" data-nav="settings" onclick="go('settings')"><span class="ic">⚙️</span><span
+          class="txt">Settings</span></button>
+    </div>
+  </div>
+
+  <script>
+    /* ---------------- DATA ---------------- */
+    let projects = {
+      doseley: {
+        id: 'doseley',
+        name: 'Doseley Halt',
+        location: 'Telford'
+      }
+    };
+
+    const PARTL_ITEMS = [
+      '1a - GF Perimeter Insulation Upstand',
+      '1b - GF External Door Thresholds',
+      '1c - GF Below DPC',
+      '2a - Wall Below-Above DPC Continuity',
+      '2b - Wall Structural Penetrating Elements (lintels etc)',
+      '3a - Roof Joist or Rafter Level',
+      '3b - Roof Eaves and Gable Edges',
+      '4a - Window Position to Cavity Insulation',
+      '4b - Door Position to Cavity Insulation',
+      '5 - Airtightness of Junctions & Penetrations',
+      '6a - Plant & Equipment Identification Labels',
+      '6b - Insulation of Primary Pipework',
+      '6c - Vent Duct Insulation'
+    ];
+    function mkChecklist(status) {
+
+      return PARTL_ITEMS.map(name => [
+        name,
+        status
+      ]);
 
     }
 
-    go('category');
-
-  };
-
-  reader.readAsDataURL(file);
-
-}
-
-function pickCategory(el, name){
-  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('selected'));
-  el.classList.add('selected'); state.photoCategory = name;
-}
-function savePhoto(){
-
-  state.photoNotes =
-    document.getElementById('notes-input').value;
-
-  if (navigator.geolocation) {
-
-  navigator.geolocation.getCurrentPosition(
-
-    position => {
-
-      state.photoLat = position.coords.latitude;
-      state.photoLng = position.coords.longitude;
-  state.photoAltitude = position.coords.altitude;
-  state.photoAccuracy = position.coords.accuracy;
-     console.log(
-  "GPS:",
-  state.photoLat,
-  state.photoLng
-);
-   if(state.photoPlot && plots[state.photoPlot]){
-
-    console.log(
-  "ADDING PHOTO TO GALLERY",
-  state.photoImage
-);
-
- plots[state.photoPlot].gallery.unshift({
-
-  project:
-    projects[state.photoProject].name,
-
-  plot:
-    plots[state.photoPlot].number,
-
-  category:
-    state.photoCategory || "Other",
-
-      image: state.photoImage,
-
-      testImage: state.photoImage ? "YES" : "NO",
-
-    capturedBy: "Andrew Dace",
-
-  colour:"#1F8A4C",
-
-  latitude:
-    state.photoLat,
-
-  longitude:
-    state.photoLng,
-
-  altitude:
-    state.photoAltitude,
- accuracy:
-  state.photoAccuracy,
-  notes:
-    state.photoNotes,
-    
+    let plots = {
 
 
-  timestamp:
-    new Date().toLocaleString()
+      p1: {
+        id: 'p1',
+        projectId: 'doseley',
+        number: 'Plot 1',
+        houseType: 'New Plot',
+        stage: 'Not Started',
+        status: 'Not Started',
+        score: 0,
+        last: 'Just created',
+        checklist: mkChecklist('missing'),
+        missing: [],
+        timeline: [],
+        gallery: []
+      }
 
-}); 
+    };
+
+    let notifications = [];
+    function showLoading() {
+
+      document.getElementById(
+        'loading-overlay'
+      ).style.display = 'flex';
+
+    }
+
+    function hideLoading() {
+
+      document.getElementById(
+        'loading-overlay'
+      ).style.display = 'none';
+
+    }
+
+    function saveData() {
+      console.log("SAVEDATA RUNNING");
+      console.log("SAVING", plots);
+      localStorage.setItem(
+        "plotvaultProjects",
+        JSON.stringify(projects)
+      );
+
+      localStorage.setItem(
+        "plotvaultPlots",
+        JSON.stringify(plots)
+      );
+
+      console.log(
+        "LOCAL STORAGE PLOTS",
+        JSON.parse(localStorage.getItem("plotvaultPlots"))
+      );
+    }
+
+    function loadData() {
+
+      const savedProjects =
+        localStorage.getItem("plotvaultProjects");
+
+      const savedPlots =
+        localStorage.getItem("plotvaultPlots");
+
+      if (savedProjects) {
+        projects = JSON.parse(savedProjects);
+      }
+
+      if (savedPlots) {
+        plots = JSON.parse(savedPlots);
+      }
+    }
+
+
+    /* ---------------- STATE ---------------- */
+    const state = {
+      screen: 'splash',
+      history: [],
+      projectId: 'doseley',
+      plotId: 'p1',
+      checklistExpanded: false,
+      timelineExpanded: false,
+
+      photoCategory: null,
+      photoProject: 'doseley',
+      photoPlot: 'p1',
+      photoNotes: '',
+      photoLat: null,
+      photoLng: null,
+      photoAltitude: null,
+      photoAccuracy: null,
+
+      selectedPhoto: null
+
+    };
+
+
+    function go(screen, push = true) {
+      if (push && state.screen !== screen) state.history.push(state.screen);
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-' + screen).classList.add('active');
+      state.screen = screen;
+      updateBottomNav(screen);
+      updateFab(screen);
+      if (screen === 'projects') renderProjects();
+      if (screen === 'dashboard') {
+        updateDashboardStats();
+      }
+
+      console.log("Dashboard loaded");
+      if (screen === 'projectdetails') renderPlotList();
+      if (screen === 'checklist') renderChecklist();
+      if (screen === 'evidencegallery') renderGallery();
+      if (screen === 'plotoverview') renderPlotOverview();
+      if (screen === 'notifications') renderNotifications();
+      if (screen === 'search') renderSearch(document.getElementById('global-search') ? document.getElementById('global-search').value : '');
+      updateNotifBadges();
+      document.getElementById('screens').scrollTop = 0;
+      const el = document.getElementById('screen-' + screen);
+      if (el) el.scrollTop = 0;
+    }
+    function back() {
+
+      if (state.screen === 'plotoverview') {
+        go('projectdetails', false);
+        return;
+      }
+
+      if (state.screen === 'projectdetails') {
+        go('dashboard');
+        return;
+      }
+
+      const prev = state.history.pop();
+
+      if (prev) {
+        go(prev, false);
+      }
+      else {
+        go('dashboard', false);
+      }
+
+    }
+    function updateBottomNav(screen) {
+      const map = { dashboard: 'dashboard', projects: 'projects', projectdetails: 'projects', plotoverview: 'projects', reports: 'reports', settings: 'settings', notifications: 'settings', userprofile: 'settings', camera: 'camera', category: 'camera', notes: 'camera', photoreview: 'camera' };
+      const active = map[screen];
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.nav === active));
+      document.getElementById('bottomnav').style.display = ['splash', 'login', 'companysetup', 'camera', 'category', 'notes', 'photoreview'].includes(screen) ? 'none' : 'flex';
+    }
+    function updateFab(screen) {
+      document.getElementById('fabbtn').style.display = ['dashboard', 'projects', 'projectdetails', 'plotoverview', 'reports', 'settings', 'notifications', 'userprofile'].includes(screen) ? 'flex' : 'none';
+    }
+
+    /* ---------------- NAVIGATION HELPERS ---------------- */
+
+    function openProject(id) {
+
+      state.projectId = id;
+
+      const projectPlots =
+        Object.values(plots)
+          .filter(p => p.projectId === id);
+
+      const progress =
+        projectPlots.length
+          ? Math.round(
+            projectPlots.reduce(
+              (total, plot) => total + plot.score,
+              0
+            ) / projectPlots.length
+          )
+          : 0;
+
+      document.getElementById('pd-name').textContent =
+        projects[id].name;
+
+      document.getElementById('pd-location').textContent =
+        projects[id].location || "Not set";
+      document.getElementById('pd-client').textContent =
+        projects[id].client || "Not set";
+
+      document.getElementById('pd-sitemanager').textContent =
+        projects[id].siteManager || "Not set";
+
+      console.log(projects[id]);
+
+      // document.getElementById(
+      //   'project-progress-score'
+      // ).textContent =
+      //   progress + "%";
+
+      // document.getElementById(
+      // 'project-plots-count'
+      //).textContent =
+      // projectPlots.length;
+
+      go('projectdetails');
+    }
+
+    function editProject() {
+
+      const project = projects[state.projectId];
+
+      const newName =
+        prompt("Project Name", project.name);
+
+      if (!newName) return;
+
+      const newLocation =
+        prompt("Location", project.location);
+
+      if (!newLocation) return;
+      const newClient =
+        prompt("Client", project.client || "");
+
+      const newSiteManager =
+        prompt("Site Manager", project.siteManager || "");
+
+      project.name = newName;
+      project.location = newLocation;
+      project.client = newClient;
+      project.siteManager = newSiteManager;
+
+      saveData();
+
+      document.getElementById('pd-name').textContent =
+        project.name;
+
+      document.getElementById('pd-location').textContent =
+        project.location;
+      document.getElementById('pd-client').textContent =
+        project.client || "Not set";
+
+      document.getElementById('pd-sitemanager').textContent =
+        project.siteManager || "Not set";
+
+
+      toast("Project updated");
+    }
+
+    function openPlot(id) { state.plotId = id; state.projectId = plots[id].projectId; go('plotoverview'); }
+    function openChecklist(id) { state.plotId = id; go('checklist'); }
+    function openCamera(projectId) {
+      state.photoProject = projectId; state.photoPlot = null; state.photoCategory = null;
+      document.getElementById('cam-context-pill').textContent = projects[projectId].name; go('camera');
+    }
+    function openCameraFor(projectId, plotId, category) {
+      state.photoProject = projectId; state.photoPlot = plotId; state.photoCategory = category || null;
+      document.getElementById('cam-context-pill').textContent = projects[projectId].name + (plotId ? ' · ' + plots[plotId].number : '');
+      go('camera');
+    }
+    function capturePhoto() {
+
+      document.getElementById('photo-input').click();
+
+    }
+    function photoSelected(event) {
+
+      const file = event.target.files[0];
+
+      if (!file) {
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+
+        const img = new Image();
+
+        img.onload = function () {
+
+          const canvas = document.createElement("canvas");
+
+          const maxWidth = 800;
+
+          const scale =
+            maxWidth / img.width;
+
+          canvas.width = maxWidth;
+          canvas.height =
+            img.height * scale;
+
+          const ctx =
+            canvas.getContext("2d");
+
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+          state.photoImage =
+            canvas.toDataURL(
+              "image/jpeg",
+              0.7
+            );
+
+        };
+
+        img.src = e.target.result;
+
+
+        document.getElementById('cat-sub').textContent =
+          (state.photoPlot
+            ? plots[state.photoPlot].number + ' • '
+            : '') +
+          projects[state.photoProject].name;
+
+        document.querySelectorAll('.cat-chip')
+          .forEach(c => c.classList.remove('selected'));
+
+        if (state.photoCategory) {
+
+          document.querySelectorAll('.cat-chip')
+            .forEach(c => {
+
+              if (c.textContent.trim() === state.photoCategory) {
+                c.classList.add('selected');
+              }
+
+            });
+
+        }
+
+        go('category');
+
+      };
+
+      reader.readAsDataURL(file);
+
+    }
+
+    function pickCategory(el, name) {
+      document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected'); state.photoCategory = name;
+    }
+    function savePhoto() {
+
+      showLoading();
+
+      state.photoNotes =
+        document.getElementById('notes-input').value;
+
+      if (navigator.geolocation) {
+
+        console.log("REQUESTING GPS");
+
+        navigator.geolocation.getCurrentPosition(
+
+          position => {
+
+            console.log("GPS RECEIVED");
+
+            state.photoLat = position.coords.latitude;
+            state.photoLng = position.coords.longitude;
+            state.photoAltitude = position.coords.altitude;
+            state.photoAccuracy = position.coords.accuracy;
+            console.log(
+              "GPS:",
+              state.photoLat,
+              state.photoLng
+            );
+            if (state.photoPlot && plots[state.photoPlot]) {
+
+              console.log(
+                "ADDING PHOTO TO GALLERY",
+                state.photoImage
+              );
+
+              plots[state.photoPlot].gallery.unshift({
+
+                project:
+                  projects[state.photoProject].name,
+
+                plot:
+                  plots[state.photoPlot].number,
+
+                category:
+                  state.photoCategory || "Other",
+
+                image: state.photoImage,
+
+                testImage: state.photoImage ? "YES" : "NO",
+
+                capturedBy: "Andrew Dace",
+
+                colour: "#1F8A4C",
+
+                latitude:
+                  state.photoLat,
+
+                longitude:
+                  state.photoLng,
+
+                altitude:
+                  state.photoAltitude,
+                accuracy:
+                  state.photoAccuracy,
+                notes:
+                  state.photoNotes,
+
+
+
+                timestamp:
+                  new Date().toLocaleString()
+
+              });
 
 
 
 
-const item = plots[state.photoPlot].checklist.find(
-  c => c[0] === state.photoCategory
-);
+              const item = plots[state.photoPlot].checklist.find(
+                c => c[0] === state.photoCategory
+              );
+              console.log("PHOTO CATEGORY:", state.photoCategory);
+              console.log("FOUND ITEM:", item);
+
+              if (item) {
+
+                item[1] = 'pending';
+
+                console.log(
+                  "UPDATED ITEM:",
+                  item
+                );
+
+              }
+
+              plots[state.photoPlot].timeline.unshift([
+                new Date().toLocaleString(),
+                `Evidence submitted for ${state.photoCategory}`
+              ]);
+
+              saveData();
+
+              hideLoading();
+
+              
+
+              renderPlotOverview();
 
 
-if(item){
+            }
 
-  item[1] = 'pending';
+          },
 
+          error => {
 
+            alert(
+              "GPS Error: " +
+              error.message
+            );
 
-}
+          }
 
-saveData();
+        );
 
-renderPlotOverview();
+      }
+      console.log("GPS REQUESTED");
 
+      state.photoNotes = document.getElementById('notes-input').value;
+      console.log("PHOTO PLOT =", state.photoPlot);
+      const plotLbl = state.photoPlot ? plots[state.photoPlot].number : 'Unassigned plot';
+      document.getElementById('saved-sub').textContent = (state.photoCategory || 'Photo') + ' · ' + plotLbl + ' · ' + projects[state.photoProject].name;
+      document.getElementById('notes-input').value = '';
 
-}
+     
 
-    },
+      go('photoreview');
 
-    error => {
-
-      alert(
-        "GPS Error: " +
-        error.message
+      state.history = state.history.filter(
+        s => !['camera', 'category', 'notes'].includes(s)
       );
 
     }
 
-  );
 
-} 
-console.log("GPS REQUESTED");
+    /* ---------------- RENDERERS ---------------- */
+    function statusMeta(s) {
+      switch (s) {
+        case 'Needs Attention':
+          return { badge: 'badge-red', dot: 'dot-red', text: 'Needs Attention' };
 
-  state.photoNotes = document.getElementById('notes-input').value;
-  console.log("PHOTO PLOT =", state.photoPlot);
-  const plotLbl = state.photoPlot ? plots[state.photoPlot].number : 'Unassigned plot';
-  document.getElementById('saved-sub').textContent = (state.photoCategory||'Photo') + ' · ' + plotLbl + ' · ' + projects[state.photoProject].name;
-  document.getElementById('notes-input').value='';
+        case 'Pending Review':
+          return { badge: 'badge-amber', dot: 'dot-amber', text: 'Pending Review' };
 
-  renderPlotOverview();
+        case 'Report Ready':
+          return { badge: 'badge-green', dot: 'dot-green', text: 'Report Ready' };
 
-  go('photoreview');
+        case 'In Progress':
+          return { badge: 'badge-blue', dot: 'dot-green', text: 'In Progress' };
 
-  state.history = state.history.filter(
-    s => !['camera','category','notes'].includes(s)
-  );
+        case 'Not Started':
+          return { badge: 'badge-muted', dot: 'dot-amber', text: 'Not Started' };
 
-}
+        default:
+          return { badge: 'badge-muted', dot: 'dot-amber', text: 'In Progress' };
+      }
+    }
+    function renderPlotList(filterText, statusFilter) {
+      const list =
+        Object.values(plots)
+          .sort((a, b) => {
 
-
-/* ---------------- RENDERERS ---------------- */
-function statusMeta(s){
-  switch(s){
-    case 'Needs Attention':
-      return {badge:'badge-red', dot:'dot-red', text:'Needs Attention'};
-
-    case 'Pending Review':
-      return {badge:'badge-amber', dot:'dot-amber', text:'Pending Review'};
-
-    case 'Report Ready':
-      return {badge:'badge-green', dot:'dot-green', text:'Report Ready'};
-
-    case 'In Progress':
-      return {badge:'badge-blue', dot:'dot-green', text:'In Progress'};
-
-    case 'Not Started':
-      return {badge:'badge-muted', dot:'dot-amber', text:'Not Started'};
-
-    default:
-      return {badge:'badge-muted', dot:'dot-amber', text:'In Progress'};
-  }
-}
-function renderPlotList(filterText, statusFilter){
-  const list =
-    Object.values(plots)
-    .sort((a, b) => {
-
-        const numA =
-            parseInt(
+            const numA =
+              parseInt(
                 String(a.number).replace(/\D/g, '')
-            ) || 0;
+              ) || 0;
 
-        const numB =
-            parseInt(
+            const numB =
+              parseInt(
                 String(b.number).replace(/\D/g, '')
-            ) || 0;
+              ) || 0;
 
-        return numA - numB;
-    });
-  const progress =
-  list.length
-    ? Math.round(
-        list.reduce(
-          (total, plot) => total + plot.score,
-          0
-        ) / list.length
-      )
-    : 0;
-    const progressEl =
-  document.getElementById(
-    'project-progress-score'
-  );
+            return numA - numB;
+          });
+      const progress =
+        list.length
+          ? Math.round(
+            list.reduce(
+              (total, plot) => total + plot.score,
+              0
+            ) / list.length
+          )
+          : 0;
+      const progressEl =
+        document.getElementById(
+          'project-progress-score'
+        );
 
-if(progressEl){
-  progressEl.textContent =
-    progress + "%";
-}
+      if (progressEl) {
+        progressEl.textContent =
+          progress + "%";
+      }
 
-const plotsEl =
-  document.getElementById(
-    'project-plots-count'
-  );
+      const plotsEl =
+        document.getElementById(
+          'project-plots-count'
+        );
 
-if(plotsEl){
-  plotsEl.textContent =
-    Object.keys(plots).length;
-}
-const missingCount =
-  list.reduce((total, plot) => {
+      if (plotsEl) {
+        plotsEl.textContent =
+          Object.keys(plots).length;
+      }
+      const missingCount =
+        list.reduce((total, plot) => {
 
-    return total +
-      plot.checklist.filter(
-        item => item[1] === 'missing'
-      ).length;
+          return total +
+            plot.checklist.filter(
+              item => item[1] === 'missing'
+            ).length;
 
-  }, 0);
+        }, 0);
 
-const missingEl =
-  document.getElementById(
-    'project-missing-count'
-  );
+      const missingEl =
+        document.getElementById(
+          'project-missing-count'
+        );
 
-if(missingEl){
-  missingEl.textContent =
-    missingCount;
+      if (missingEl) {
+        missingEl.textContent =
+          missingCount;
 
-   const approvedCount =
-  list.reduce((total, plot) => {
+        const approvedCount =
+          list.reduce((total, plot) => {
 
-    return total +
-      plot.checklist.filter(
-        item => item[1] === 'done'
-      ).length;
+            return total +
+              plot.checklist.filter(
+                item => item[1] === 'done'
+              ).length;
 
-  }, 0);
+          }, 0);
 
-const approvedEl =
-  document.getElementById(
-    'project-approved-count'
-  );
+        const approvedEl =
+          document.getElementById(
+            'project-approved-count'
+          );
 
-if(approvedEl){
-  approvedEl.textContent =
-    approvedCount;
-} 
+        if (approvedEl) {
+          approvedEl.textContent =
+            approvedCount;
+        }
 
-const pendingCount =
-  list.reduce((total, plot) => {
+        const pendingCount =
+          list.reduce((total, plot) => {
 
-    return total +
-      plot.checklist.filter(
-        item => item[1] === 'pending'
-      ).length;
+            return total +
+              plot.checklist.filter(
+                item => item[1] === 'pending'
+              ).length;
 
-  }, 0);
+          }, 0);
 
-const pendingEl =
-  document.getElementById(
-    'project-pending-count'
-  );
+        const pendingEl =
+          document.getElementById(
+            'project-pending-count'
+          );
 
-if(pendingEl){
-  pendingEl.textContent =
-    pendingCount;
-}
+        if (pendingEl) {
+          pendingEl.textContent =
+            pendingCount;
+        }
 
 
-}
-  const container = document.getElementById('plot-list');
-  container.innerHTML = list.map(p=>{
-    const m =
-  statusMeta(p.status || "In Progress");
-    const approved =
-  p.checklist.filter(i => i[1] === 'done').length;
+      }
+      const container = document.getElementById('plot-list');
+      container.innerHTML = list.map(p => {
+        const m =
+          statusMeta(p.status || "In Progress");
+        const approved =
+          p.checklist.filter(i => i[1] === 'done').length;
 
-const pending =
-  p.checklist.filter(i => i[1] === 'pending').length;
+        const pending =
+          p.checklist.filter(i => i[1] === 'pending').length;
 
-const missing =
-  p.checklist.filter(i => i[1] === 'missing').length;
+        const missing =
+          p.checklist.filter(i => i[1] === 'missing').length;
 
-return `<div class="card tap" onclick="openPlot('${p.id}')">
+        return `<div class="card tap" onclick="openPlot('${p.id}')">
   <div class="row">
 
   <div style="display:flex;gap:6px;align-items:center;">
@@ -1782,7 +2683,7 @@ return `<div class="card tap" onclick="openPlot('${p.id}')">
   <!-- Plot stats moved into header row -->
 
   <div class="progress-track" style="margin-top:8px;">
-    <div class="progress-fill ${p.score>=90?'green':p.score>=70?'amber':''}" style="width:${p.score}%"></div>
+    <div class="progress-fill ${p.score >= 90 ? 'green' : p.score >= 70 ? 'amber' : ''}" style="width:${p.score}%"></div>
   </div>
 
   <div class="row" style="margin-top:8px;font-size:12px;color:var(--muted);">
@@ -1790,65 +2691,71 @@ return `<div class="card tap" onclick="openPlot('${p.id}')">
     <span>${p.created || ''}</span>
   </div>
 </div>`;
-    
-  }).join('') || `<div class="empty-state"><div class="ic">📭</div>No plots match this filter.</div>`;
-}
-function toggleChecklist(){
 
-    state.checklistExpanded =
+      }).join('') || `<div class="empty-state"><div class="ic">📭</div>No plots match this filter.</div>`;
+    }
+    function toggleChecklist() {
+
+      state.checklistExpanded =
         !state.checklistExpanded;
 
-    renderPlotOverview();
+      renderPlotOverview();
 
-}
+    }
 
-function toggleTimeline(){
+    function toggleTimeline() {
 
-    state.timelineExpanded =
+      state.timelineExpanded =
         !state.timelineExpanded;
 
-    renderPlotOverview();
+      renderPlotOverview();
 
-}
+    }
 
 
-    function renderPlotOverview(){
-console.log("RENDER PLOT OVERVIEW");
+    function renderPlotOverview() {
+      console.log("RENDER PLOT OVERVIEW");
 
-  const p = plots[state.plotId];
+      const p = plots[state.plotId];
 
-  if(!p.checklist || p.checklist.length === 0){
+      const photos = [...p.gallery].sort((a, b) =>
+        a.category.localeCompare(b.category, undefined, {
+          numeric: true
+        })
+      );
 
-  p.checklist =
-    PARTL_ITEMS.map(name => [name,'missing']);
+      if (!p.checklist || p.checklist.length === 0) {
 
-  saveData();
+        p.checklist =
+          PARTL_ITEMS.map(name => [name, 'missing']);
 
-}
+        saveData();
 
-  const approved =
-  p.checklist.filter(i => i[1] === 'done').length;
+      }
 
-const pending =
-  p.checklist.filter(i => i[1] === 'pending').length;
+      const approved =
+        p.checklist.filter(i => i[1] === 'done').length;
 
-const missing =
-  p.checklist.filter(i => i[1] === 'missing').length;
+      const pending =
+        p.checklist.filter(i => i[1] === 'pending').length;
 
-const total =
-  p.checklist.length;
+      const missing =
+        p.checklist.filter(i => i[1] === 'missing').length;
 
-const progress =
-  total
-    ? Math.round((approved / total) * 100)
-    : 0;
+      const total =
+        p.checklist.length;
 
-  document.getElementById('po-number').textContent = p.number;
-  document.getElementById('po-project')
-    .textContent = '';
-  const m = statusMeta(p.status);
-  const body = document.getElementById('po-body');
-  body.innerHTML = `
+      const progress =
+        total
+          ? Math.round((approved / total) * 100)
+          : 0;
+
+      document.getElementById('po-number').textContent = p.number;
+      document.getElementById('po-project')
+        .textContent = '';
+      const m = statusMeta(p.status);
+      const body = document.getElementById('po-body');
+      body.innerHTML = `
 
   <div style="
     background:#F4F6F8;
@@ -1922,7 +2829,7 @@ PLOT
 
 
 
-    ${p.number.replace('Plot ','')}
+    ${p.number.replace('Plot ', '')}
 
     
 </div>
@@ -2022,9 +2929,9 @@ gap:12px;
     </div>
 
 </div>
-    ${p.missing.length? `<div class="card" style="border-left:4px solid var(--red);">
+    ${p.missing.length ? `<div class="card" style="border-left:4px solid var(--red);">
       <div class="label-eyebrow" style="color:var(--red);">MISSING EVIDENCE</div>
-      ${p.missing.map(m=>`<div style="font-size:13.5px;font-weight:600;padding:6px 0;">⚠️ ${m}</div>`).join('')}
+      ${p.missing.map(m => `<div style="font-size:13.5px;font-weight:600;padding:6px 0;">⚠️ ${m}</div>`).join('')}
     </div>` : ''}<div class="quick-actions">
       
       <div style="
@@ -2268,9 +3175,9 @@ ${state.checklistExpanded ? `
             border-bottom:1px solid #eee;
         ">
 
-            ${i[1]==='done' ? '✅' :
-              i[1]==='pending' ? '⏳' :
-              '❌'}
+            ${i[1] === 'done' ? '✅' :
+          i[1] === 'pending' ? '⏳' :
+            '❌'}
 
             ${i[0]}
 
@@ -2290,27 +3197,143 @@ font-weight:700;
 "
 >    
  <!--
-      <h2 class="section-heading">Compliance Progress</h2>
+ <div class="card" style="
+    padding:18px;
+    margin-bottom:16px;
+">
 
-    <div class="card" style="margin-bottom:12px;">
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        margin-bottom:12px;
+    ">
 
-  
+        <div>
 
-  <div style="color:#1F8A4C;font-weight:700;">
-    Approved: ${approved}
-  </div>
+            <div style="
+                font-size:16px;
+                font-weight:700;
+                color:var(--navy);
+                margin-bottom:4px;
+            ">
+                Compliance Progress
+            </div>
 
-  <div style="color:#F59E0B;font-weight:700;">
-    Pending Review: ${pending}
-  </div>
+            <div style="
+                font-size:36px;
+                line-height:1;
+                font-weight:800;
+                color:var(--navy);
+            ">
+                ${Math.round((approved / p.checklist.length) * 100)}%
+            </div>
 
-  <div style="color:#D32F2F;font-weight:700;">
-    Missing: ${missing}
-  </div>
+        </div>
 
-  <div style="margin-top:8px;font-weight:700;">
-    Progress: ${progress}%
-  </div>
+        <div style="
+            text-align:right;
+            color:var(--muted);
+            font-size:14px;
+        ">
+         ${p.gallery.length}/${p.checklist.length}
+<br>
+Captured   
+        </div>
+
+    </div>
+
+    <div style="
+        height:12px;
+        background:#e5e7eb;
+        border-radius:999px;
+        overflow:hidden;
+        margin-bottom:18px;
+    ">
+        <div style="
+            width:${(approved / p.checklist.length) * 100}%;
+            height:100%;
+            background:#22c55e;
+            border-radius:999px;
+        ">
+        </div>
+    </div>
+
+    <div style="
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:10px;
+    ">
+
+        <div style="
+            text-align:center;
+            background:#f0fdf4;
+            padding:12px;
+            border-radius:12px;
+        ">
+            <div style="
+                font-size:28px;
+                font-weight:800;
+                color:#16a34a;
+            ">
+                ${approved}
+            </div>
+
+            <div style="
+                font-size:12px;
+                color:var(--muted);
+            ">
+                Approved
+            </div>
+        </div>
+
+        <div style="
+            text-align:center;
+            background:#fffbeb;
+            padding:12px;
+            border-radius:12px;
+        ">
+            <div style="
+                font-size:28px;
+                font-weight:800;
+                color:#ca8a04;
+            ">
+                ${pending}
+            </div>
+
+            <div style="
+                font-size:12px;
+                color:var(--muted);
+            ">
+                Pending
+            </div>
+        </div>
+
+        <div style="
+            text-align:center;
+            background:#fef2f2;
+            padding:12px;
+            border-radius:12px;
+        ">
+            <div style="
+                font-size:28px;
+                font-weight:800;
+                color:#dc2626;
+            ">
+                ${missing}
+            </div>
+
+            <div style="
+                font-size:12px;
+                color:var(--muted);
+            ">
+                Missing
+            </div>
+        </div>
+
+    </div>
+
+</div>     
 
 </div>
 -->
@@ -2374,146 +3397,357 @@ font-weight:700;
 
     </div>
   `;
-}
-let expandedGallery = null;
-function toggleGallery(plotId){
-
-
-    if(expandedGallery === plotId){
-        expandedGallery = null;
-    } else {
-        expandedGallery = plotId;
     }
+    let expandedGallery = null;
+    function toggleGallery(plotId) {
 
-    renderPlotOverview();
-}
-function checklistRow(name, st, plotId){
-  const iconMap = {
-  done:['✓','done'],
-  missing:['✕','missing'],
-  pending:['⏳','pending'],
-  notstarted:['○','notstarted']
-};
-const labelMap = {
-  done:'✅ Approved',
-  missing:'❌ Missing',
-  pending:'⏳ Pending Review',
-  notstarted:'⚪ Not Started'
-};
 
-  const colourMap = {
-  done:'#1F8A4C',
-  missing:'#D32F2F',
-  pending:'#F59E0B',
-  notstarted:'#6B7280'
-};
-  const [icon, cls] = iconMap[st];
-  const action = st==='missing' ? `openCameraFor('${plots[plotId].projectId}','${plotId}','${name}')` : `toast('${labelMap[st]}')`;
-  return `<div class="checklist-row" onclick="${action}">
-    <div class="cl-icon ${cls}">${icon}</div>
-    <div class="cl-name">${name}</div>
-   
-   <div class="cl-status"
-     style="color:${colourMap[st]};font-weight:700;">
+      if (expandedGallery === plotId) {
+        expandedGallery = null;
+      } else {
+        expandedGallery = plotId;
+      }
 
-  ${labelMap[st]}
+      renderPlotOverview();
+    }
+    function checklistRow(name, st, plotId) {
+      const iconMap = {
+        done: ['✓', 'done'],
+        missing: ['✕', 'missing'],
+        pending: ['⏳', 'pending'],
+        notstarted: ['○', 'notstarted']
+      };
+      const labelMap = {
+        done: '✅ Approved',
+        missing: '❌ Missing',
+        pending: '⏳ Pending Review',
+        notstarted: '⚪ Not Started'
+      };
 
-  ${st === 'pending'
-    ? `<button
-         style="
-           margin-left:10px;
-           padding:4px 8px;
-           font-size:12px;
-           border:none;
-           border-radius:6px;
-           background:#1F8A4C;
-           color:white;
-           cursor:pointer;
-         "
-         onclick="event.stopPropagation();approveChecklistItem('${plotId}','${name}')">
-         Approve
-       </button>`
-    : ''
-  }
+      const colourMap = {
+        done: '#1F8A4C',
+        missing: '#D32F2F',
+        pending: '#F59E0B',
+        notstarted: '#6B7280'
+      };
+      const [icon, cls] = iconMap[st];
+      const action = st === 'missing' ? `openCameraFor('${plots[plotId].projectId}','${plotId}','${name}')` : `toast('${labelMap[st]}')`;
+      return `
+   <div class="card tap"
+     onclick="${action}"
+     style="
+        display:flex;
+        align-items:center;
+        gap:16px;
+        padding:18px;
+        min-height:88px;
+     ">
 
-</div> 
-  </div>`;
-}
-function renderChecklist(){
-  const p = plots[state.plotId];
-
-const approved =
-  p.checklist.filter(i => i[1] === 'done').length;
-
-const pending =
-  p.checklist.filter(i => i[1] === 'pending').length;
-
-const missing =
-  p.checklist.filter(i => i[1] === 'missing').length;
-
-const progress =
-  p.checklist.length
-    ? Math.round((approved / p.checklist.length) * 100)
-    : 0;
-
-  document.getElementById('cl-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
-  document.getElementById('checklist-body').innerHTML =
-  `
-  <div class="card" style="margin-bottom:12px;">
-
-    <h3 style="margin-bottom:10px;">
-      Compliance Progress
-    </h3>
-
-    <div style="color:#1F8A4C;font-weight:700;">
-      ✅ Approved: ${approved}
-    </div>
-
-    <div style="color:#F59E0B;font-weight:700;">
-      ⏳ Pending Review: ${pending}
-    </div>
-
-    <div style="color:#D32F2F;font-weight:700;">
-      ✕ Missing: ${missing}
+    <div style="
+        width:48px;
+        height:48px;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-shrink:0;
+        background:
+            ${st === 'done' ? '#16A34A'
+          : st === 'pending' ? '#EAB308'
+            : '#DC2626'};
+        color:white;
+        font-size:24px;
+        font-weight:700;
+    ">
+        ${st === 'done' ? '✓'
+          : st === 'pending' ? '⌛'
+            : '✕'}
     </div>
 
     <div style="
-      margin-top:10px;
-      font-weight:700;
+        flex:1;
+        min-width:0;
     ">
-      Progress: ${progress}%
+
+        <div style="
+            font-size:18px;
+            font-weight:800;
+            color:var(--navy);
+            margin-bottom:4px;
+        ">
+            ${name.split(' - ')[0]}
+        </div>
+
+        <div style="
+            font-size:14px;
+            color:#5B667A;
+            line-height:1.35;
+        ">
+            ${name.split(' - ')[1] || ''}
+        </div>
+
     </div>
 
-  </div>
+    <div style="
+        flex-shrink:0;
+    ">
+
+        ${st === 'done'
+          ? `
+            <div style="
+                background:#EAF7EE;
+                color:#16803C;
+                padding:10px 18px;
+                border-radius:999px;
+                font-size:14px;
+                font-weight:700;
+            ">
+                Approved
+            </div>
+            `
+          : st === 'pending'
+            ? `
+            <button
+                onclick="event.stopPropagation();approveChecklistItem('${plotId}','${name}')"
+                style="
+                    background:#062B66;
+                    color:white;
+                    border:none;
+                    border-radius:12px;
+                    padding:12px 22px;
+                    font-size:14px;
+                    font-weight:700;
+                    cursor:pointer;
+                ">
+                Approve
+            </button>
+            `
+            : `
+            <button
+                onclick="event.stopPropagation();openCameraFor('${plots[plotId].projectId}','${plotId}','${name}')"
+                style="
+                    background:#16A34A;
+                    color:white;
+                    border:none;
+                    border-radius:12px;
+                    padding:12px 22px;
+                    font-size:14px;
+                    font-weight:700;
+                    cursor:pointer;
+                ">
+                Take Photo
+            </button>
+            `
+        }
+
+    </div>
+
+</div>
+  `;
+    }
+    function renderChecklist() {
+      const p = plots[state.plotId];
+
+      const approved =
+        p.checklist.filter(i => i[1] === 'done').length;
+
+      const pending =
+        p.checklist.filter(i => i[1] === 'pending').length;
+
+      const missing =
+        p.checklist.filter(i => i[1] === 'missing').length;
+
+      const progress =
+        p.checklist.length
+          ? Math.round((approved / p.checklist.length) * 100)
+          : 0;
+
+      document.getElementById('cl-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
+      document.getElementById('checklist-body').innerHTML =
+        `
+  <div class="card" style="
+    padding:18px;
+    margin-bottom:16px;
+">
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        margin-bottom:12px;
+    ">
+
+        <div>
+
+            <div style="
+                font-size:16px;
+                font-weight:700;
+                color:var(--navy);
+                margin-bottom:4px;
+            ">
+                Compliance Progress
+            </div>
+
+            <div style="
+                font-size:34px;
+                line-height:1;
+                font-weight:800;
+                color:var(--navy);
+            ">
+                ${progress}% Complete
+            </div>
+
+        </div>
+
+        <div style="
+    text-align:right;
+    color:var(--muted);
+    font-size:13px;
+    white-space:nowrap;
+">
+    ${p.gallery.length} of ${p.checklist.length} Items Captured
+</div>
+
+    </div>
+
+    <div style="
+        height:12px;
+        background:#e5e7eb;
+        border-radius:999px;
+        overflow:hidden;
+        margin-bottom:18px;
+    ">
+        <div style="
+            width:${progress}%;
+            height:100%;
+            background:#16a34a;
+            border-radius:999px;
+        ">
+        </div>
+    </div>
+
+    <div style="
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:10px;
+    ">
+
+        <div style="
+            text-align:center;
+            background:#f0fdf4;
+            padding:12px;
+            border-radius:12px;
+        ">
+            <div style="
+                font-size:28px;
+                font-weight:800;
+                color:#16a34a;
+            ">
+                ${approved}
+            </div>
+            <div style="font-size:12px;color:var(--muted);">
+                Approved
+            </div>
+        </div>
+
+        <div style="
+            text-align:center;
+            background:#fffbeb;
+            padding:12px;
+            border-radius:12px;
+        ">
+            <div style="
+                font-size:28px;
+                font-weight:800;
+                color:#ca8a04;
+            ">
+                ${pending}
+            </div>
+            <div style="font-size:12px;color:var(--muted);">
+                Pending
+            </div>
+        </div>
+
+        <div style="
+            text-align:center;
+            background:#fef2f2;
+            padding:12px;
+            border-radius:12px;
+        ">
+            <div style="
+                font-size:28px;
+                font-weight:800;
+                color:#dc2626;
+            ">
+                ${missing}
+            </div>
+            <div style="font-size:12px;color:var(--muted);">
+                Missing
+            </div>
+        </div>
+
+    </div>
+
+</div>
 
   <div class="card" style="padding:4px 16px;">
   
-      ${p.checklist.map(([name,st])=>checklistRow(name,st,p.id)).join('')}</div>
+      ${p.checklist.map(([name, st]) => checklistRow(name, st, p.id)).join('')}</div>
     <p style="color:var(--muted);font-size:12.5px;text-align:center;margin-top:10px;">Tap a missing or pending item to capture evidence.</p>
   `;
-}
-function renderGallery(){
-  const p = plots[state.plotId];
+    }
+    function renderGallery() {
+      const p = plots[state.plotId];
 
-const approved =
-  p.checklist.filter(i => i[1] === 'done').length;
+      const photos = [...p.gallery].sort((a, b) =>
+        a.category.localeCompare(
+          b.category,
+          undefined,
+          { numeric: true }
+        )
+      );
 
-const pending =
-  p.checklist.filter(i => i[1] === 'pending').length;
 
-const missing =
-  p.checklist.filter(i => i[1] === 'missing').length;
+      const approved =
+        p.checklist.filter(i => i[1] === 'done').length;
 
-const total = p.checklist.length;
+      const pending =
+        p.checklist.filter(i => i[1] === 'pending').length;
 
-const progress =
-  Math.round((approved / total) * 100);
+      const missing =
+        p.checklist.filter(i => i[1] === 'missing').length;
 
-  document.getElementById('eg-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
-  const grid = document.getElementById('gallery-grid');
-  grid.innerHTML = p.gallery.length ? p.gallery.map((photo,index) =>
+      const total = p.checklist.length;
 
-`<div class="gallery-thumb"
+      const progress =
+        Math.round((approved / total) * 100);
+
+      document.getElementById('eg-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
+
+      const galleryBody =
+        document.querySelector(
+          '#screen-evidencegallery .screen-body'
+        );
+
+      galleryBody.innerHTML = `
+<div style="
+    margin-bottom:14px;
+    padding:12px 14px;
+    background:#F4F6F8;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:700;
+    color:var(--navy);
+">
+    ${p.gallery.length} of ${p.checklist.length} Compliance Items Captured
+</div>
+
+<div class="gallery-grid" id="gallery-grid"></div>
+`;
+      const grid = document.getElementById('gallery-grid');
+      grid.innerHTML = p.gallery.length ? photos.map((photo, index) =>
+
+        `<div class="gallery-thumb"
     onclick="showEvidence(state.plotId, ${index})">
 
     <img
@@ -2524,70 +3758,82 @@ const progress =
         object-fit:cover;
       ">
 
-    <span class="lbl">${photo.category}</span>
+    <div style="
+    position:absolute;
+    bottom:6px;
+    left:6px;
+    background:rgba(0,0,0,.65);
+    color:white;
+    padding:3px 8px;
+    border-radius:4px;
+    font-size:13px;
+    font-weight:700;
+">
+    ${photo.category.split(' - ')[0]}
+</div>
 
 </div>`
 
-).join('') :
+      ).join('') :
 
-    `<div class="empty-state" style="grid-column:1/-1;"><div class="ic">📷</div>No evidence captured yet.</div>`;
-}
-function showEvidence(plotId, photoIndex){
+        `<div class="empty-state" style="grid-column:1/-1;"><div class="ic">📷</div>No evidence captured yet.</div>`;
+    }
+    function showEvidence(plotId, photoIndex) {
 
-  const p = plots[plotId];
-  const photo = p.gallery[photoIndex];
+      const p = plots[plotId];
+      const photo = p.gallery[photoIndex];
 
-  if (!photo || !photo.project){
-    alert(
-      "This is an older photo record. Take a new photo to view evidence details."
-    );
-    return;
-  }
-  openEvidenceViewer(photo);
-return;
-/*
-const openMap = confirm(
-`PLOTVAULT EVIDENCE
+      if (!photo || !photo.project) {
+        alert(
+          "This is an older photo record. Take a new photo to view evidence details."
+        );
+        return;
+      }
+      openEvidenceViewer(photo);
+      return;
+      /*
+      const openMap = confirm(
+      `PLOTVAULT EVIDENCE
+      
+      Project: ${photo.project}
+      
+      Plot: ${photo.plot}
+      
+      Section: ${photo.category}
+      
+      Captured By:
+      ${photo.capturedBy || "Andrew Dace"}
+      
+      Latitude:
+      ${photo.latitude}
+      
+      Longitude:
+      ${photo.longitude}
+      
+      GPS Accuracy:
+      ±${photo.accuracy}m
+      
+      Date:
+      ${photo.timestamp}
+      
+      Press OK to open Google Maps`
+      );
+      
+      if (openMap) {
+      
+        window.location.href =
+        `https://www.google.com/maps/search/?api=1&query=${photo.latitude},${photo.longitude}`;
+        
+      
+      }
+      */
 
-Project: ${photo.project}
+    }
+    function openEvidenceViewer(photo) {
 
-Plot: ${photo.plot}
-
-Section: ${photo.category}
-
-Captured By:
-${photo.capturedBy || "Andrew Dace"}
-
-Latitude:
-${photo.latitude}
-
-Longitude:
-${photo.longitude}
-
-GPS Accuracy:
-±${photo.accuracy}m
-
-Date:
-${photo.timestamp}
-
-Press OK to open Google Maps`
-);
-
-if (openMap) {
-
-  window.location.href =
-  `https://www.google.com/maps/search/?api=1&query=${photo.latitude},${photo.longitude}`;
-  
-
-}
-*/
-
-}
-function openEvidenceViewer(photo){
-
-  document.getElementById(
-    'evidence-viewer-body'
-  ).innerHTML = `
+      document.getElementById(
+        'evidence-viewer-body'
+      ).innerHTML = `
 
     <div class="card">
 
@@ -2595,7 +3841,7 @@ function openEvidenceViewer(photo){
   src="${photo.image}"
   style="
     width:100%;
-    max-height:250px;
+    max-height:220px;
     object-fit:cover;
     border-radius:12px;
     margin-bottom:16px;
@@ -2603,15 +3849,7 @@ function openEvidenceViewer(photo){
 >
    
 
-  <div style="font-size:48px;">📸</div>
-
-  <div style="font-weight:700;font-size:18px;">
-    Evidence Captured
-  </div>
-
-  <div style="margin-top:8px;font-size:14px;">
-    ${photo.category}
-  </div>
+  
 
 </div>
 
@@ -2690,307 +3928,307 @@ function openEvidenceViewer(photo){
     </div>
   `;
 
-  go('evidenceviewer');
-}
+      go('evidenceviewer');
+    }
 
-function approveChecklistItem(plotId, category){
+    function approveChecklistItem(plotId, category) {
 
-  const item = plots[plotId].checklist.find(
-    c => c[0] === category
-  );
+      const item = plots[plotId].checklist.find(
+        c => c[0] === category
+      );
 
-  if(item){
+      if (item) {
 
-    item[1] = 'done';
+        item[1] = 'done';
 
-    updatePlotScore(plotId);
+        updatePlotScore(plotId);
 
-  }
+      }
 
-  saveData();
+      saveData();
 
-  renderChecklist();
+      renderChecklist();
 
-}
+    }
 
-function approveEvidence(category){
+    function approveEvidence(category) {
 
-  const plotId = state.plotId;
+      const plotId = state.plotId;
 
-  const item = plots[plotId].checklist.find(
-    c => c[0] === category
-  );
+      const item = plots[plotId].checklist.find(
+        c => c[0] === category
+      );
 
-  if(item){
+      if (item) {
 
-    item[1] = 'done';
+        item[1] = 'done';
 
-  }
+      }
 
-  saveData();
+      saveData();
 
-  openPlot(plotId);
+      openPlot(plotId);
 
-}
+    }
 
 
-function deleteEvidence(category){
+    function deleteEvidence(category) {
 
-  if(!confirm(
-    `Delete evidence for:\n\n${category}?`
-  )){
-    return;
-  }
+      if (!confirm(
+        `Delete evidence for:\n\n${category}?`
+      )) {
+        return;
+      }
 
-  const plotId = state.plotId;
+      const plotId = state.plotId;
 
-  const gallery = plots[plotId].gallery;
+      const gallery = plots[plotId].gallery;
 
-  const index = gallery.findIndex(
-    p => p.category === category
-  );
+      const index = gallery.findIndex(
+        p => p.category === category
+      );
 
-  if(index === -1){
-    return;
-  }
+      if (index === -1) {
+        return;
+      }
 
-  gallery.splice(index,1);
+      gallery.splice(index, 1);
 
-  const evidenceStillExists = gallery.some(
-    p => p.category === category
-  );
+      const evidenceStillExists = gallery.some(
+        p => p.category === category
+      );
 
-  const item = plots[plotId].checklist.find(
-    c => c[0] === category
-  );
+      const item = plots[plotId].checklist.find(
+        c => c[0] === category
+      );
 
-  if(item && !evidenceStillExists){
+      if (item && !evidenceStillExists) {
 
-    item[1] = 'missing';
+        item[1] = 'missing';
 
-    updatePlotScore(plotId);
+        updatePlotScore(plotId);
 
-  }
+      }
 
-  saveData();
+      saveData();
 
-  openPlot(plotId);
+      openPlot(plotId);
 
-}
+    }
 
-function levelDot(level){ return {red:'dot-red',amber:'dot-amber',green:'dot-green',blue:'dot-green'}[level]||'dot-amber'; }
-function renderNotifications(){
-  const body = document.getElementById('notifications-body');
-  if(!notifications.length){ body.innerHTML = `<div class="empty-state"><div class="ic">🔔</div>No notifications right now.</div>`; return; }
-  body.innerHTML = `<div class="card" style="padding:4px 16px;">` + notifications.map(n=>`
-    <div class="priority-item" style="opacity:${n.read?0.55:1};" onclick="openNotification('${n.id}')">
+    function levelDot(level) { return { red: 'dot-red', amber: 'dot-amber', green: 'dot-green', blue: 'dot-green' }[level] || 'dot-amber'; }
+    function renderNotifications() {
+      const body = document.getElementById('notifications-body');
+      if (!notifications.length) { body.innerHTML = `<div class="empty-state"><div class="ic">🔔</div>No notifications right now.</div>`; return; }
+      body.innerHTML = `<div class="card" style="padding:4px 16px;">` + notifications.map(n => `
+    <div class="priority-item" style="opacity:${n.read ? 0.55 : 1};" onclick="openNotification('${n.id}')">
       <span class="dot ${levelDot(n.level)}" style="margin-top:5px;"></span>
-      <div class="pi-text"><div class="t">${n.title}${n.read?'':' · <span class="badge badge-blue" style="padding:2px 6px;">New</span>'}</div><div class="d">${n.body}</div><div class="d" style="color:var(--muted);margin-top:2px;">${n.time}</div></div>
+      <div class="pi-text"><div class="t">${n.title}${n.read ? '' : ' · <span class="badge badge-blue" style="padding:2px 6px;">New</span>'}</div><div class="d">${n.body}</div><div class="d" style="color:var(--muted);margin-top:2px;">${n.time}</div></div>
       <span class="chev">›</span>
     </div>`).join('') + `</div>`;
-  updateNotifBadges();
-}
-function openNotification(id){
-  const n = notifications.find(x=>x.id===id);
-  if(!n) return;
-  n.read = true;
-  updateNotifBadges();
-  n.action();
-}
-function markAllRead(){
-  notifications.forEach(n=>n.read=true);
-  renderNotifications();
-  toast('All notifications marked read');
-}
-function unreadCount(){ return notifications.filter(n=>!n.read).length; }
-function updateNotifBadges(){
-  const c = unreadCount();
-  const dashBadge = document.getElementById('dash-notif-badge');
-  const settingsBadge = document.getElementById('settings-notif-badge');
-  if(dashBadge) dashBadge.style.display = c>0 ? 'block' : 'none';
-  if(settingsBadge){ settingsBadge.style.display = c>0 ? 'inline-flex' : 'none'; settingsBadge.textContent = c; }
-}
-function renderSearch(q){
-  const container = document.getElementById('search-results');
-  if(!q){ container.innerHTML = `<p style="color:var(--muted);font-size:13px;text-align:center;margin-top:30px;">Start typing to search across every project.</p>`; return; }
-  const ql = q.toLowerCase();
-  const matchedPlots = Object.values(plots).filter(p=>p.number.toLowerCase().includes(ql)||p.houseType.toLowerCase().includes(ql)||p.status.toLowerCase().includes(ql));
-  const matchedProjects = Object.values(projects).filter(pr=>pr.name.toLowerCase().includes(ql)||pr.location.toLowerCase().includes(ql));
-  if(!matchedPlots.length && !matchedProjects.length){ container.innerHTML = `<div class="empty-state"><div class="ic">🔍</div>No results for "${q}"</div>`; return; }
-  container.innerHTML =
-    (matchedProjects.length? `<div class="label-eyebrow" style="margin-top:8px;">PROJECTS</div>` + matchedProjects.map(pr=>`<div class="card tap" onclick="openProject('${pr.id}')"><span style="font-weight:700;color:var(--navy);">${pr.name}</span><div style="font-size:12px;color:var(--muted);">${pr.location}</div></div>`).join('') : '') +
-    (matchedPlots.length? `<div class="label-eyebrow" style="margin-top:8px;">PLOTS</div>` + matchedPlots.map(p=>`<div class="card tap" onclick="openPlot('${p.id}')"><div class="row"><span style="font-weight:700;color:var(--navy);">${p.number}</span><span class="badge ${statusMeta(p.status).badge}">${p.status}</span></div><div style="font-size:12px;color:var(--muted);">${projects[p.projectId].name}</div></div>`).join('') : '');
-}
-function setChip(el, group, forceLabel){
-  const row = el ? el.parentElement : document.querySelector('.chip.active').parentElement;
-  row.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
-  if(el) el.classList.add('active');
-  else { row.querySelectorAll('.chip').forEach(c=>{ if(c.textContent.trim()===forceLabel) c.classList.add('active'); }); if(state.screen!=='projectdetails') go('projectdetails'); }
-  toast('Filtered');
-}
+      updateNotifBadges();
+    }
+    function openNotification(id) {
+      const n = notifications.find(x => x.id === id);
+      if (!n) return;
+      n.read = true;
+      updateNotifBadges();
+      n.action();
+    }
+    function markAllRead() {
+      notifications.forEach(n => n.read = true);
+      renderNotifications();
+      toast('All notifications marked read');
+    }
+    function unreadCount() { return notifications.filter(n => !n.read).length; }
+    function updateNotifBadges() {
+      const c = unreadCount();
+      const dashBadge = document.getElementById('dash-notif-badge');
+      const settingsBadge = document.getElementById('settings-notif-badge');
+      if (dashBadge) dashBadge.style.display = c > 0 ? 'block' : 'none';
+      if (settingsBadge) { settingsBadge.style.display = c > 0 ? 'inline-flex' : 'none'; settingsBadge.textContent = c; }
+    }
+    function renderSearch(q) {
+      const container = document.getElementById('search-results');
+      if (!q) { container.innerHTML = `<p style="color:var(--muted);font-size:13px;text-align:center;margin-top:30px;">Start typing to search across every project.</p>`; return; }
+      const ql = q.toLowerCase();
+      const matchedPlots = Object.values(plots).filter(p => p.number.toLowerCase().includes(ql) || p.houseType.toLowerCase().includes(ql) || p.status.toLowerCase().includes(ql));
+      const matchedProjects = Object.values(projects).filter(pr => pr.name.toLowerCase().includes(ql) || pr.location.toLowerCase().includes(ql));
+      if (!matchedPlots.length && !matchedProjects.length) { container.innerHTML = `<div class="empty-state"><div class="ic">🔍</div>No results for "${q}"</div>`; return; }
+      container.innerHTML =
+        (matchedProjects.length ? `<div class="label-eyebrow" style="margin-top:8px;">PROJECTS</div>` + matchedProjects.map(pr => `<div class="card tap" onclick="openProject('${pr.id}')"><span style="font-weight:700;color:var(--navy);">${pr.name}</span><div style="font-size:12px;color:var(--muted);">${pr.location}</div></div>`).join('') : '') +
+        (matchedPlots.length ? `<div class="label-eyebrow" style="margin-top:8px;">PLOTS</div>` + matchedPlots.map(p => `<div class="card tap" onclick="openPlot('${p.id}')"><div class="row"><span style="font-weight:700;color:var(--navy);">${p.number}</span><span class="badge ${statusMeta(p.status).badge}">${p.status}</span></div><div style="font-size:12px;color:var(--muted);">${projects[p.projectId].name}</div></div>`).join('') : '');
+    }
+    function setChip(el, group, forceLabel) {
+      const row = el ? el.parentElement : document.querySelector('.chip.active').parentElement;
+      row.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      if (el) el.classList.add('active');
+      else { row.querySelectorAll('.chip').forEach(c => { if (c.textContent.trim() === forceLabel) c.classList.add('active'); }); if (state.screen !== 'projectdetails') go('projectdetails'); }
+      toast('Filtered');
+    }
 
-// ENHANCED FILTERING
-function filterPlots(q=""){
- const txt=(q||"").toLowerCase();
- const active=document.querySelector('#screen-projectdetails .chip.active');
- const status=active?active.textContent.trim():"All";
- const container=document.getElementById('plot-list');
- const list=Object.values(plots).filter(p=>p.projectId===state.projectId).filter(p=>{
-   const match=!txt || p.number.toLowerCase().includes(txt)||p.houseType.toLowerCase().includes(txt)||p.status.toLowerCase().includes(txt);
-   const sf=status==='All'||p.status===status;
-   return match&&sf;
- });
- container.innerHTML=list.map(p=>`<div class="card tap" onclick="openPlot('${p.id}')"><div class="row"><span style="font-weight:800;color:var(--navy);">${p.number}</span><span class="badge ${statusMeta(p.status).badge}">${p.status}</span></div><div style="font-size:12.5px;color:var(--muted);margin-top:2px;">${p.houseType}</div></div>`).join('');
-}
-function generateReportForPlot(id){toast('PDF generated for '+plots[id].number);}
+    // ENHANCED FILTERING
+    function filterPlots(q = "") {
+      const txt = (q || "").toLowerCase();
+      const active = document.querySelector('#screen-projectdetails .chip.active');
+      const status = active ? active.textContent.trim() : "All";
+      const container = document.getElementById('plot-list');
+      const list = Object.values(plots).filter(p => p.projectId === state.projectId).filter(p => {
+        const match = !txt || p.number.toLowerCase().includes(txt) || p.houseType.toLowerCase().includes(txt) || p.status.toLowerCase().includes(txt);
+        const sf = status === 'All' || p.status === status;
+        return match && sf;
+      });
+      container.innerHTML = list.map(p => `<div class="card tap" onclick="openPlot('${p.id}')"><div class="row"><span style="font-weight:800;color:var(--navy);">${p.number}</span><span class="badge ${statusMeta(p.status).badge}">${p.status}</span></div><div style="font-size:12.5px;color:var(--muted);margin-top:2px;">${p.houseType}</div></div>`).join('');
+    }
+    function generateReportForPlot(id) { toast('PDF generated for ' + plots[id].number); }
 
-function updateDashboardStats(){
+    function updateDashboardStats() {
 
-  const plotList =
-    Object.values(plots);
+      const plotList =
+        Object.values(plots);
 
-    const projectCount =
-  Object.keys(projects).length;
+      const projectCount =
+        Object.keys(projects).length;
 
-    const siteHealth =
-  plotList.length
-    ? Math.round(
-        plotList.reduce(
-          (total, plot) => total + plot.score,
-          0
-        ) / plotList.length
-      )
-    : 0;
-
-    
-
-    
-
-  
-
-    const approvedCount =
-  plotList.reduce((total, plot) => {
-
-    return total +
-      plot.checklist.filter(
-        item => item[1] === 'done'
-      ).length;
-
-  }, 0);
-
-  
-
-   const pendingCount =
-  plotList.reduce((total, plot) => {
-
-    return total +
-      plot.checklist.filter(
-        item => item[1] === 'pending'
-      ).length;
-
-  }, 0); 
-
- const missingCount =
-  plotList.reduce((total, plot) => {
-
-    return total +
-      plot.checklist.filter(
-        item => item[1] === 'missing'
-      ).length;
-
-  }, 0); 
-
-const projectsEl =
-  document.getElementById(
-    'dash-projects-count'
-  );
-
-if(projectsEl){
-  projectsEl.textContent =
-  "Projects: " + projectCount;
-}
-
-document.getElementById(
-  'dash-plots-active'
-).textContent =
-  "Plots: " + plotList.length;
-  
-
-const completeEl =
-  document.getElementById(
-    'dash-complete'
-  );
-
-if(completeEl){
- completeEl.textContent =
-  "Approved: " + approvedCount; 
-}
+      const siteHealth =
+        plotList.length
+          ? Math.round(
+            plotList.reduce(
+              (total, plot) => total + plot.score,
+              0
+            ) / plotList.length
+          )
+          : 0;
 
 
-const pendingEl =
-  document.getElementById(
-    'dash-pending-count'
-  );
-
-if(pendingEl){
-  pendingEl.textContent =
-    "Pending: " + pendingCount;
-}
 
 
-  document.getElementById(
-  'dash-notstarted'
-).textContent =
-  "Missing: " + missingCount;
 
-    const siteHealthEl =
-  document.getElementById(
-    'site-health-score'
-  );
 
-if(siteHealthEl){
-  siteHealthEl.textContent =
-    siteHealth + "%";
-}
 
-const badgeEl =
-  document.getElementById(
-    'site-health-badge'
-  );
+      const approvedCount =
+        plotList.reduce((total, plot) => {
 
-if(badgeEl){
+          return total +
+            plot.checklist.filter(
+              item => item[1] === 'done'
+            ).length;
 
-  if(siteHealth >= 90){
-    badgeEl.textContent = "Excellent";
-  }
-  else if(siteHealth >= 70){
-    badgeEl.textContent = "Good";
-  }
-  else if(siteHealth >= 40){
-    badgeEl.textContent = "Needs Attention";
-  }
-  else{
-    badgeEl.textContent = "Poor";
-  }
+        }, 0);
 
-}
 
-}
 
-function renderProjects() {
+      const pendingCount =
+        plotList.reduce((total, plot) => {
 
-  const projectsScreenPlotsEl =
-  document.getElementById(
-    'projects-screen-plots-count'
-  );
+          return total +
+            plot.checklist.filter(
+              item => item[1] === 'pending'
+            ).length;
 
-if(projectsScreenPlotsEl){
-  projectsScreenPlotsEl.textContent =
-    Object.keys(plots).length;
-}
+        }, 0);
 
-  const projectCards = Object.values(projects)
-    .map(project => `
+      const missingCount =
+        plotList.reduce((total, plot) => {
+
+          return total +
+            plot.checklist.filter(
+              item => item[1] === 'missing'
+            ).length;
+
+        }, 0);
+
+      const projectsEl =
+        document.getElementById(
+          'dash-projects-count'
+        );
+
+      if (projectsEl) {
+        projectsEl.textContent =
+          "Projects: " + projectCount;
+      }
+
+      document.getElementById(
+        'dash-plots-active'
+      ).textContent =
+        "Plots: " + plotList.length;
+
+
+      const completeEl =
+        document.getElementById(
+          'dash-complete'
+        );
+
+      if (completeEl) {
+        completeEl.textContent =
+          "Approved: " + approvedCount;
+      }
+
+
+      const pendingEl =
+        document.getElementById(
+          'dash-pending-count'
+        );
+
+      if (pendingEl) {
+        pendingEl.textContent =
+          "Pending: " + pendingCount;
+      }
+
+
+      document.getElementById(
+        'dash-notstarted'
+      ).textContent =
+        "Missing: " + missingCount;
+
+      const siteHealthEl =
+        document.getElementById(
+          'site-health-score'
+        );
+
+      if (siteHealthEl) {
+        siteHealthEl.textContent =
+          siteHealth + "%";
+      }
+
+      const badgeEl =
+        document.getElementById(
+          'site-health-badge'
+        );
+
+      if (badgeEl) {
+
+        if (siteHealth >= 90) {
+          badgeEl.textContent = "Excellent";
+        }
+        else if (siteHealth >= 70) {
+          badgeEl.textContent = "Good";
+        }
+        else if (siteHealth >= 40) {
+          badgeEl.textContent = "Needs Attention";
+        }
+        else {
+          badgeEl.textContent = "Poor";
+        }
+
+      }
+
+    }
+
+    function renderProjects() {
+
+      const projectsScreenPlotsEl =
+        document.getElementById(
+          'projects-screen-plots-count'
+        );
+
+      if (projectsScreenPlotsEl) {
+        projectsScreenPlotsEl.textContent =
+          Object.keys(plots).length;
+      }
+
+      const projectCards = Object.values(projects)
+        .map(project => `
       <div class="card tap" onclick="openProject('${project.id}')">
         <div class="row">
           <span style="font-weight:800;color:var(--navy);font-size:16px;">
@@ -3004,37 +4242,37 @@ if(projectsScreenPlotsEl){
         </div>
       </div>
     `)
-    .join("");
+        .join("");
 
-  const body =
-    document.querySelector("#screen-projects .screen-body");
+      const body =
+        document.querySelector("#screen-projects .screen-body");
 
-  body.innerHTML = projectCards;
-}
+      body.innerHTML = projectCards;
+    }
 
-function filterProjects(){ }
+    function filterProjects() { }
 
-function addProject() {
+    function addProject() {
 
-  const name = prompt("Enter a project name");
-  const location = prompt("Enter project location");
-  if (!name || !location) return;
-  const id = "project" + Date.now();
+      const name = prompt("Enter a project name");
+      const location = prompt("Enter project location");
+      if (!name || !location) return;
+      const id = "project" + Date.now();
 
-projects[id] = {
-  id: id,
-  name: name,
-  location: location,
-  client: "",
-  siteManager: ""
-};
+      projects[id] = {
+        id: id,
+        name: name,
+        location: location,
+        client: "",
+        siteManager: ""
+      };
 
-  const projectsScreen =
-    document.querySelector('#screen-projects .screen-body');
+      const projectsScreen =
+        document.querySelector('#screen-projects .screen-body');
 
-  projectsScreen.insertAdjacentHTML(
-    'beforeend',
-    `
+      projectsScreen.insertAdjacentHTML(
+        'beforeend',
+        `
     <div class="card">
       <div class="row">
         <span style="font-weight:800;color:var(--navy);font-size:16px;">
@@ -3048,31 +4286,31 @@ projects[id] = {
 </div>
     </div>
     `
-  );
-saveData();
+      );
+      saveData();
 
-  toast("Project added");
-}
-function createPlotFromForm() {
+      toast("Project added");
+    }
+    function createPlotFromForm() {
 
-    const plotNumber =
+      const plotNumber =
         document.getElementById(
-            'new-plot-number'
+          'new-plot-number'
         ).value.trim();
 
-        const houseType =
-    document.getElementById(
-        'new-house-type'
-    ).value.trim();
+      const houseType =
+        document.getElementById(
+          'new-house-type'
+        ).value.trim();
 
-    if (!plotNumber) {
+      if (!plotNumber) {
         toast("Enter a plot number");
         return;
-    }
+      }
 
-    const id = "plot" + Date.now();
+      const id = "plot" + Date.now();
 
-    plots[id] = {
+      plots[id] = {
         id: id,
         projectId: state.projectId,
         number: plotNumber,
@@ -3085,53 +4323,53 @@ function createPlotFromForm() {
         missing: [],
         timeline: [],
         gallery: []
-    };
+      };
 
-    saveData();
+      saveData();
 
-    renderPlotList();
+      renderPlotList();
 
-    document.getElementById(
+      document.getElementById(
         'new-plot-number'
-    ).value = '';
+      ).value = '';
 
-    document.getElementById(
-    'new-house-type'
-).value = '';
+      document.getElementById(
+        'new-house-type'
+      ).value = '';
 
-    go('projectdetails');
+      go('projectdetails');
 
-    toast("Plot added");
-}
-function addPlot() {
- 
+      toast("Plot added");
+    }
+    function addPlot() {
 
-  const plotNumber = prompt("Enter plot number");
 
-  if (!plotNumber) return;
-  const id = "plot" + Date.now();
+      const plotNumber = prompt("Enter plot number");
 
-plots[id] = {
-  id: id,
-  projectId: state.projectId,
-  number: plotNumber,
-  houseType: "New Plot",
-  stage: "Not Started",
-  status: "Not Started",
-  score: 0,
-  last: "Just created",
-  checklist: [],
-  missing: [],
-  timeline: [],
-  gallery: []
-};
-console.log("PLOT ADDED", id);
+      if (!plotNumber) return;
+      const id = "plot" + Date.now();
 
-  const plotList = document.getElementById('plot-list');
+      plots[id] = {
+        id: id,
+        projectId: state.projectId,
+        number: plotNumber,
+        houseType: "New Plot",
+        stage: "Not Started",
+        status: "Not Started",
+        score: 0,
+        last: "Just created",
+        checklist: [],
+        missing: [],
+        timeline: [],
+        gallery: []
+      };
+      console.log("PLOT ADDED", id);
 
-  plotList.insertAdjacentHTML(
-    'beforeend',
-    `
+      const plotList = document.getElementById('plot-list');
+
+      plotList.insertAdjacentHTML(
+        'beforeend',
+        `
     <div class="card tap">
       <div class="row">
         <span style="font-weight:800;color:var(--navy);">
@@ -3145,114 +4383,115 @@ console.log("PLOT ADDED", id);
       </div>
     </div>
     `
-  );
-  console.log('ABOUT TO SAVE');
-saveData();
+      );
+      console.log('ABOUT TO SAVE');
+      saveData();
 
-renderPlotList();
+      renderPlotList();
 
-toast("Plot added");
-}
-function editPlot() {
+      toast("Plot added");
+    }
+    function editPlot() {
 
-  const plot = plots[state.plotId];
+      const plot = plots[state.plotId];
 
-  const newNumber =
-    prompt("Plot Number", plot.number);
+      const newNumber =
+        prompt("Plot Number", plot.number);
 
-  if (!newNumber) return;
+      if (!newNumber) return;
 
-  const newHouseType =
-    prompt("House Type", plot.houseType);
+      const newHouseType =
+        prompt("House Type", plot.houseType);
 
-  if (!newHouseType) return;
-  const newStage =
-  prompt("Build Stage", plot.stage);
+      if (!newHouseType) return;
+      const newStage =
+        prompt("Build Stage", plot.stage);
 
-if (!newStage) return;
-const newStatus =
-  prompt("Status", plot.status);
+      if (!newStage) return;
+      const newStatus =
+        prompt("Status", plot.status);
 
-if (!newStatus) return;
+      if (!newStatus) return;
 
-  plot.number = newNumber;
-  plot.houseType = newHouseType;
-  plot.stage = newStage;
-  plot.status = newStatus;
+      plot.number = newNumber;
+      plot.houseType = newHouseType;
+      plot.stage = newStage;
+      plot.status = newStatus;
 
-  saveData();
+      saveData();
 
-  renderPlotList();
+      renderPlotList();
 
-  toast("Plot updated");
+      toast("Plot updated");
 
-  renderPlotOverview();
-}
+      renderPlotOverview();
+    }
 
-function updatePlotScore(plotId){
+    function updatePlotScore(plotId) {
 
-  const plot = plots[plotId];
+      const plot = plots[plotId];
 
-  const approved =
-    plot.checklist.filter(i => i[1] === 'done').length;
+      const approved =
+        plot.checklist.filter(i => i[1] === 'done').length;
 
-  plot.score =
-    Math.round(
-      (approved / plot.checklist.length) * 100
-    );
+      plot.score =
+        Math.round(
+          (approved / plot.checklist.length) * 100
+        );
 
-    if(plot.score === 0){
+      if (plot.score === 0) {
 
-  plot.status = "Not Started";
+        plot.status = "Not Started";
 
-}
-else if(plot.score < 100){
+      }
+      else if (plot.score < 100) {
 
-  plot.status = "In Progress";
+        plot.status = "In Progress";
 
-}
-else{
+      }
+      else {
 
-  plot.status = "Complete";
+        plot.status = "Complete";
 
-}
+      }
 
-  saveData();
-}
+      saveData();
+    }
 
-/*-------------- TOAST ---------------- */
-let toastTimer;
-function toast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
-}
+    /*-------------- TOAST ---------------- */
+    let toastTimer;
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+    }
 
-/* ---------------- ACCESSIBILITY ---------------- */
-function enhanceKeyboardAccess(){
-  document.querySelectorAll('[onclick]').forEach(el=>{
-    const tag = el.tagName.toLowerCase();
-    if(tag==='button' || tag==='a' || tag==='input') return;
-    if(!el.hasAttribute('tabindex')) el.setAttribute('tabindex','0');
-    if(!el.hasAttribute('role')) el.setAttribute('role','button');
-    if(!el.dataset.kbBound){
-      el.dataset.kbBound = '1';
-      el.addEventListener('keydown', e=>{
-        if(e.key==='Enter' || e.key===' '){ e.preventDefault(); el.click(); }
+    /* ---------------- ACCESSIBILITY ---------------- */
+    function enhanceKeyboardAccess() {
+      document.querySelectorAll('[onclick]').forEach(el => {
+        const tag = el.tagName.toLowerCase();
+        if (tag === 'button' || tag === 'a' || tag === 'input') return;
+        if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+        if (!el.hasAttribute('role')) el.setAttribute('role', 'button');
+        if (!el.dataset.kbBound) {
+          el.dataset.kbBound = '1';
+          el.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+          });
+        }
       });
     }
-  });
-}
 
-/* ---------------- BOOT ---------------- */
-loadData();
+    /* ---------------- BOOT ---------------- */
+    loadData();
 
-go('login', false);
-enhanceKeyboardAccess();
-const _origGo = go;
-go = function(...args){ _origGo(...args); enhanceKeyboardAccess(); };
-</script>
+    go('login', false);
+    enhanceKeyboardAccess();
+    const _origGo = go;
+    go = function (...args) { _origGo(...args); enhanceKeyboardAccess(); };
+  </script>
 </body>
+
 </html>
