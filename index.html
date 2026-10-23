@@ -1431,7 +1431,7 @@
 </button>
         </div>
         
-        <div class="screen-body">
+        <div class="screen-body"style="padding-bottom:90px;">
 
     <div class="card" style="
         padding:20px;
@@ -1578,32 +1578,50 @@
     </div>
 
     <div style="
-    position:sticky;
-    bottom:0;
-    background:#fff;
-    border-top:1px solid #E5E7EB;
-    display:flex;
-    justify-content:space-around;
-    padding:12px 0;
-    margin-top:20px;
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#fff;
+border-top:1px solid #E5E7EB;
+display:flex;
+justify-content:space-around;
+padding:12px 0;
+z-index:1000;
 ">
 
-    <div style="text-align:center;color:#2F80ED;">
+    <div onclick="go('projects')" style="
+        text-align:center;
+        color:#2F80ED;
+        cursor:pointer;
+    ">
         <div style="font-size:24px;">🏠</div>
         <div style="font-size:12px;font-weight:600;">Projects</div>
     </div>
 
-    <div style="text-align:center;color:#94A3B8;">
+    <div onclick="go('dashboard')" style="
+        text-align:center;
+        color:#94A3B8;
+        cursor:pointer;
+    ">
         <div style="font-size:24px;">🗺️</div>
-        <div style="font-size:12px;">Map</div>
+        <div style="font-size:12px;">Home</div>
     </div>
 
-    <div style="text-align:center;color:#94A3B8;">
+    <div onclick="go('reports')" style="
+        text-align:center;
+        color:#94A3B8;
+        cursor:pointer;
+    ">
         <div style="font-size:24px;">📊</div>
         <div style="font-size:12px;">Reports</div>
     </div>
 
-    <div style="text-align:center;color:#94A3B8;">
+    <div onclick="go('settings')" style="
+        text-align:center;
+        color:#94A3B8;
+        cursor:pointer;
+    ">
         <div style="font-size:24px;">⚙️</div>
         <div style="font-size:12px;">Settings</div>
     </div>
@@ -2337,9 +2355,9 @@
       }
 
       if (state.screen === 'projectdetails') {
-        go('dashboard');
-        return;
-      }
+    go('projects');
+    return;
+}
 
       const prev = state.history.pop();
 
