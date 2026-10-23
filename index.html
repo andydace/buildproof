@@ -1403,69 +1403,212 @@
       <div class="screen" id="screen-projects">
         <div class="topnav">
           <div class="topnav-title">
-            <h1>Projects</h1>
+            <h1 style="
+    font-size:28px;
+    font-weight:800;
+    margin:0;
+    line-height:1;
+">
+    PlotVault
+</h1>
+<div style="
+    font-size:13px;
+    color:var(--muted);
+    margin-top:6px;
+">
+    BuildProof Inspection Platform
+</div>
           </div>
-          <button class="backbtn" onclick="addProject()">＋</button>
+          <button class="backbtn" style="
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:#EEF2F7;
+    color:#6B7280;
+    font-size:20px;
+">
+    👤
+</button>
         </div>
+        
         <div class="screen-body">
-          <div class="searchbar">🔍<input placeholder="Search projects, plots, clients..."
-              oninput="filterProjects(this.value)"></div>
-          <div class="chip-row">
-            <div class="chip active" onclick="setChip(this,'galfilter')">All</div>
-            <div class="chip" onclick="setChip(this,'galfilter')">Foundations</div>
-            <div class="chip" onclick="setChip(this,'galfilter')">Walls</div>
-            <div class="chip" onclick="setChip(this,'galfilter')">Roof</div>
-            <div class="chip" onclick="setChip(this,'galfilter')">Openings</div>
-            <div class="chip" onclick="setChip(this,'galfilter')">Airtightness</div>
-            <div class="chip" onclick="setChip(this,'galfilter')">Services</div>
-          </div>
-          <div class="card" style="display:flex;justify-content:space-around;text-align:center;">
-            <div>
-              <div style="font-weight:800;color:var(--navy);font-size:18px;">4</div>
-              <div style="font-size:11px;color:var(--muted);">Projects</div>
-            </div>
-            <div id="project-screen-plots-count" style="font-weight:800;color:var(--navy);font-size:16px;">
-              0
-            </div>
-            <div style="font-size:11px;color:var(--muted);">Plots active</div>
-          </div>
-          <div>
-            <div style="font-weight:800;color:var(--red);font-size:18px;">8</div>
-            <div style="font-size:11px;color:var(--muted);">Missing evidence</div>
-          </div>
-          <div>
-            <div style="font-weight:800;color:var(--green);font-size:18px;">3</div>
-            <div style="font-size:11px;color:var(--muted);">Reports ready</div>
-          </div>
+
+    <div class="card" style="
+        padding:20px;
+        border-radius:24px;
+        margin-bottom:20px;
+        display:flex;
+        justify-content:space-between;
+        text-align:center;
+    ">
+
+        <div>
+            <div style="font-size:32px;font-weight:800;">12</div>
+            <div style="font-size:12px;color:var(--muted);">Projects</div>
         </div>
 
-        <div class="card tap" onclick="openProject('oakview')">
-          <div class="row"><span style="font-weight:800;color:var(--navy);font-size:16px;">Oak View
-              Development</span><span class="badge badge-green">Active</span></div>
-          <div style="font-size:12.5px;color:var(--muted);margin-top:2px;">Leeds</div>
-          <div class="progress-track">
-            <div class="progress-fill" style="width:76%;"></div>
-          </div>
-          <div class="row" style="margin-top:10px;font-size:12.5px;color:var(--muted);">
-            <span>48 of 63 complete</span><span style="color:var(--red);font-weight:600;">4 missing</span><span>2
-              reports ready</span>
-          </div>
+        <div>
+            <div style="font-size:32px;font-weight:800;">48</div>
+            <div style="font-size:12px;color:var(--muted);">Plots</div>
         </div>
 
-        <div class="card tap" onclick="openProject('greenmeadows')">
-          <div class="row"><span style="font-weight:800;color:var(--navy);font-size:16px;">Green Meadows</span><span
-              class="badge badge-amber">Needs Attention</span></div>
-          <div style="font-size:12.5px;color:var(--muted);margin-top:2px;">Wakefield</div>
-          <div class="progress-track">
-            <div class="progress-fill amber" style="width:38%;"></div>
-          </div>
-          <div class="row" style="margin-top:10px;font-size:12.5px;color:var(--muted);">
-            <span>12 of 32 complete</span><span style="color:var(--red);font-weight:600;">5 missing</span><span>1 report
-              ready</span>
-          </div>
+        <div>
+            <div style="font-size:32px;font-weight:800;">36</div>
+            <div style="font-size:12px;color:var(--muted);">Completed</div>
         </div>
+
+        <div>
+            <div style="
+                font-size:32px;
+                font-weight:800;
+                color:var(--green);
+            ">
+                75%
+            </div>
+            <div style="font-size:12px;color:var(--muted);">Compliance</div>
+        </div>
+
+    </div>
+
+    <div style="
+    display:flex;
+    gap:12px;
+    margin-bottom:16px;
+">
+
+    <div class="card" style="
+        flex:1;
+        padding:14px 18px;
+        border-radius:30px;
+        display:flex;
+        align-items:center;
+        gap:12px;
+    ">
+
+        <span style="
+            color:var(--muted);
+            font-size:20px;
+        ">
+            🔍
+        </span>
+
+        <input
+            type="text"
+            placeholder="Search Projects"
+            style="
+                border:none;
+                outline:none;
+                flex:1;
+                font-size:16px;
+                background:transparent;
+            ">
+
+    </div>
+
+    <button style="
+        width:56px;
+        height:56px;
+        border:none;
+        border-radius:50%;
+        background:white;
+        box-shadow:0 2px 8px rgba(0,0,0,.08);
+        font-size:20px;
+        cursor:pointer;
+    ">
+        ⚙️
+    </button>
+
+</div>
+
+    
+
+<div style="
+    display:flex;
+    gap:10px;
+    margin-bottom:16px;
+    overflow-x:auto;
+">
+
+    <div style="
+        background:#2F80ED;
+        color:white;
+        padding:10px 20px;
+        border-radius:24px;
+        font-size:14px;
+        font-weight:600;
+    ">
+        All
+    </div>
+
+    <div style="
+        background:white;
+        padding:10px 20px;
+        border-radius:24px;
+        font-size:14px;
+    ">
+        Active
+    </div>
+
+    <div style="
+        background:white;
+        padding:10px 20px;
+        border-radius:24px;
+        font-size:14px;
+    ">
+        Completed
+    </div>
+
+    <div style="
+        background:white;
+        padding:10px 20px;
+        border-radius:24px;
+        font-size:14px;
+    ">
+        Behind Schedule
+    </div>
+
+</div>
+
+    <div id="projects-list"></div>
+
+</div>
+
+        
       </div>
     </div>
+
+    <div style="
+    position:sticky;
+    bottom:0;
+    background:#fff;
+    border-top:1px solid #E5E7EB;
+    display:flex;
+    justify-content:space-around;
+    padding:12px 0;
+    margin-top:20px;
+">
+
+    <div style="text-align:center;color:#2F80ED;">
+        <div style="font-size:24px;">🏠</div>
+        <div style="font-size:12px;font-weight:600;">Projects</div>
+    </div>
+
+    <div style="text-align:center;color:#94A3B8;">
+        <div style="font-size:24px;">🗺️</div>
+        <div style="font-size:12px;">Map</div>
+    </div>
+
+    <div style="text-align:center;color:#94A3B8;">
+        <div style="font-size:24px;">📊</div>
+        <div style="font-size:12px;">Reports</div>
+    </div>
+
+    <div style="text-align:center;color:#94A3B8;">
+        <div style="font-size:24px;">⚙️</div>
+        <div style="font-size:12px;">Settings</div>
+    </div>
+
+</div>
 
     <!-- PROJECT DETAILS -->
     <div class="screen" id="screen-projectdetails">
@@ -1996,12 +2139,50 @@
   <script>
     /* ---------------- DATA ---------------- */
     let projects = {
-      doseley: {
-        id: 'doseley',
-        name: 'Doseley Halt',
-        location: 'Telford'
-      }
-    };
+  doseley: {
+    id: 'doseley',
+    name: 'Doseley',
+    location: 'Telford, Shropshire',
+    status: 'Active',
+    plots: 8,
+    completion: 75,
+    compliance: 80,
+    updated: '14 Oct 2026'
+  },
+
+  oakwood: {
+    id: 'oakwood',
+    name: 'Oakwood Gardens',
+    location: 'Stafford, Staffordshire',
+    status: 'Active',
+    plots: 24,
+    completion: 68,
+    compliance: 82,
+    updated: '22 Oct 2026'
+  },
+
+  greenmeadows: {
+    id: 'greenmeadows',
+    name: 'Green Meadows',
+    location: 'Wolverhampton, West Midlands',
+    status: 'Attention',
+    plots: 16,
+    completion: 42,
+    compliance: 61,
+    updated: '20 Oct 2026'
+  },
+
+  riverside: {
+    id: 'riverside',
+    name: 'Riverside View',
+    location: 'Cannock, Staffordshire',
+    status: 'Complete',
+    plots: 32,
+    completion: 100,
+    compliance: 98,
+    updated: '18 Oct 2026'
+  }
+};
 
     const PARTL_ITEMS = [
       '1a - GF Perimeter Insulation Upstand',
@@ -4229,25 +4410,136 @@ Captured
 
       const projectCards = Object.values(projects)
         .map(project => `
-      <div class="card tap" onclick="openProject('${project.id}')">
-        <div class="row">
-          <span style="font-weight:800;color:var(--navy);font-size:16px;">
-            ${project.name}
-          </span>
-          <span class="badge badge-green">Active</span>
+      <div class="card tap" onclick="openProject('${project.id}')" style="
+background:#FFFFFF;
+border-radius:18px;
+padding:16px;
+margin-bottom:12px;
+box-shadow:0 6px 18px rgba(0,0,0,0.08);
+">
+
+    <div style="display:flex;gap:14px;">
+
+       <div style="
+    width:90px;
+height:90px;
+    border-radius:16px;
+    overflow:hidden;
+    flex-shrink:0;
+">
+    <img
+        src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=300"
+        style="
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        ">
+</div> 
+
+        <div style="flex:1;">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+            ">
+
+                <div style="
+                    font-size:18px;
+                    font-weight:800;
+                    color:var(--navy);
+                ">
+                    ${project.name}
+                    
+                    
+                </div>
+
+                <span class="badge badge-green">
+                    ${project.status}
+                </span>
+
+            </div>
+
+            <div style="
+                color:var(--muted);
+                font-size:13px;
+                margin-top:2px;
+            ">
+                ${project.location}
+            </div>
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                margin-top:12px;
+                font-size:13px;
+            ">
+
+                <div>
+                    <div style="font-weight:800;">
+                        ${project.plots}
+                    </div>
+                    <div style="color:var(--muted);">
+                        Plots
+                    </div>
+                </div>
+
+                <div>
+                    <div style="font-weight:800;">
+                        ${project.completion}%
+                    </div>
+                    <div style="color:var(--muted);">
+                        Complete
+                    </div>
+                </div>
+
+                <div>
+                    <div style="font-weight:800;">
+                        ${project.compliance}%
+                    </div>
+                    <div style="color:var(--muted);">
+                        Compliance
+                    </div>
+                </div>
+
+            </div>
+
         </div>
 
-        <div style="font-size:12.5px;color:var(--muted);margin-top:2px;">
-          ${project.location}
+    </div>
+
+    <div class="progress-track" style="margin-top:8px;">
+        <div class="progress-fill"
+             style="width:${project.completion}%;">
         </div>
-      </div>
+    </div>
+
+    <div style="
+        margin-top:6px;
+        color:var(--muted);
+        font-size:12px;
+    ">
+        <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:10px;
+    color:var(--muted);
+    font-size:12px;
+">
+    <span>📅 Last updated ${project.updated}</span>
+    <span style="font-size:18px;font-weight:700;">›</span>
+</div>
+    </div>
+
+</div>
     `)
         .join("");
 
-      const body =
-        document.querySelector("#screen-projects .screen-body");
+      const projectList =
+document.getElementById("projects-list");
 
-      body.innerHTML = projectCards;
+projectList.innerHTML = projectCards;
     }
 
     function filterProjects() { }
