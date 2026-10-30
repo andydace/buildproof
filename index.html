@@ -251,7 +251,7 @@
       font-size: 18px;
       font-weight: 700;
       color: var(--navy);
-      margin: 20px 0 10px;
+      margin: 8px 0 8px;
     }
 
     h2.section-heading:first-child {
@@ -1068,6 +1068,70 @@
 
       cursor: pointer;
     }
+
+    .project-detail-hero{
+    margin-bottom:24px;
+    padding:16px;
+}
+
+.back-btn{
+    border:none;
+    background:none;
+    color:#2563eb;
+    font-weight:600;
+    font-size:14px;
+    margin-bottom:16px;
+    cursor:pointer;
+}
+
+.project-detail-image{
+    width:100%;
+    height:220px;
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:16px;
+}
+
+.project-detail-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.project-detail-content h1{
+    margin:0 0 8px 0;
+    font-size:28px;
+    font-weight:700;
+}
+
+.project-location{
+    color:#6b7280;
+    margin-bottom:12px;
+    font-size:14px;
+}
+
+.project-badges{
+    display:flex;
+    gap:10px;
+}
+
+.status-badge{
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.status-badge.active{
+    background:#DCFCE7;
+    color:#166534;
+}
+
+.status-badge.synced{
+    background:#DBEAFE;
+    color:#1D4ED8;
+}
   </style>
 </head>
 
@@ -1630,71 +1694,242 @@ z-index:1000;
 
     <!-- PROJECT DETAILS -->
     <div class="screen" id="screen-projectdetails">
-      <div class="topnav">
-        <button class="backbtn" onclick="back()">←</button>
-        <div class="topnav-title">
-          <h1 id="pd-name">Oak View Development</h1>
-          <div class="sub">Active</div>
+      <div class="project-detail-hero">
+
+    <button class="back-btn" onclick="back()">
+        ← Back
+    </button>
+
+   <div class="project-detail-image">
+    <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200" alt="Project">
+</div>
+
+    <div class="project-detail-content">
+
+        <h1 id="pd-name">Oak View Development</h1>
+
+        <p class="project-location">
+            📍 Leeds, West Yorkshire
+        </p>
+
+        <div class="project-badges">
+
+            <span class="status-badge active">
+                Active
+            </span>
+
+            <span class="status-badge synced">
+                Synced
+            </span>
+
         </div>
-        <span class="sync-pill">● Synced</span>
-      </div>
+
+    </div>
+
+</div>
+
       <div class="screen-body">
-        <div class="card">
-          <div class="row" style="margin-bottom:8px;"><span
-              style="color:var(--muted);font-size:13px;">Client</span><span id="pd-client"
-              style="font-weight:600;font-size:13px;">Acme Homes</span></div>
-          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Site
-              Manager</span><span id="pd-sitemanager" style="font-weight:600;font-size:13px;">Andrew Dace</span></div>
-          <div class="row" style="margin-bottom:8px;"><span
-              style="color:var(--muted);font-size:13px;">Address</span><span id="pd-location"
-              style="font-weight:600;font-size:13px;">Oak View, Leeds</span></div>
-          <div class="row" style="margin-bottom:8px;"><span style="color:var(--muted);font-size:13px;">Start
-              date</span><span style="font-weight:600;font-size:13px;">12 May 2026</span></div>
-          <div class="row"><span style="color:var(--muted);font-size:13px;">Target completion</span><span
-              style="font-weight:600;font-size:13px;">18 Dec 2026</span></div>
+        <div class="card" style="
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:16px;
+">
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:20px;
+    ">
+
+        <h3 style="
+            font-size:18px;
+            font-weight:800;
+            color:var(--navy);
+            margin:0;
+        ">
+            Project Overview
+        </h3>
+
+        <button onclick="editProject()" style="
+            border:none;
+            background:#EEF2FF;
+            color:#2563EB;
+            padding:8px 14px;
+            border-radius:12px;
+            font-weight:600;
+            cursor:pointer;
+        ">
+            ✏️ Edit
+        </button>
+
+    </div>
+
+    <div style="
+        display:grid;
+        grid-template-columns:1fr;
+        gap:14px;
+    ">
+
+        <div>
+            <div style="font-size:12px;color:var(--muted);">
+                Client
+            </div>
+            <div id="pd-client" style="font-weight:700;">
+                Acme Homes
+            </div>
         </div>
 
+        <div>
+            <div style="font-size:12px;color:var(--muted);">
+                Site Manager
+            </div>
+            <div id="pd-sitemanager" style="font-weight:700;">
+                Andrew Dace
+            </div>
+        </div>
 
+        <div>
+            <div style="font-size:12px;color:var(--muted);">
+                Address
+            </div>
+            <div id="pd-location" style="font-weight:700;">
+                Oak View, Leeds
+            </div>
+        </div>
 
-        <div class="card">
-
-          <div style="
+        <div style="
             display:flex;
             justify-content:space-between;
-            align-items:center;
-            font-size:16px;
-            font-weight:800;
+            gap:20px;
         ">
 
-            <span>📊 <span id="project-progress-score">0%</span></span>
+            <div>
+                <div style="font-size:12px;color:var(--muted);">
+                    Start Date
+                </div>
 
-            <span title="Plots">🏠 <span id="project-plots-count">0</span></span>
+                <div style="font-weight:700;">
+                    12 May 2026
+                </div>
+            </div>
 
-            <span title="Approved">✅ <span id="project-approved-count">0</span></span>
+            <div>
+                <div style="font-size:12px;color:var(--muted);">
+                    Target Completion
+                </div>
 
-            <span title="Pending">⏳ <span id="project-pending-count">0</span></span>
-
-            <span title="Missing">❌ <span id="project-missing-count">0</span></span>
-
-          </div>
+                <div style="font-weight:700;">
+                    18 Dec 2026
+                </div>
+            </div>
 
         </div>
+
+    </div>
+
+</div>
+
+
+
+       <div class="card" style="
+    padding:18px;
+    border-radius:20px;
+    margin-bottom:4px;
+">
+
+
+    <div style="
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        gap:10px;
+        text-align:center;
+    ">
+
+        <div>
+            <div id="project-progress-score"
+                 style="font-size:22px;font-weight:800;color:#2563EB;">
+                0%
+            </div>
+            <div style="font-size:11px;color:var(--muted);">
+                Progress
+            </div>
+        </div>
+
+        <div>
+            <div id="project-plots-count"
+                 style="font-size:22px;font-weight:800;">
+                0
+            </div>
+            <div style="font-size:11px;color:var(--muted);">
+                Plots
+            </div>
+        </div>
+
+        <div>
+            <div id="project-approved-count"
+                 style="font-size:22px;font-weight:800;color:#16A34A;">
+                 0
+            </div>
+            <div style="font-size:11px;color:var(--muted);">
+                Approved
+            </div>
+        </div>
+
+        <div>
+            <div id="project-pending-count"
+                 style="font-size:22px;font-weight:800;color:#D97706;">
+                 0
+            </div>
+            <div style="font-size:11px;color:var(--muted);">
+                Pending
+            </div>
+        </div>
+
+        <div>
+            <div id="project-missing-count"
+                 style="font-size:22px;font-weight:800;color:#DC2626;">
+                 0
+            </div>
+            <div style="font-size:11px;color:var(--muted);">
+                Missing
+            </div>
+        </div>
+
+    </div>
+
+</div> 
       </div>
 
-      <h2 class="section-heading">Plots</h2>
-      <!-- Plot search and filters removed -->
-      <div id="plot-list"></div>
+      <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:8px;
+">
 
-      <div class="quick-actions">
-        <button class="qa-btn" onclick="editProject()">
-          <span class="ic">✏️</span>
-          <span class="txt">Edit Project</span>
-        </button>
-        <button class="qa-btn" onclick="go('addplot')">
-          <span class="ic">➕</span>
-          <span class="txt">Add Plot</span>
-        </button>
-      </div>
+    <h2 class="section-heading" style="
+        margin:0;
+    ">
+        Plots (<span id="project-plots-count-header">1</span>)
+    </h2>
+
+    <button onclick="go('addplot')" style="
+        background:#2563EB;
+        color:white;
+        border:none;
+        border-radius:12px;
+        padding:10px 16px;
+        font-weight:700;
+        cursor:pointer;
+    ">
+        + Add Plot
+    </button>
+
+</div>
+
+<div id="plot-list"></div>
+          
     </div>
   </div>
 
@@ -2847,49 +3082,110 @@ z-index:1000;
         const missing =
           p.checklist.filter(i => i[1] === 'missing').length;
 
-        return `<div class="card tap" onclick="openPlot('${p.id}')">
-  <div class="row">
+        return `
+<div class="card tap"
+     onclick="openPlot('${p.id}')"
+     style="
+        border-radius:20px;
+        padding:18px;
+        margin-bottom:14px;
+     ">
 
-  <div style="display:flex;gap:6px;align-items:center;">
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        margin-bottom:12px;
+    ">
 
-    <div>
-    <div style="font-weight:800;color:var(--navy);">
-        ${p.number}
+        <div>
+
+            <div style="
+                font-size:20px;
+                font-weight:800;
+                color:var(--navy);
+            ">
+                ${p.number}
+            </div>
+
+            <div style="
+                font-size:13px;
+                color:var(--muted);
+                margin-top:2px;
+            ">
+                ${p.houseType || 'Detached House'}
+            </div>
+
+        </div>
+
+        <span class="badge ${m.badge}">
+            ${m.text}
+        </span>
+
+    </div>
+
+   <div style="
+    font-size:24px;
+    font-weight:800;
+    color:#2563EB;
+    margin-bottom:4px;
+">
+        ${p.score || 0}%
+    </div>
+
+    <div class="progress-track"
+     style="
+        margin-bottom:10px;
+        height:8px;
+     ">
+
+        <div class="progress-fill ${p.score >= 90 ? 'green' : p.score >= 70 ? 'amber' : ''}"
+             style="width:${p.score || 0}%">
+        </div>
+
     </div>
 
     <div style="
-        font-size:12px;
-        color:var(--muted);
-        margin-top:2px;
-    ">
-        ${p.houseType || 'Not set'}
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:4px;
+">
+
+        <div style="
+    display:flex;
+    gap:16px;
+    align-items:center;
+    flex-wrap:wrap;
+    font-size:12px;
+">
+
+    <span style="color:#16A34A;">
+        ✅ ${approved} Complete
+    </span>
+
+    <span style="color:#D97706;">
+        ⏳ ${pending} Pending
+    </span>
+
+    <span style="color:#DC2626;">
+        ❌ ${missing} Missing
+    </span>
+
+</div>
+
+        <div style="
+            font-size:24px;
+            color:#94A3B8;
+            font-weight:700;
+        ">
+            ›
+        </div>
+
     </div>
-</div>
-
-    <span>✅${approved}</span>
-    <span>⏳${pending}</span>
-    <span>❌${missing}</span>
-    <span>📊${p.score}%</span>
-
-  </div>
-
-  <span class="badge ${m.badge}">${m.text}</span>
 
 </div>
-
-  
-
-  <!-- Plot stats moved into header row -->
-
-  <div class="progress-track" style="margin-top:8px;">
-    <div class="progress-fill ${p.score >= 90 ? 'green' : p.score >= 70 ? 'amber' : ''}" style="width:${p.score}%"></div>
-  </div>
-
-  <div class="row" style="margin-top:8px;font-size:12px;color:var(--muted);">
-    <span>Progress ${p.score}%</span>
-    <span>${p.created || ''}</span>
-  </div>
-</div>`;
+`;
 
       }).join('') || `<div class="empty-state"><div class="ic">📭</div>No plots match this filter.</div>`;
     }
