@@ -1131,6 +1131,7 @@
 .status-badge.synced{
     background:#DBEAFE;
     color:#1D4ED8;
+
 }
   </style>
 </head>
@@ -3082,107 +3083,106 @@ z-index:1000;
         const missing =
           p.checklist.filter(i => i[1] === 'missing').length;
 
-        return `
+return `
 <div class="card tap"
      onclick="openPlot('${p.id}')"
-     style="
-        border-radius:20px;
-        padding:18px;
-        margin-bottom:14px;
-     ">
-
-    <div style="
-        display:flex;
-        justify-content:space-between;
-        align-items:flex-start;
-        margin-bottom:12px;
-    ">
-
-        <div>
-
-            <div style="
-                font-size:20px;
-                font-weight:800;
-                color:var(--navy);
-            ">
-                ${p.number}
-            </div>
-
-            <div style="
-                font-size:13px;
-                color:var(--muted);
-                margin-top:2px;
-            ">
-                ${p.houseType || 'Detached House'}
-            </div>
-
-        </div>
-
-        <span class="badge ${m.badge}">
-            ${m.text}
-        </span>
-
-    </div>
-
-   <div style="
-    font-size:24px;
-    font-weight:800;
-    color:#2563EB;
-    margin-bottom:4px;
+    style="
+    position:relative;
+    border-radius:16px;
+    padding:10px 12px;
+    margin-bottom:6px;
 ">
-        ${p.score || 0}%
-    </div>
-
-    <div class="progress-track"
-     style="
-        margin-bottom:10px;
-        height:8px;
-     ">
-
-        <div class="progress-fill ${p.score >= 90 ? 'green' : p.score >= 70 ? 'amber' : ''}"
-             style="width:${p.score || 0}%">
-        </div>
-
-    </div>
 
     <div style="
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-top:4px;
+    margin-bottom:6px;
 ">
 
-        <div style="
-    display:flex;
-    gap:16px;
-    align-items:center;
-    flex-wrap:wrap;
+    <div style="
+        font-size:18px;
+        font-weight:800;
+        color:var(--navy);
+    ">
+        ${p.number}
+    </div>
+
+  <div style="
     font-size:12px;
+    font-weight:700;
+    color:#64748B;
+">
+    ${m.text}
+</div>  
+
+</div>
+
+<div style="
+    font-size:12px;
+    color:var(--muted);
+    text-align:left;
+    margin-bottom:6px;
+">
+    ${p.houseType || 'Detached House'}
+</div>
+
+<div style="
+    text-align:center;
+    font-size:13px;
+    font-weight:700;
+    color:#64748B;
+    margin-bottom:6px;
+">
+    ${p.score || 0}% Complete
+</div>
+
+<div class="progress-track"
+     style="
+        margin-bottom:6px;
+        height:8px;
+     ">
+
+    <div class="progress-fill ${p.score >= 90 ? 'green' : p.score >= 70 ? 'amber' : ''}"
+         style="width:${p.score || 0}%">
+    </div>
+
+</div>
+
+<div style="
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:24px;
+    font-size:12px;
+    font-weight:600;
 ">
 
     <span style="color:#16A34A;">
-        ✅ ${approved} Complete
+        ✅ ${approved}
     </span>
 
     <span style="color:#D97706;">
-        ⏳ ${pending} Pending
+        ⏳ ${pending}
     </span>
 
     <span style="color:#DC2626;">
-        ❌ ${missing} Missing
+        ❌ ${missing}
     </span>
 
 </div>
 
-        <div style="
-            font-size:24px;
-            color:#94A3B8;
-            font-weight:700;
-        ">
-            ›
-        </div>
-
-    </div>
+<div style="
+    position:absolute;
+    right:14px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:22px;
+    color:#94A3B8;
+    font-weight:700;
+">
+    ›
+</div>
 
 </div>
 `;
