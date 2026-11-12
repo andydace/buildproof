@@ -1070,8 +1070,8 @@
     }
 
     .project-detail-hero{
-    margin-bottom:24px;
-    padding:16px;
+    margin-bottom:12px;
+    padding:12px;
 }
 
 .back-btn{
@@ -1086,7 +1086,7 @@
 
 .project-detail-image{
     width:100%;
-    height:220px;
+    height:140px;
     border-radius:20px;
     overflow:hidden;
     margin-bottom:16px;
@@ -1740,7 +1740,7 @@ z-index:1000;
         display:flex;
         justify-content:space-between;
         align-items:center;
-        margin-bottom:20px;
+        margin-bottom:8px;
     ">
 
         <h3 style="
@@ -1756,7 +1756,7 @@ z-index:1000;
             border:none;
             background:#EEF2FF;
             color:#2563EB;
-            padding:8px 14px;
+            padding:4px 10px;
             border-radius:12px;
             font-weight:600;
             cursor:pointer;
@@ -1767,46 +1767,48 @@ z-index:1000;
     </div>
 
     <div style="
-        display:grid;
-        grid-template-columns:1fr;
-        gap:14px;
-    ">
+    display:grid;
+    grid-template-columns:110px 1fr;
+    row-gap:6px;
+    column-gap:12px;
+    align-items:center;
+">
 
         <div>
-            <div style="font-size:12px;color:var(--muted);">
-                Client
-            </div>
+            <div style="display:none;">
+    Client
+</div>
             <div id="pd-client" style="font-weight:700;">
-                Acme Homes
+                Central & Country Developments
             </div>
         </div>
 
         <div>
-            <div style="font-size:12px;color:var(--muted);">
-                Site Manager
-            </div>
+            <div style="display:none;">
+    Site Manager
+</div>
             <div id="pd-sitemanager" style="font-weight:700;">
-                Andrew Dace
+                David Blurton
             </div>
         </div>
 
         <div>
-            <div style="font-size:12px;color:var(--muted);">
-                Address
-            </div>
+            <div style="display:none;">
+    Client
+</div>
             <div id="pd-location" style="font-weight:700;">
-                Oak View, Leeds
+                Doseley Halt, Telford, Shropshire
             </div>
         </div>
 
         <div style="
             display:flex;
             justify-content:space-between;
-            gap:20px;
+            gap:4px;
         ">
 
             <div>
-                <div style="font-size:12px;color:var(--muted);">
+                <div style="font-size:10px;color:var(--muted);">
                     Start Date
                 </div>
 
@@ -1816,7 +1818,7 @@ z-index:1000;
             </div>
 
             <div>
-                <div style="font-size:12px;color:var(--muted);">
+                <div style="font-size:10px;color:var(--muted);">
                     Target Completion
                 </div>
 
@@ -1834,7 +1836,7 @@ z-index:1000;
 
 
        <div class="card" style="
-    padding:18px;
+    padding:4px;
     border-radius:20px;
     margin-bottom:4px;
 ">
@@ -1843,56 +1845,56 @@ z-index:1000;
     <div style="
         display:grid;
         grid-template-columns:repeat(5,1fr);
-        gap:10px;
+        gap:4px;
         text-align:center;
     ">
 
         <div>
             <div id="project-progress-score"
-                 style="font-size:22px;font-weight:800;color:#2563EB;">
+                 style="font-size:18px;font-weight:800;color:#2563EB;">
                 0%
             </div>
-            <div style="font-size:11px;color:var(--muted);">
+            <div style="font-size:10px;color:var(--muted);">
                 Progress
             </div>
         </div>
 
         <div>
             <div id="project-plots-count"
-                 style="font-size:22px;font-weight:800;">
+                 style="font-size:18px;font-weight:800;">
                 0
             </div>
-            <div style="font-size:11px;color:var(--muted);">
+            <div style="font-size:10px;color:var(--muted);">
                 Plots
             </div>
         </div>
 
         <div>
             <div id="project-approved-count"
-                 style="font-size:22px;font-weight:800;color:#16A34A;">
+                 style="font-size:18px;font-weight:800;color:#16A34A;">
                  0
             </div>
-            <div style="font-size:11px;color:var(--muted);">
+            <div style="font-size:10px;color:var(--muted);">
                 Approved
             </div>
         </div>
 
         <div>
             <div id="project-pending-count"
-                 style="font-size:22px;font-weight:800;color:#D97706;">
+                 style="font-size:18px;font-weight:800;color:#D97706;">
                  0
             </div>
-            <div style="font-size:11px;color:var(--muted);">
+            <div style="font-size:10px;color:var(--muted);">
                 Pending
             </div>
         </div>
 
         <div>
             <div id="project-missing-count"
-                 style="font-size:22px;font-weight:800;color:#DC2626;">
+                 style="font-size:18px;font-weight:800;color:#DC2626;">
                  0
             </div>
-            <div style="font-size:11px;color:var(--muted);">
+            <div style="font-size:10px;color:var(--muted);">
                 Missing
             </div>
         </div>
@@ -1906,7 +1908,7 @@ z-index:1000;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:8px;
+    margin-bottom:4px;
 ">
 
     <h2 class="section-heading" style="
@@ -1920,7 +1922,7 @@ z-index:1000;
         color:white;
         border:none;
         border-radius:12px;
-        padding:10px 16px;
+        padding:6px 12px;
         font-weight:700;
         cursor:pointer;
     ">
@@ -3093,99 +3095,120 @@ return `
     margin-bottom:6px;
 ">
 
-    <div style="
+<div style="
     display:flex;
     justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:10px;
+">
+
+    <div>
+        <div style="
+            font-size:18px;
+            font-weight:800;
+            color:var(--navy);
+            line-height:1.1;
+        ">
+            ${p.number}
+        </div>
+
+        <div style="
+            font-size:13px;
+            color:var(--muted);
+            margin-top:2px;
+        ">
+            ${p.houseType || 'Detached House'}
+        </div>
+    </div>
+
+    <span class="badge ${m.badge}">
+        ${m.text}
+    </span>
+
+</div>
+
+<div style="
+    display:flex;
     align-items:center;
-    margin-bottom:6px;
+    gap:12px;
+    margin-bottom:8px;
 ">
 
     <div style="
-        font-size:18px;
-        font-weight:800;
-        color:var(--navy);
+        width:60px;
+        flex-shrink:0;
     ">
-        ${p.number}
+
+        <div style="
+            font-size:16px;
+            font-weight:800;
+            line-height:1;
+            color:var(--navy);
+        ">
+            ${p.score || 0}%
+        </div>
+
+        <div style="
+            font-size:11px;
+            color:var(--muted);
+            margin-top:2px;
+        ">
+            Complete
+        </div>
+
     </div>
 
-  <div style="
-    font-size:12px;
-    font-weight:700;
-    color:#64748B;
-">
-    ${m.text}
-</div>  
+    <div style="
+        flex:1;
+    ">
 
-</div>
+        <div class="progress-track"
+             style="height:8px;">
 
-<div style="
-    font-size:12px;
-    color:var(--muted);
-    text-align:left;
-    margin-bottom:6px;
-">
-    ${p.houseType || 'Detached House'}
-</div>
+            <div
+                class="progress-fill ${p.score >= 90 ? 'green' : p.score >= 70 ? 'amber' : ''}"
+                style="width:${p.score || 0}%">
+            </div>
 
-<div style="
-    text-align:center;
-    font-size:13px;
-    font-weight:700;
-    color:#64748B;
-    margin-bottom:6px;
-">
-    ${p.score || 0}% Complete
-</div>
+        </div>
 
-<div class="progress-track"
-     style="
-        margin-bottom:6px;
-        height:8px;
-     ">
+    </div>
 
-    <div class="progress-fill ${p.score >= 90 ? 'green' : p.score >= 70 ? 'amber' : ''}"
-         style="width:${p.score || 0}%">
+    <div style="
+        font-size:22px;
+        color:#94A3B8;
+        font-weight:700;
+    ">
+        ›
     </div>
 
 </div>
 
 <div style="
     display:flex;
-    justify-content:center;
+    gap:12px;
     align-items:center;
-    gap:24px;
-    font-size:12px;
-    font-weight:600;
+    flex-wrap:wrap;
+    font-size:11px;
 ">
 
     <span style="color:#16A34A;">
-        ✅ ${approved}
+        ✅ ${approved} Complete
     </span>
 
     <span style="color:#D97706;">
-        ⏳ ${pending}
+        ⏳ ${pending} Pending
     </span>
 
     <span style="color:#DC2626;">
-        ❌ ${missing}
+        ❌ ${missing} Missing
     </span>
 
-</div>
-
-<div style="
-    position:absolute;
-    right:14px;
-    top:50%;
-    transform:translateY(-50%);
-    font-size:22px;
-    color:#94A3B8;
-    font-weight:700;
-">
-    ›
 </div>
 
 </div>
 `;
+
 
       }).join('') || `<div class="empty-state"><div class="ic">📭</div>No plots match this filter.</div>`;
     }
