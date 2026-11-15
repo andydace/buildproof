@@ -1504,7 +1504,38 @@
         .project-status.amber{background:#fff0c9;color:#b9770e;}
         .project-empty{padding:28px 18px;text-align:center;color:var(--muted);background:#fff;border-radius:18px;}
         @media(max-width:390px){#screen-projects .screen-body{padding-left:13px;padding-right:13px;}#screen-projects .project-stat strong{font-size:23px;}#screen-projects .project-stat span{font-size:10px;}.project-card{height:176px;padding:11px;}.project-card-main{height:154px;}.project-card-image{width:96px;flex-basis:96px;height:154px;}.project-card-name{font-size:15px;}.project-status{font-size:10px;padding:5px 8px;}}
-      </style>
+      
+    /* PlotVault v11.21 — Part L checklist */
+    .cl-progress-card{background:#fff;border:1px solid #edf0f3;border-radius:20px;padding:22px;margin:0 0 16px;box-shadow:0 5px 18px rgba(16,36,58,.055)}
+    .cl-progress-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}
+    .cl-progress-title{color:#596579;font-size:16px;font-weight:750}
+    .cl-captured-count{color:#596579;font-size:13px;white-space:nowrap}
+    .cl-progress-percent{color:#10243a;font-size:34px;line-height:1.08;font-weight:850;letter-spacing:-.7px;margin-bottom:18px}
+    .cl-progress-track{height:12px;border-radius:999px;overflow:hidden;background:#e5e9ee;margin-bottom:20px}
+    .cl-progress-fill{height:100%;border-radius:inherit;background:#15964f;transition:width .25s ease}
+    .cl-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+    .cl-summary-tile{min-height:82px;border-radius:15px;padding:12px 8px;display:grid;grid-template-columns:42px auto;grid-template-rows:1fr 1fr;align-items:center;justify-content:center;column-gap:9px}
+    .cl-summary-approved{background:#edf8f1}.cl-summary-pending{background:#fff6e8}.cl-summary-missing{background:#fff0f0}
+    .cl-summary-icon{grid-row:1/3;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:23px;font-weight:800}
+    .cl-summary-approved .cl-summary-icon{background:#15964f}.cl-summary-pending .cl-summary-icon{background:#e69a08}.cl-summary-missing .cl-summary-icon{background:#d93636}
+    .cl-summary-value{color:#10243a;font-size:25px;line-height:1;font-weight:850;align-self:end}
+    .cl-summary-label{color:#1f2937;font-size:12px;align-self:start;white-space:nowrap}
+    .cl-items-list{display:flex;flex-direction:column;gap:8px}
+    .cl-item-card{display:flex;align-items:center;gap:16px;min-height:82px;padding:14px 16px;background:#fff;border:1px solid #edf0f3;border-radius:18px;box-shadow:0 3px 12px rgba(16,36,58,.045)}
+    .cl-item-icon{width:44px;height:44px;flex:0 0 44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:25px;line-height:1;font-weight:800}
+    .cl-item-done .cl-item-icon{background:#15964f}.cl-item-pending .cl-item-icon{background:#e69a08}.cl-item-missing .cl-item-icon{background:#d93636}.cl-item-notstarted .cl-item-icon{background:#b8c0ca}
+    .cl-item-copy{flex:1 1 auto;min-width:0}.cl-item-ref{color:#10243a;font-size:18px;line-height:1.15;font-weight:800;margin-bottom:4px}
+    .cl-item-description{color:#596579;font-size:14px;line-height:1.35;overflow-wrap:anywhere}
+    .cl-item-action{flex:0 0 auto;display:flex;justify-content:flex-end;min-width:112px}
+    .cl-action{display:inline-flex;min-height:42px;align-items:center;justify-content:center;border:0;border-radius:12px;padding:0 17px;font:inherit;font-size:14px;font-weight:750;white-space:nowrap}
+    .cl-action-approved{min-height:38px;color:#168044;background:#eaf6ee;border-radius:999px}
+    .cl-action-approve{color:#fff;background:#082d52;cursor:pointer}.cl-action-photo{color:#fff;background:#15964f;cursor:pointer}
+    .cl-action-notstarted{min-height:38px;color:#657080;background:#eef1f4;border-radius:999px}
+    .cl-help-text{color:#7a8492;font-size:12px;text-align:center;margin:12px 0 4px}
+    @media(max-width:520px){.cl-progress-card{padding:18px 16px;border-radius:18px}.cl-progress-heading{align-items:flex-start;flex-direction:column;gap:4px}.cl-progress-percent{font-size:31px}.cl-summary-grid{gap:7px}.cl-summary-tile{grid-template-columns:1fr;grid-template-rows:auto auto auto;justify-items:center;text-align:center;gap:5px;padding:10px 4px;min-height:108px}.cl-summary-icon{grid-row:auto;width:36px;height:36px;font-size:20px}.cl-summary-value{font-size:22px}.cl-summary-label{font-size:11px}.cl-item-card{gap:11px;padding:12px 11px;min-height:76px;border-radius:16px}.cl-item-icon{width:40px;height:40px;flex-basis:40px;font-size:22px}.cl-item-ref{font-size:17px}.cl-item-description{font-size:13px}.cl-item-action{min-width:0}.cl-action{min-height:39px;padding:0 11px;font-size:12px;border-radius:10px}.cl-action-approved,.cl-action-notstarted{min-height:34px;padding:0 10px}}
+    @media(max-width:370px){.cl-item-card{gap:8px;padding:10px 8px}.cl-item-icon{width:35px;height:35px;flex-basis:35px}.cl-action{padding:0 8px;font-size:11px}}
+
+</style>
 
       <!-- PROJECTS -->
       <div class="screen" id="screen-projects">
@@ -3849,290 +3880,44 @@ Captured
       renderPlotOverview();
     }
     function checklistRow(name, st, plotId) {
-      const iconMap = {
-        done: ['✓', 'done'],
-        missing: ['✕', 'missing'],
-        pending: ['⏳', 'pending'],
-        notstarted: ['○', 'notstarted']
-      };
-      const labelMap = {
-        done: '✅ Approved',
-        missing: '❌ Missing',
-        pending: '⏳ Pending Review',
-        notstarted: '⚪ Not Started'
-      };
-
-      const colourMap = {
-        done: '#1F8A4C',
-        missing: '#D32F2F',
-        pending: '#F59E0B',
-        notstarted: '#6B7280'
-      };
-      const [icon, cls] = iconMap[st];
-      const action = st === 'missing' ? `openCameraFor('${plots[plotId].projectId}','${plotId}','${name}')` : `toast('${labelMap[st]}')`;
-      return `
-   <div class="card tap"
-     onclick="${action}"
-     style="
-        display:flex;
-        align-items:center;
-        gap:16px;
-        padding:18px;
-        min-height:88px;
-     ">
-
-    <div style="
-        width:48px;
-        height:48px;
-        border-radius:50%;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        flex-shrink:0;
-        background:
-            ${st === 'done' ? '#16A34A'
-          : st === 'pending' ? '#EAB308'
-            : '#DC2626'};
-        color:white;
-        font-size:24px;
-        font-weight:700;
-    ">
-        ${st === 'done' ? '✓'
-          : st === 'pending' ? '⌛'
-            : '✕'}
-    </div>
-
-    <div style="
-        flex:1;
-        min-width:0;
-    ">
-
-        <div style="
-            font-size:18px;
-            font-weight:800;
-            color:var(--navy);
-            margin-bottom:4px;
-        ">
-            ${name.split(' - ')[0]}
-        </div>
-
-        <div style="
-            font-size:14px;
-            color:#5B667A;
-            line-height:1.35;
-        ">
-            ${name.split(' - ')[1] || ''}
-        </div>
-
-    </div>
-
-    <div style="
-        flex-shrink:0;
-    ">
-
-        ${st === 'done'
-          ? `
-            <div style="
-                background:#EAF7EE;
-                color:#16803C;
-                padding:10px 18px;
-                border-radius:999px;
-                font-size:14px;
-                font-weight:700;
-            ">
-                Approved
-            </div>
-            `
-          : st === 'pending'
-            ? `
-            <button
-                onclick="event.stopPropagation();approveChecklistItem('${plotId}','${name}')"
-                style="
-                    background:#062B66;
-                    color:white;
-                    border:none;
-                    border-radius:12px;
-                    padding:12px 22px;
-                    font-size:14px;
-                    font-weight:700;
-                    cursor:pointer;
-                ">
-                Approve
-            </button>
-            `
-            : `
-            <button
-                onclick="event.stopPropagation();openCameraFor('${plots[plotId].projectId}','${plotId}','${name}')"
-                style="
-                    background:#16A34A;
-                    color:white;
-                    border:none;
-                    border-radius:12px;
-                    padding:12px 22px;
-                    font-size:14px;
-                    font-weight:700;
-                    cursor:pointer;
-                ">
-                Take Photo
-            </button>
-            `
-        }
-
-    </div>
-
-</div>
-  `;
+      const status = ['done','pending','missing','notstarted'].includes(st) ? st : 'notstarted';
+      const parts = name.split(' - ');
+      const ref = parts.shift() || '';
+      const description = parts.join(' - ');
+      const projectId = plots[plotId] ? plots[plotId].projectId : '';
+      let action = '';
+      if (status === 'done') action = `<span class="cl-action cl-action-approved">Approved</span>`;
+      else if (status === 'pending') action = `<button class="cl-action cl-action-approve" type="button" onclick="event.stopPropagation();approveChecklistItem('${plotId}','${name.replace(/'/g, "\\\\'")}')">Approve</button>`;
+      else if (status === 'missing') action = `<button class="cl-action cl-action-photo" type="button" onclick="event.stopPropagation();openCameraFor('${projectId}','${plotId}','${name.replace(/'/g, "\\\\'")}')">Take Photo</button>`;
+      else action = `<span class="cl-action cl-action-notstarted">Not Started</span>`;
+      const icons = {done:'✓', pending:'⌛', missing:'✕', notstarted:'○'};
+      return `<div class="cl-item-card cl-item-${status}">
+        <div class="cl-item-icon">${icons[status]}</div>
+        <div class="cl-item-copy"><div class="cl-item-ref">${ref}</div><div class="cl-item-description">${description}</div></div>
+        <div class="cl-item-action">${action}</div>
+      </div>`;
     }
     function renderChecklist() {
       const p = plots[state.plotId];
-
-      const approved =
-        p.checklist.filter(i => i[1] === 'done').length;
-
-      const pending =
-        p.checklist.filter(i => i[1] === 'pending').length;
-
-      const missing =
-        p.checklist.filter(i => i[1] === 'missing').length;
-
-      const progress =
-        p.checklist.length
-          ? Math.round((approved / p.checklist.length) * 100)
-          : 0;
-
+      if (!p) return;
+      const approved = p.checklist.filter(i => i[1] === 'done').length;
+      const pending = p.checklist.filter(i => i[1] === 'pending').length;
+      const missing = p.checklist.filter(i => i[1] === 'missing').length;
+      const progress = p.checklist.length ? Math.round((approved / p.checklist.length) * 100) : 0;
       document.getElementById('cl-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
-      document.getElementById('checklist-body').innerHTML =
-        `
-  <div class="card" style="
-    padding:18px;
-    margin-bottom:16px;
-">
-
-    <div style="
-        display:flex;
-        justify-content:space-between;
-        align-items:flex-start;
-        margin-bottom:12px;
-    ">
-
-        <div>
-
-            <div style="
-                font-size:16px;
-                font-weight:700;
-                color:var(--navy);
-                margin-bottom:4px;
-            ">
-                Compliance Progress
-            </div>
-
-            <div style="
-                font-size:34px;
-                line-height:1;
-                font-weight:800;
-                color:var(--navy);
-            ">
-                ${progress}% Complete
-            </div>
-
-        </div>
-
-        <div style="
-    text-align:right;
-    color:var(--muted);
-    font-size:13px;
-    white-space:nowrap;
-">
-    ${p.gallery.length} of ${p.checklist.length} Items Captured
-</div>
-
-    </div>
-
-    <div style="
-        height:12px;
-        background:#e5e7eb;
-        border-radius:999px;
-        overflow:hidden;
-        margin-bottom:18px;
-    ">
-        <div style="
-            width:${progress}%;
-            height:100%;
-            background:#16a34a;
-            border-radius:999px;
-        ">
-        </div>
-    </div>
-
-    <div style="
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        gap:10px;
-    ">
-
-        <div style="
-            text-align:center;
-            background:#f0fdf4;
-            padding:12px;
-            border-radius:12px;
-        ">
-            <div style="
-                font-size:28px;
-                font-weight:800;
-                color:#16a34a;
-            ">
-                ${approved}
-            </div>
-            <div style="font-size:12px;color:var(--muted);">
-                Approved
-            </div>
-        </div>
-
-        <div style="
-            text-align:center;
-            background:#fffbeb;
-            padding:12px;
-            border-radius:12px;
-        ">
-            <div style="
-                font-size:28px;
-                font-weight:800;
-                color:#ca8a04;
-            ">
-                ${pending}
-            </div>
-            <div style="font-size:12px;color:var(--muted);">
-                Pending
-            </div>
-        </div>
-
-        <div style="
-            text-align:center;
-            background:#fef2f2;
-            padding:12px;
-            border-radius:12px;
-        ">
-            <div style="
-                font-size:28px;
-                font-weight:800;
-                color:#dc2626;
-            ">
-                ${missing}
-            </div>
-            <div style="font-size:12px;color:var(--muted);">
-                Missing
-            </div>
-        </div>
-
-    </div>
-
-</div>
-
-  <div class="card" style="padding:4px 16px;">
-  
-      ${p.checklist.map(([name, st]) => checklistRow(name, st, p.id)).join('')}</div>
-    <p style="color:var(--muted);font-size:12.5px;text-align:center;margin-top:10px;">Tap a missing or pending item to capture evidence.</p>
-  `;
+      document.getElementById('checklist-body').innerHTML = `
+        <section class="cl-progress-card">
+          <div class="cl-progress-heading"><span class="cl-progress-title">Compliance Progress</span><span class="cl-captured-count">${p.gallery.length} of ${p.checklist.length} Items Captured</span></div>
+          <div class="cl-progress-percent">${progress}% Complete</div>
+          <div class="cl-progress-track" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100"><div class="cl-progress-fill" style="width:${progress}%"></div></div>
+          <div class="cl-summary-grid">
+            <div class="cl-summary-tile cl-summary-approved"><span class="cl-summary-icon">✓</span><span class="cl-summary-value">${approved}</span><span class="cl-summary-label">Approved</span></div>
+            <div class="cl-summary-tile cl-summary-pending"><span class="cl-summary-icon">⌛</span><span class="cl-summary-value">${pending}</span><span class="cl-summary-label">Pending</span></div>
+            <div class="cl-summary-tile cl-summary-missing"><span class="cl-summary-icon">✕</span><span class="cl-summary-value">${missing}</span><span class="cl-summary-label">Missing</span></div>
+          </div>
+        </section>
+        <section class="cl-items-list" aria-label="Part L evidence checklist">${p.checklist.map(([name, st]) => checklistRow(name, st, p.id)).join('')}</section>
+        <p class="cl-help-text">Capture the missing evidence and approve submitted items when reviewed.</p>`;
     }
     function renderGallery() {
       const p = plots[state.plotId];
@@ -4666,7 +4451,44 @@ Captured
       renderProjects();
     }
 
+    function updateProjectStats() {
+      const projectList = Object.values(projects);
+      const totalProjects = projectList.length;
+      const totalPlots = projectList.reduce((total, project) =>
+        total + Math.max(0, Number(project.plots) || 0), 0);
+
+      // Until individual plot records drive these figures, completed plots are
+      // estimated from each project's completion percentage.
+      const estimatedCompletedPlots = projectList.reduce((total, project) => {
+        const plotCount = Math.max(0, Number(project.plots) || 0);
+        const completion = Math.max(0, Math.min(100, Number(project.completion) || 0));
+        return total + Math.round(plotCount * completion / 100);
+      }, 0);
+
+      // Weight each project's compliance score by its number of plots.
+      const weightedCompliance = totalPlots > 0
+        ? Math.round(projectList.reduce((total, project) => {
+            const plotCount = Math.max(0, Number(project.plots) || 0);
+            const compliance = Math.max(0, Math.min(100, Number(project.compliance) || 0));
+            return total + (plotCount * compliance);
+          }, 0) / totalPlots)
+        : 0;
+
+      const values = {
+        'projects-total': totalProjects,
+        'plots-total': totalPlots,
+        'completed-total': estimatedCompletedPlots,
+        'compliance-total': `${weightedCompliance}%`
+      };
+
+      Object.entries(values).forEach(([id, value]) => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = value;
+      });
+    }
+
     function renderProjects() {
+      updateProjectStats();
       const matchingProjects = Object.values(projects).filter(project => {
         const searchableText = `${project.name} ${project.location}`.toLowerCase();
         const status = (project.status || '').toLowerCase();
