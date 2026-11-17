@@ -1172,6 +1172,7 @@
 }
 
 </style>
+  <!-- PlotVault v11.23 - Plot Overview Redesign -->
 </head>
 
 <body>
@@ -1572,6 +1573,60 @@
     .cl-help-text{color:#7a8492;font-size:12px;text-align:center;margin:12px 0 4px}
     @media(max-width:520px){.cl-progress-card{padding:18px 16px;border-radius:18px}.cl-progress-heading{align-items:flex-start;flex-direction:column;gap:4px}.cl-progress-percent{font-size:31px}.cl-summary-grid{gap:7px}.cl-summary-tile{grid-template-columns:1fr;grid-template-rows:auto auto auto;justify-items:center;text-align:center;gap:5px;padding:10px 4px;min-height:108px}.cl-summary-icon{grid-row:auto;width:36px;height:36px;font-size:20px}.cl-summary-value{font-size:22px}.cl-summary-label{font-size:11px}.cl-item-card{gap:11px;padding:12px 11px;min-height:76px;border-radius:16px}.cl-item-icon{width:40px;height:40px;flex-basis:40px;font-size:22px}.cl-item-ref{font-size:17px}.cl-item-description{font-size:13px}.cl-item-action{min-width:0}.cl-action{min-height:39px;padding:0 11px;font-size:12px;border-radius:10px}.cl-action-approved,.cl-action-notstarted{min-height:34px;padding:0 10px}}
     @media(max-width:370px){.cl-item-card{gap:8px;padding:10px 8px}.cl-item-icon{width:35px;height:35px;flex-basis:35px}.cl-action{padding:0 8px;font-size:11px}}
+
+
+    /* v11.23 - Plot Overview aligned to the supplied iPhone mockup */
+    #screen-plotoverview .topnav { padding: 11px 14px; }
+    #screen-plotoverview .topnav-title h1 { font-size: 15px; }
+    #screen-plotoverview .topnav-title .sub { font-size: 11px; }
+    #screen-plotoverview .sync-pill { margin-left: auto; font-size: 10px; }
+    #screen-plotoverview .screen-body { padding: 7px 11px 88px; }
+    .po23-wrap { display:flex; flex-direction:column; gap:9px; padding-bottom:4px; }
+    .po23-hero { position:relative; min-height:116px; overflow:hidden; border-radius:15px; padding:13px 15px 11px; color:#fff; background:linear-gradient(115deg,#10283e 0%,#173e62 62%,#285e88 100%); box-shadow:0 5px 13px rgba(15,42,61,.16); }
+    .po23-hero:after { content:""; position:absolute; width:170px; height:130px; right:-42px; top:-25px; border-radius:50%; background:rgba(255,255,255,.08); }
+    .po23-hero-copy { position:relative; z-index:2; }
+    .po23-eyebrow { font-size:9px; font-weight:800; letter-spacing:1.1px; opacity:.8; }
+    .po23-number { font-size:34px; line-height:1; font-weight:850; margin:1px 0 3px; }
+    .po23-house-type { font-size:11px; font-weight:600; opacity:.9; }
+    .po23-status { display:inline-flex; align-items:center; gap:5px; margin-top:5px; padding:3px 7px; border-radius:20px; font-size:9px; font-weight:700; background:rgba(255,255,255,.15); color:#fff; }
+    .po23-status .po23-status-dot { width:6px; height:6px; border-radius:50%; background:#f4bd43; }
+    .po23-house { position:absolute; right:5px; top:12px; width:53%; height:78px; object-fit:contain; opacity:.23; filter:brightness(1.6) grayscale(1); pointer-events:none; }
+    .po23-tagline { position:absolute; right:13px; bottom:28px; z-index:2; text-align:right; font-size:8px; line-height:1.05; font-style:italic; font-weight:700; color:rgba(255,255,255,.75); }
+    .po23-progress-line { position:absolute; left:15px; right:57px; bottom:10px; z-index:2; display:flex; align-items:center; gap:7px; }
+    .po23-progress-track { height:6px; flex:1; overflow:hidden; border-radius:20px; background:rgba(255,255,255,.25); }
+    .po23-progress-track span { display:block; height:100%; border-radius:20px; background:#80c85a; }
+    .po23-progress-line strong { min-width:25px; text-align:right; font-size:9px; color:#fff; }
+    .po23-camera { width:100%; min-height:42px; display:flex; align-items:center; gap:10px; padding:7px 12px; border:0; border-radius:11px; color:#fff; text-align:left; background:linear-gradient(105deg,#258d52,#176b42); box-shadow:0 3px 8px rgba(24,110,65,.18); cursor:pointer; }
+    .po23-camera-icon { font-size:20px; }
+    .po23-camera-copy { flex:1; display:flex; flex-direction:column; gap:1px; }
+    .po23-camera-copy strong { font-size:10px; letter-spacing:.3px; }
+    .po23-camera-copy small { font-size:8px; opacity:.85; }
+    .po23-arrow { font-size:24px; line-height:1; font-weight:300; }
+    .po23-compliance { padding:9px 10px 10px; border-radius:12px; background:#fff; box-shadow:0 2px 8px rgba(15,42,61,.07); }
+    .po23-section-head { display:flex; align-items:center; gap:6px; margin-bottom:7px; color:#263746; }
+    .po23-section-head strong { font-size:9px; letter-spacing:.45px; }
+    .po23-section-head small { margin-left:auto; color:#8793a0; font-size:8px; }
+    .po23-bars { color:#299c65; font-size:13px; }
+    .po23-counts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; }
+    .po23-count { min-height:47px; display:grid; grid-template-columns:22px 1fr; grid-template-rows:22px 12px; align-items:center; justify-items:center; padding:5px 3px 4px; border-radius:9px; }
+    .po23-count-icon { grid-row:1; grid-column:1; width:18px; height:18px; display:flex; align-items:center; justify-content:center; border-radius:50%; color:#fff; font-size:12px; font-weight:800; }
+    .po23-count strong { grid-row:1; grid-column:2; justify-self:start; font-size:15px; line-height:1; color:#172b3d; }
+    .po23-count small { grid-row:2; grid-column:1 / 3; font-size:8px; font-weight:600; color:#667586; }
+    .po23-complete { background:#edf7f0; }.po23-complete .po23-count-icon { background:#5ca66b; }
+    .po23-pending { background:#fff5e7; }.po23-pending .po23-count-icon { background:#e5a52e; }
+    .po23-missing { background:#fff0f0; }.po23-missing .po23-count-icon { background:#d85c5c; }
+    .po23-link-card { width:100%; min-height:43px; display:flex; align-items:center; gap:9px; padding:6px 10px; border:1px solid #edf0f3; border-radius:10px; background:#fff; color:#21364a; text-align:left; box-shadow:0 2px 6px rgba(15,42,61,.06); cursor:pointer; }
+    .po23-link-icon { width:27px; height:27px; flex:0 0 27px; display:flex; align-items:center; justify-content:center; border-radius:8px; font-size:17px; font-weight:800; }
+    .po23-check-icon { color:#2874db; background:#eaf1ff; }.po23-gallery-icon { color:#7653d5; background:#f0eaff; }.po23-time-icon { color:#2874db; background:#eaf1ff; }
+    .po23-link-copy { min-width:0; flex:1; display:flex; flex-direction:column; gap:2px; }
+    .po23-link-copy strong { font-size:10px; font-weight:800; }
+    .po23-link-copy small { overflow:hidden; color:#8290a0; font-size:8px; text-overflow:ellipsis; white-space:nowrap; }
+    .po23-link-arrow { color:#6d7c8d; font-size:20px; font-weight:300; }
+    .po23-timeline-detail { padding:9px 12px; border-radius:10px; background:#fff; box-shadow:0 2px 6px rgba(15,42,61,.05); }
+    .po23-timeline-entry { display:flex; gap:8px; padding:5px 0; border-bottom:1px solid #edf0f3; font-size:10px; }
+    .po23-timeline-entry:last-child { border-bottom:0; }.po23-timeline-entry small { display:block; margin-top:2px; color:#83909d; }
+    .po23-empty { color:#8290a0; font-size:9px; }
+    @media(min-width:600px) { #screen-plotoverview .screen-body { max-width:520px; width:100%; margin:0 auto; } }
 
 </style>
 
@@ -3221,689 +3276,83 @@ return `
 
 
     function renderPlotOverview() {
-      console.log("RENDER PLOT OVERVIEW");
-
       const p = plots[state.plotId];
+      if (!p) return;
 
-      const photos = [...p.gallery].sort((a, b) =>
-        a.category.localeCompare(b.category, undefined, {
-          numeric: true
-        })
-      );
-
-      if (!p.checklist || p.checklist.length === 0) {
-
-        p.checklist =
-          PARTL_ITEMS.map(name => [name, 'missing']);
-
+      if (!Array.isArray(p.gallery)) p.gallery = [];
+      if (!Array.isArray(p.timeline)) p.timeline = [];
+      if (!Array.isArray(p.missing)) p.missing = [];
+      if (!Array.isArray(p.checklist) || p.checklist.length === 0) {
+        p.checklist = PARTL_ITEMS.map(name => [name, 'missing']);
         saveData();
-
       }
 
-      const approved =
-        p.checklist.filter(i => i[1] === 'done').length;
+      const approved = p.checklist.filter(i => i[1] === 'done').length;
+      const pending = p.checklist.filter(i => i[1] === 'pending').length;
+      const missing = p.checklist.filter(i => i[1] === 'missing').length;
+      const total = p.checklist.length;
+      const progress = total ? Math.round((approved / total) * 100) : 0;
+      const project = projects[p.projectId] || { name: 'Development' };
+      const meta = statusMeta(p.status);
+      const plotNumber = String(p.number || 'Plot').replace(/^Plot\s*/i, '');
+      const latestActivity = p.timeline.length ? p.timeline[0][1] : 'No activity yet';
 
-      const pending =
-        p.checklist.filter(i => i[1] === 'pending').length;
+      document.getElementById('po-number').textContent = p.number || 'Plot';
+      document.getElementById('po-project').textContent = project.name || 'Development';
 
-      const missing =
-        p.checklist.filter(i => i[1] === 'missing').length;
-
-      const total =
-        p.checklist.length;
-
-      const progress =
-        total
-          ? Math.round((approved / total) * 100)
-          : 0;
-
-      document.getElementById('po-number').textContent = p.number;
-      document.getElementById('po-project')
-        .textContent = '';
-      const m = statusMeta(p.status);
       const body = document.getElementById('po-body');
       body.innerHTML = `
-
-  <div style="
-    background:#F4F6F8;
-    
-
-    background-size:cover;
-    background-position:center;
-    background-attachment:fixed;
-
-    opacity:0.8;
-
-    padding:0px;
-
-    color:var(--navy);
-">
-      
-    
-   
-
- <div style="
-position:relative;
-
-text-align:left;
-padding:20px 24px 18px 24px;
-min-height:190px;
-height:225px;
-background:linear-gradient(
-135deg,
-#020C17 0%,
-#0A2240 40%,
-#2C6DB1 100%
-);
-
-border-radius:28px;
-box-shadow:0 20px 40px rgba(11,30,52,0.25);
-margin:12px;
-overflow:hidden;
-">
-<div style="
-position:absolute;
-right:-40px;
-top:40px;
-width:220px;
-height:170px;
-border-radius:50%;
-background:rgba(255,255,255,0.35);
-filter:blur(35px);
-pointer-events:none;
-">
-</div>
-
-
-
-<div style="
-font-size:18px;
-font-weight:700;
-letter-spacing:4px;
-color:white;
-margin-bottom:8px;
-">
-PLOT
-</div>
-    <div style="
-    font-size:68px;
-    font-weight:800;
-    letter-spacing:2px;
-    color:white;
-    text-shadow:
-        0 2px 12px rgba(0,0,0,0.35);
-">
-
-
-
-    ${p.number.replace('Plot ', '')}
-
-    
-</div>
-
-    <div style="
-    margin-top:8px;
-    font-size:24px;
-    font-weight:600;
-    color:rgba(255,255,255,0.8);
-">
-    ${p.houseType}
-</div>
-<img
-src="house-ghost.png"
-style="
-position:absolute;
-right:25px;
-top:25px;
-width:62%;
-height:auto;
-opacity:.35;
-filter:
-brightness(1.25)
-contrast(1.15)
-drop-shadow(0 0 20px rgba(255,255,255,0.4));
-
-pointer-events:none;
-"
-/>
-<div style="
-position:absolute;
-right:55px;
-top:215px;
-text-align:right;
-font-size:15px;
-font-style:italic;
-letter-spacing:0.3px;
-font-weight:600;
-opacity:0.85;
-color:rgba(255,255,255,0.75);
-line-height:1.05;
-pointer-events:none;
-">
-Build Better<br>
-Compliance
-
-</div>
-    <div style="
-        margin-top:4px;
-    ">
-        <span class="badge ${m.badge}" style="
-padding:8px 18px;
-font-size:14px;
-font-weight:700;
-border-radius:999px;
-">
-    ● ${p.status}
-</span>  
-
-<div style="
-margin-top:18px;
-display:flex;
-align-items:center;
-gap:12px;
-">
-
-    <div style="
-    width:55%;
-    height:12px;
-    background:rgba(255,255,255,0.20);
-    border-radius:999px;
-    overflow:hidden;
-    ">
-
-        <div style="
-        width:45%;
-        height:100%;
-        background:#8ED45B;
-        border-radius:999px;
-        ">
-        </div>
-
-    </div>
-
-    <div style="
-    font-size:12px;
-    font-weight:700;
-    color:rgba(255,255,255,0.85);
-    min-width:24px;
-    text-align:right;
-    ">
-        45%
-    </div>
-
-</div>
-
-    </div>
-
-</div>
-    ${p.missing.length ? `<div class="card" style="border-left:4px solid var(--red);">
-      <div class="label-eyebrow" style="color:var(--red);">MISSING EVIDENCE</div>
-      ${p.missing.map(m => `<div style="font-size:13.5px;font-weight:600;padding:6px 0;">⚠️ ${m}</div>`).join('')}
-    </div>` : ''}<div class="quick-actions">
-      
-      <div style="
-margin:8px auto;
-text-align:center;
-">
-
-   <button
-class="take-photo-btn"
-style="
-width:100%;
-height:56px;
-font-size:15px;
-font-weight:600;
-border-radius:12px;
-"
-    onclick="openCameraFor('${p.projectId}','${p.id}')">
-    TAKE PHOTO
-</button>       
-</div>
-
-    
-
-<div class="card" style="
-background:#FFFFFF;
-padding:12px;
-border-radius:12px;
-box-shadow:0 2px 8px rgba(0,0,0,0.08);
-margin:12px 0;
-">
-<div style="
-font-size:14px;
-font-weight:700;
-letter-spacing:1px;
-color:#333;
-margin-bottom:12px;
-">
-COMPLIANCE
-</div>
-
-
-
-<div style="
-display:flex;
-gap:8px;
-margin-top:12px;
-">
-<div style="
-flex:1;
-background:#EEF8EF;
-border-radius:22px;
-padding:6px;
-text-align:center;
-">
-
-<div style="
-display:flex;
-justify-content:center;
-align-items:center;
-gap:8px;
-">
-
-<div style="
-width:28px;
-height:28px;
-border-radius:50%;
-background:#69B85A;
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-size:16px;
-font-weight:700;
-">
-✓
-</div>
-
-<div style="
-font-size:18px;
-font-weight:700;
-">
-${approved}
-</div>
-
-</div>
-
-<div style="
-margin-top:4px;
-font-size:13px;
-font-weight:700;
-color:#667085;
-">
-Complete
-</div>
-</div>
-
-<div style="
-flex:1;
-background:#FFF7E8;
-border-radius:22px;
-padding:6px;
-text-align:center;
-">
-
-<div style="
-display:flex;
-justify-content:center;
-align-items:center;
-gap:8px;
-">
-
-<div style="
-width:28px;
-height:28px;
-border-radius:50%;
-background:#E0A92D;
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-size:16px;
-font-weight:700;
-">
-⏳
-</div>
-
-<div style="
-font-size:18px;
-font-weight:700;
-">
-${pending}
-</div>
-
-</div>
-
-<div style="
-margin-top:4px;
-font-size:13px;
-font-weight:700;
-color:#667085;
-">
-Pending
-</div>
-
-
-
-</div>
-<div style="
-flex:1;
-background:#FDEEEE;
-border-radius:22px;
-padding:6px;
-text-align:center;
-">
-
-<div style="
-display:flex;
-justify-content:center;
-align-items:center;
-gap:8px;
-">
-
-<div style="
-width:28px;
-height:28px;
-border-radius:50%;
-background:#D96A6A;
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-size:16px;
-font-weight:700;
-">
-✕
-</div>
-
-<div style="
-font-size:18px;
-font-weight:700;
-">
-${missing}
-</div>
-
-</div>
-
-<div style="
-margin-top:4px;
-font-size:13px;
-font-weight:700;
-color:#667085;
-">
-Missing
-</div>
-
-</div>
-
-</div>
-
- <!-- COMPLIANCE ENDS HERE -->
-</div>
-
-    
-   <div
-    class="card tap"
-    onclick="openChecklist('${p.id}')"
-    style="
-        margin-top:12px;
-        padding:16px;
-    "
->
-
-    <div style="
-        font-size:16px;
-        font-weight:700;
-        color:var(--navy);
-        margin-bottom:6px;
-    ">
-        📋 Checklist (${p.checklist.length})
-    </div>
-
-    <div style="
-        font-size:13px;
-        color:var(--muted);
-    ">
-        View compliance items
-    </div>
-
-
-    
-
-</div>
-${state.checklistExpanded ? `
-
-<div class="card">
-
-    ${p.checklist.map(i => `
-
-        <div style="
-            padding:8px 0;
-            border-bottom:1px solid #eee;
-        ">
-
-            ${i[1] === 'done' ? '✅' :
-          i[1] === 'pending' ? '⏳' :
-            '❌'}
-
-            ${i[0]}
-
-        </div>
-
-    `).join('')}
-
-</div>
-
-` : ''}
-  <div
-style="
-cursor:pointer;
-margin-bottom:10px;
-color:var(--navy);
-font-weight:700;
-"
->    
- <!--
- <div class="card" style="
-    padding:18px;
-    margin-bottom:16px;
-">
-
-    <div style="
-        display:flex;
-        justify-content:space-between;
-        align-items:flex-start;
-        margin-bottom:12px;
-    ">
-
-        <div>
-
-            <div style="
-                font-size:16px;
-                font-weight:700;
-                color:var(--navy);
-                margin-bottom:4px;
-            ">
-                Compliance Progress
+        <div class="po23-wrap">
+          <section class="po23-hero" aria-label="Plot summary">
+            <div class="po23-hero-copy">
+              <div class="po23-eyebrow">PLOT</div>
+              <div class="po23-number">${plotNumber}</div>
+              <div class="po23-house-type">${p.houseType || 'New Plot'}</div>
+              <span class="po23-status ${meta.badge}"><span class="po23-status-dot"></span>${p.status || 'In Progress'}</span>
             </div>
-
-            <div style="
-                font-size:36px;
-                line-height:1;
-                font-weight:800;
-                color:var(--navy);
-            ">
-                ${Math.round((approved / p.checklist.length) * 100)}%
+            <img class="po23-house" src="house-ghost.png" alt="" onerror="this.style.display='none'">
+            <div class="po23-tagline">Build Better<br>Compliance</div>
+            <div class="po23-progress-line">
+              <div class="po23-progress-track"><span style="width:${progress}%"></span></div>
+              <strong>${progress}%</strong>
             </div>
+          </section>
 
+          <button class="po23-camera" onclick="openCameraFor('${p.projectId}','${p.id}')">
+            <span class="po23-camera-icon">📷</span>
+            <span class="po23-camera-copy"><strong>TAKE PHOTO</strong><small>Capture compliance evidence</small></span>
+            <span class="po23-arrow">›</span>
+          </button>
+
+          <section class="po23-compliance" aria-label="Compliance summary">
+            <div class="po23-section-head"><span class="po23-bars">▥</span><strong>COMPLIANCE</strong><small>${total} Items</small></div>
+            <div class="po23-counts">
+              <div class="po23-count po23-complete"><span class="po23-count-icon">✓</span><strong>${approved}</strong><small>Complete</small></div>
+              <div class="po23-count po23-pending"><span class="po23-count-icon">⌛</span><strong>${pending}</strong><small>Pending</small></div>
+              <div class="po23-count po23-missing"><span class="po23-count-icon">×</span><strong>${missing}</strong><small>Missing</small></div>
+            </div>
+          </section>
+
+          <button class="po23-link-card" onclick="openChecklist('${p.id}')">
+            <span class="po23-link-icon po23-check-icon">▤</span>
+            <span class="po23-link-copy"><strong>Checklist (${total})</strong><small>View and complete compliance items</small></span>
+            <span class="po23-link-arrow">›</span>
+          </button>
+
+          <button class="po23-link-card" onclick="go('evidencegallery')">
+            <span class="po23-link-icon po23-gallery-icon">▧</span>
+            <span class="po23-link-copy"><strong>Gallery (${p.gallery.length})</strong><small>View site photos and evidence</small></span>
+            <span class="po23-link-arrow">›</span>
+          </button>
+
+          <button class="po23-link-card po23-timeline-card" onclick="toggleTimeline()">
+            <span class="po23-link-icon po23-time-icon">◷</span>
+            <span class="po23-link-copy"><strong>Recent Timeline</strong><small>${latestActivity}</small></span>
+            <span class="po23-link-arrow">›</span>
+          </button>
+          ${state.timelineExpanded ? `<div class="po23-timeline-detail">${p.timeline.length ? p.timeline.map(item => `<div class="po23-timeline-entry"><span>•</span><div><strong>${item[1] || 'Activity'}</strong><small>${item[0] || ''}</small></div></div>`).join('') : '<div class="po23-empty">No activity has been recorded for this plot yet.</div>'}</div>` : ''}
         </div>
-
-        <div style="
-            text-align:right;
-            color:var(--muted);
-            font-size:14px;
-        ">
-         ${p.gallery.length}/${p.checklist.length}
-<br>
-Captured   
-        </div>
-
-    </div>
-
-    <div style="
-        height:12px;
-        background:#e5e7eb;
-        border-radius:999px;
-        overflow:hidden;
-        margin-bottom:18px;
-    ">
-        <div style="
-            width:${(approved / p.checklist.length) * 100}%;
-            height:100%;
-            background:#22c55e;
-            border-radius:999px;
-        ">
-        </div>
-    </div>
-
-    <div style="
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        gap:10px;
-    ">
-
-        <div style="
-            text-align:center;
-            background:#f0fdf4;
-            padding:12px;
-            border-radius:12px;
-        ">
-            <div style="
-                font-size:28px;
-                font-weight:800;
-                color:#16a34a;
-            ">
-                ${approved}
-            </div>
-
-            <div style="
-                font-size:12px;
-                color:var(--muted);
-            ">
-                Approved
-            </div>
-        </div>
-
-        <div style="
-            text-align:center;
-            background:#fffbeb;
-            padding:12px;
-            border-radius:12px;
-        ">
-            <div style="
-                font-size:28px;
-                font-weight:800;
-                color:#ca8a04;
-            ">
-                ${pending}
-            </div>
-
-            <div style="
-                font-size:12px;
-                color:var(--muted);
-            ">
-                Pending
-            </div>
-        </div>
-
-        <div style="
-            text-align:center;
-            background:#fef2f2;
-            padding:12px;
-            border-radius:12px;
-        ">
-            <div style="
-                font-size:28px;
-                font-weight:800;
-                color:#dc2626;
-            ">
-                ${missing}
-            </div>
-
-            <div style="
-                font-size:12px;
-                color:var(--muted);
-            ">
-                Missing
-            </div>
-        </div>
-
-    </div>
-
-</div>     
-
-</div>
--->
-
-<!-- Checklist moved to dedicated screen -->
-
-<div
-    class="card tap"
-    onclick="go('evidencegallery')"
-    style="
-        padding:16px;
-        margin-top:8px;
-    "
->
-
-    <div style="
-        font-size:16px;
-        font-weight:700;
-        color:var(--navy);
-        margin-bottom:6px;
-    ">
-        📷 Gallery (${p.gallery.length})
-    </div>
-
-    <div style="
-        font-size:13px;
-        color:var(--muted);
-    ">
-        View evidence photos
-    </div>
-
-</div>
-
-    <div
-    class="card"
-    style="
-        margin-top:8px;
-        padding:16px;
-    "
->
-
-    <div style="
-        font-size:16px;
-        font-weight:700;
-        color:var(--navy);
-        margin-bottom:6px;
-    ">
-        ⏱ Recent Timeline
-    </div>
-
-    <div style="
-        font-size:13px;
-        color:var(--muted);
-    ">
-        ${p.timeline.length ? p.timeline[0][1] : 'No activity yet'}
-    </div>
-
-</div>
-    
-    <!-- Evidence Gallery moved to dedicated screen -->
-
-    </div>
-  `;
+      `;
     }
     let expandedGallery = null;
     function toggleGallery(plotId) {
