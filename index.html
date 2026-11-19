@@ -1364,7 +1364,109 @@
 
 </style>
   <!-- PlotVault v11.23 - Plot Overview Redesign -->
-<meta name="plotvault-version" content="v11.25">
+<meta name="plotvault-version" content="v11.26">
+
+<style id="plotvault-v1126-screen-corrections">
+/* v11.26 — Plot Overview: proportions based on the supplied iPhone reference */
+#screen-plotoverview { background:#f3f6fa; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+#screen-plotoverview .screen-body { padding:12px 14px 104px; overflow-y:auto; }
+#screen-plotoverview .po23-wrap { gap:13px; padding-bottom:8px; }
+#screen-plotoverview .po23-hero { min-height:166px; padding:20px 20px 17px; border-radius:19px; }
+#screen-plotoverview .po23-hero:after { width:220px; height:170px; right:-34px; top:-25px; }
+#screen-plotoverview .po23-eyebrow { font-size:11px; letter-spacing:1.4px; }
+#screen-plotoverview .po23-number { font-size:49px; margin:4px 0 5px; }
+#screen-plotoverview .po23-house-type { font-size:13px; }
+#screen-plotoverview .po23-status { margin-top:9px; padding:5px 10px; font-size:10px; }
+#screen-plotoverview .po23-house { top:13px; right:8px; width:55%; height:112px; }
+#screen-plotoverview .po23-tagline { right:17px; bottom:39px; font-size:10px; }
+#screen-plotoverview .po23-progress-line { left:20px; right:70px; bottom:14px; gap:10px; }
+#screen-plotoverview .po23-progress-track { height:8px; }
+#screen-plotoverview .po23-progress-line strong { font-size:11px; }
+#screen-plotoverview .po23-camera { min-height:66px; gap:13px; padding:11px 17px; border-radius:15px; box-shadow:0 4px 12px rgba(18,55,83,.15); }
+#screen-plotoverview .po23-camera-icon { font-size:27px; }
+#screen-plotoverview .po23-camera-copy strong { font-size:13px; }
+#screen-plotoverview .po23-camera-copy small { font-size:10px; }
+#screen-plotoverview .po23-compliance { padding:14px 14px 15px; border-radius:16px; }
+#screen-plotoverview .po23-section-head { gap:8px; margin-bottom:11px; }
+#screen-plotoverview .po23-section-head strong { font-size:10px; }
+#screen-plotoverview .po23-section-head small { font-size:9px; }
+#screen-plotoverview .po23-counts { gap:8px; }
+#screen-plotoverview .po23-count { min-height:66px; grid-template-columns:27px 1fr; grid-template-rows:29px 15px; padding:8px 5px 7px; border-radius:11px; }
+#screen-plotoverview .po23-count-icon { width:23px; height:23px; font-size:14px; }
+#screen-plotoverview .po23-count strong { font-size:19px; }
+#screen-plotoverview .po23-count small { font-size:9px; }
+#screen-plotoverview .po23-link-card { min-height:62px; gap:12px; padding:9px 13px; border-radius:14px; }
+#screen-plotoverview .po23-link-icon { width:37px; height:37px; flex-basis:37px; border-radius:10px; font-size:20px; }
+#screen-plotoverview .po23-link-copy { gap:4px; }
+#screen-plotoverview .po23-link-copy strong { font-size:13px; }
+#screen-plotoverview .po23-link-copy small { font-size:10px; }
+#screen-plotoverview .po23-link-arrow { font-size:24px; }
+#screen-plotoverview .po23-timeline-detail { padding:12px 15px; }
+
+/* v11.26 — Project Details: exact structural selectors, not child-position guesses */
+#screen-projectdetails { background:#f3f6fa; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+#screen-projectdetails .project-detail-hero { padding:10px 17px 7px; margin:0; }
+#screen-projectdetails .back-btn { display:block; margin:0 0 11px; padding:3px 0; font-size:16px; }
+#screen-projectdetails .project-detail-image { height:clamp(150px, 39vw, 205px); border-radius:19px; margin-bottom:12px; }
+#screen-projectdetails .project-detail-content h1 { font-size:31px; line-height:1.08; margin:0 0 5px; color:#101d31; }
+#screen-projectdetails .project-title-row { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+#screen-projectdetails .project-title-copy { min-width:0; }
+#screen-projectdetails .project-location { color:#657386; font-size:15px; margin:0; white-space:normal; }
+#screen-projectdetails .project-badges { display:flex; flex-shrink:0; gap:7px; align-items:center; }
+#screen-projectdetails .status-badge { padding:8px 11px; font-size:11px; white-space:nowrap; }
+#screen-projectdetails .project-details-body { padding:8px 17px 112px; overflow:visible; }
+#screen-projectdetails .pd-overview-card { border-radius:21px; padding:19px 18px 17px; margin:0 0 13px; box-shadow:0 5px 18px rgba(25,48,75,.07); }
+#screen-projectdetails .pd-card-heading { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:13px; }
+#screen-projectdetails .pd-card-heading h3 { color:#101d31; font-size:20px; font-weight:800; margin:0; }
+#screen-projectdetails .pd-card-heading button { border:0; border-radius:13px; background:#e8f0fb; color:#1768d2; padding:9px 15px; font-size:14px; font-weight:700; }
+#screen-projectdetails .pd-info-grid { display:grid; gap:9px; }
+#screen-projectdetails .pd-info-row { display:grid; grid-template-columns:minmax(100px, 34%) 1fr; gap:10px; align-items:start; font-size:14px; }
+#screen-projectdetails .pd-info-row span, #screen-projectdetails .pd-date-grid span { color:#657386; }
+#screen-projectdetails .pd-info-row strong { color:#111d2d; font-weight:700; }
+#screen-projectdetails .pd-date-grid { display:grid; grid-template-columns:1fr 1fr; gap:15px; border-top:1px solid #e6ebf1; margin-top:13px; padding-top:12px; }
+#screen-projectdetails .pd-date-grid > div { display:flex; flex-direction:column; gap:4px; min-width:0; }
+#screen-projectdetails .pd-date-grid > div + div { border-left:1px solid #d8e0e9; padding-left:15px; }
+#screen-projectdetails .pd-date-grid span { font-size:12px; }
+#screen-projectdetails .pd-date-grid strong { font-size:15px; color:#111d2d; }
+#screen-projectdetails .pd-stats-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; padding:12px; margin:0 0 16px; background:#fff; border-radius:20px; box-shadow:0 5px 18px rgba(25,48,75,.06); }
+#screen-projectdetails .pd-stat-tile { min-width:0; min-height:105px; border-radius:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; padding:8px 3px; text-align:center; }
+#screen-projectdetails .pd-stat-icon { font-size:24px; line-height:1.1; font-weight:800; }
+#screen-projectdetails .pd-stat-tile strong { font-size:22px; line-height:1.05; color:#101d31; }
+#screen-projectdetails .pd-stat-tile small { font-size:11px; color:#425267; }
+#screen-projectdetails .pd-stat-progress { background:#edf4ff; color:#1768df; }
+#screen-projectdetails .pd-stat-plots { background:#f1f3f6; color:#657386; }
+#screen-projectdetails .pd-stat-approved { background:#eaf7ef; color:#1ca34b; }
+#screen-projectdetails .pd-stat-pending { background:#fff6e8; color:#e58a00; }
+#screen-projectdetails .pd-stat-missing { background:#fff0f0; color:#dc3434; }
+#screen-projectdetails .pd-plots-heading { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:0 0 11px; }
+#screen-projectdetails .pd-plots-heading .section-heading { margin:0; font-size:21px; }
+#screen-projectdetails .pd-plots-heading button { border:0; border-radius:13px; background:#1976df; color:#fff; padding:11px 16px; font-size:14px; font-weight:700; white-space:nowrap; }
+#screen-projectdetails .pd-plot-list .card { border-radius:18px!important; padding:14px 15px!important; margin:0 0 9px!important; box-shadow:0 4px 14px rgba(25,48,75,.06); }
+#screen-projectdetails .pd-plot-list .card .progress-track { height:9px!important; }
+#bottomnav { position:fixed; left:50%; transform:translateX(-50%); bottom:0; width:min(100%,430px); box-sizing:border-box; z-index:100; padding-bottom:env(safe-area-inset-bottom); }
+#screen-projectdetails #bottomnav { position:fixed; bottom:0; }
+@media(max-width:390px) {
+ #screen-plotoverview .screen-body { padding:10px 12px 100px; }
+ #screen-plotoverview .po23-hero { min-height:154px; padding:17px 16px 15px; }
+ #screen-plotoverview .po23-number { font-size:45px; }
+ #screen-plotoverview .po23-count { min-height:61px; }
+ #screen-plotoverview .po23-link-card { min-height:58px; }
+ #screen-projectdetails .project-detail-hero { padding:9px 13px 6px; }
+ #screen-projectdetails .project-detail-image { height:clamp(138px, 38vw, 165px); }
+ #screen-projectdetails .project-title-row { align-items:flex-start; flex-direction:column; gap:7px; }
+ #screen-projectdetails .project-detail-content h1 { font-size:28px; }
+ #screen-projectdetails .project-badges { position:static; }
+ #screen-projectdetails .project-details-body { padding:7px 13px 108px; }
+ #screen-projectdetails .pd-overview-card { padding:16px 15px; }
+ #screen-projectdetails .pd-info-row { grid-template-columns:100px 1fr; font-size:13px; }
+ #screen-projectdetails .pd-stat-tile { min-height:91px; }
+ #screen-projectdetails .pd-stat-icon { font-size:21px; }
+ #screen-projectdetails .pd-stat-tile strong { font-size:19px; }
+ #screen-projectdetails .pd-stat-tile small { font-size:9px; }
+ #screen-projectdetails .pd-stats-grid { gap:5px; padding:9px; }
+}
+</style>
+
 </head>
 
 <body>
@@ -1928,246 +2030,54 @@ z-index:1000;
 
 </div>
 
-    <!-- PROJECT DETAILS -->
-    <div class="screen" id="screen-projectdetails">
-      <div class="project-detail-hero">
-
-    <button class="back-btn" onclick="back()">
-        ← Back
-    </button>
-
-   <div class="project-detail-image">
-    <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200" alt="Project">
-</div>
-
-    <div class="project-detail-content">
-
-        <h1 id="pd-name">Oak View Development</h1>
-
-        <p class="project-location">
-            📍 Leeds, West Yorkshire
-        </p>
-
-        <div class="project-badges">
-
-            <span class="status-badge active">
-                Active
-            </span>
-
-            <span class="status-badge synced">
-                Synced
-            </span>
-
-        </div>
-
-    </div>
-
-</div>
-
-      <div class="screen-body">
-        <div class="card" style="
-    border-radius:20px;
-    padding:20px;
-    margin-bottom:16px;
-">
-
-    <div style="
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        margin-bottom:8px;
-    ">
-
-        <h3 style="
-            font-size:18px;
-            font-weight:800;
-            color:var(--navy);
-            margin:0;
-        ">
-            Project Overview
-        </h3>
-
-        <button onclick="editProject()" style="
-            border:none;
-            background:#EEF2FF;
-            color:#2563EB;
-            padding:4px 10px;
-            border-radius:12px;
-            font-weight:600;
-            cursor:pointer;
-        ">
-            ✏️ Edit
-        </button>
-
-    </div>
-
-    <div style="
-    display:grid;
-    grid-template-columns:110px 1fr;
-    row-gap:6px;
-    column-gap:12px;
-    align-items:center;
-">
-
-        <div>
-            <div style="display:none;">
-    Client
-</div>
-            <div id="pd-client" style="font-weight:700;">
-                Central & Country Developments
-            </div>
-        </div>
-
-        <div>
-            <div style="display:none;">
-    Site Manager
-</div>
-            <div id="pd-sitemanager" style="font-weight:700;">
-                David Blurton
-            </div>
-        </div>
-
-        <div>
-            <div style="display:none;">
-    Client
-</div>
-            <div id="pd-location" style="font-weight:700;">
-                Doseley Halt, Telford, Shropshire
-            </div>
-        </div>
-
-        <div style="
-            display:flex;
-            justify-content:space-between;
-            gap:4px;
-        ">
-
-            <div>
-                <div style="font-size:10px;color:var(--muted);">
-                    Start Date
-                </div>
-
-                <div style="font-weight:700;">
-                    12 May 2026
-                </div>
-            </div>
-
-            <div>
-                <div style="font-size:10px;color:var(--muted);">
-                    Target Completion
-                </div>
-
-                <div style="font-weight:700;">
-                    18 Dec 2026
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-       <div class="card" style="
-    padding:4px;
-    border-radius:20px;
-    margin-bottom:4px;
-">
-
-
-    <div style="
-        display:grid;
-        grid-template-columns:repeat(5,1fr);
-        gap:4px;
-        text-align:center;
-    ">
-
-        <div>
-            <div id="project-progress-score"
-                 style="font-size:18px;font-weight:800;color:#2563EB;">
-                0%
-            </div>
-            <div style="font-size:10px;color:var(--muted);">
-                Progress
-            </div>
-        </div>
-
-        <div>
-            <div id="project-plots-count"
-                 style="font-size:18px;font-weight:800;">
-                0
-            </div>
-            <div style="font-size:10px;color:var(--muted);">
-                Plots
-            </div>
-        </div>
-
-        <div>
-            <div id="project-approved-count"
-                 style="font-size:18px;font-weight:800;color:#16A34A;">
-                 0
-            </div>
-            <div style="font-size:10px;color:var(--muted);">
-                Approved
-            </div>
-        </div>
-
-        <div>
-            <div id="project-pending-count"
-                 style="font-size:18px;font-weight:800;color:#D97706;">
-                 0
-            </div>
-            <div style="font-size:10px;color:var(--muted);">
-                Pending
-            </div>
-        </div>
-
-        <div>
-            <div id="project-missing-count"
-                 style="font-size:18px;font-weight:800;color:#DC2626;">
-                 0
-            </div>
-            <div style="font-size:10px;color:var(--muted);">
-                Missing
-            </div>
-        </div>
-
-    </div>
-
-</div> 
+    <!-- PROJECT DETAILS — v11.26 structure aligned to the supplied iPhone mockup -->
+  <div class="screen" id="screen-projectdetails">
+    <div class="project-detail-hero">
+      <button class="back-btn" onclick="back()">← Back</button>
+      <div class="project-detail-image">
+        <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200" alt="Residential development under construction">
       </div>
-
-      <div style="
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:4px;
-">
-
-    <h2 class="section-heading" style="
-        margin:0;
-    ">
-        Plots (<span id="project-plots-count-header">1</span>)
-    </h2>
-
-    <button onclick="go('addplot')" style="
-        background:#2563EB;
-        color:white;
-        border:none;
-        border-radius:12px;
-        padding:6px 12px;
-        font-weight:700;
-        cursor:pointer;
-    ">
-        + Add Plot
-    </button>
-
-</div>
-
-<div id="plot-list"></div>
-          
+      <div class="project-detail-content">
+        <div class="project-title-row">
+          <div class="project-title-copy">
+            <h1 id="pd-name">Oak View Development</h1>
+            <p class="project-location">📍 <span id="pd-location-heading">Leeds, West Yorkshire</span></p>
+          </div>
+          <div class="project-badges">
+            <span class="status-badge active">● Active</span>
+            <span class="status-badge synced">☁ Synced</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="screen-body project-details-body">
+      <section class="card pd-overview-card">
+        <div class="pd-card-heading">
+          <h3>Project Overview</h3>
+          <button onclick="editProject()">✎ Edit</button>
+        </div>
+        <div class="pd-info-grid">
+          <div class="pd-info-row"><span>Client</span><strong id="pd-client">Central &amp; Country Developments</strong></div>
+          <div class="pd-info-row"><span>Site Manager</span><strong id="pd-sitemanager">David Blurton</strong></div>
+          <div class="pd-info-row"><span>Address</span><strong id="pd-location">Doseley Halt, Telford, Shropshire</strong></div>
+        </div>
+        <div class="pd-date-grid">
+          <div><span>Start Date</span><strong>12 May 2026</strong></div>
+          <div><span>Target Completion</span><strong>18 Dec 2026</strong></div>
+        </div>
+      </section>
+      <section class="pd-stats-grid" aria-label="Project statistics">
+        <div class="pd-stat-tile pd-stat-progress"><span class="pd-stat-icon">▥</span><strong id="project-progress-score">0%</strong><small>Progress</small></div>
+        <div class="pd-stat-tile pd-stat-plots"><span class="pd-stat-icon">⌂</span><strong id="project-plots-count">0</strong><small>Plots</small></div>
+        <div class="pd-stat-tile pd-stat-approved"><span class="pd-stat-icon">✓</span><strong id="project-approved-count">0</strong><small>Approved</small></div>
+        <div class="pd-stat-tile pd-stat-pending"><span class="pd-stat-icon">⌛</span><strong id="project-pending-count">0</strong><small>Pending</small></div>
+        <div class="pd-stat-tile pd-stat-missing"><span class="pd-stat-icon">×</span><strong id="project-missing-count">0</strong><small>Missing</small></div>
+      </section>
+      <div class="pd-plots-heading">
+        <h2 class="section-heading">Plots (<span id="project-plots-count-header">0</span>)</h2>
+        <button onclick="go('addplot')">＋ Add Plot</button>
+      </div>
+      <div id="plot-list" class="pd-plot-list"></div>
     </div>
   </div>
 
@@ -2551,6 +2461,7 @@ z-index:1000;
         </button>
       </div>
     </div>
+  </div><!-- close screen-photoreview; subsequent screens and the global navigation must be siblings -->
     <!-- EVIDENCE DETAILS -->
     <div class="screen" id="screen-evidencedetails">
       <div class="topnav">
@@ -2879,6 +2790,8 @@ z-index:1000;
 
       document.getElementById('pd-location').textContent =
         projects[id].location || "Not set";
+      const headingLocation = document.getElementById('pd-location-heading');
+      if (headingLocation) headingLocation.textContent = projects[id].location || 'Location not set';
       document.getElementById('pd-client').textContent =
         projects[id].client || "Not set";
 
@@ -2886,18 +2799,8 @@ z-index:1000;
         projects[id].siteManager || "Not set";
 
       console.log(projects[id]);
-
-      // document.getElementById(
-      //   'project-progress-score'
-      // ).textContent =
-      //   progress + "%";
-
-      // document.getElementById(
-      // 'project-plots-count'
-      //).textContent =
-      // projectPlots.length;
-
       go('projectdetails');
+      renderPlotList();
     }
 
     function editProject() {
@@ -2931,6 +2834,8 @@ z-index:1000;
 
       document.getElementById('pd-location').textContent =
         project.location;
+      const headingLocation = document.getElementById('pd-location-heading');
+      if (headingLocation) headingLocation.textContent = project.location;
       document.getElementById('pd-client').textContent =
         project.client || "Not set";
 
@@ -3206,6 +3111,7 @@ z-index:1000;
     function renderPlotList(filterText, statusFilter) {
       const list =
         Object.values(plots)
+          .filter(plot => plot.projectId === state.projectId)
           .sort((a, b) => {
 
             const numA =
@@ -3220,11 +3126,14 @@ z-index:1000;
 
             return numA - numB;
           });
+      list.forEach(plot => {
+        if (!Array.isArray(plot.checklist)) plot.checklist = [];
+      });
       const progress =
         list.length
           ? Math.round(
             list.reduce(
-              (total, plot) => total + plot.score,
+              (total, plot) => total + (Number(plot.score) || 0),
               0
             ) / list.length
           )
@@ -3245,9 +3154,10 @@ z-index:1000;
         );
 
       if (plotsEl) {
-        plotsEl.textContent =
-          Object.keys(plots).length;
+        plotsEl.textContent = list.length;
       }
+      const headerCount = document.getElementById('project-plots-count-header');
+      if (headerCount) headerCount.textContent = list.length;
       const missingCount =
         list.reduce((total, plot) => {
 
