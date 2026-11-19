@@ -1171,8 +1171,61 @@
  .cl-action{min-height:29px!important;padding:0 6px!important;font-size:10px!important}
 }
 
+
+
+    /* v11.24 — Plot Overview sizing refinement */
+    #screen-plotoverview .topnav { padding: 14px 16px; }
+    #screen-plotoverview .topnav-title h1 { font-size: 17px; }
+    #screen-plotoverview .topnav-title .sub { font-size: 12px; }
+    #screen-plotoverview .sync-pill { font-size: 11px; }
+    #screen-plotoverview .screen-body { padding: 10px 13px 96px; }
+    .po23-wrap { gap: 12px; padding-bottom: 7px; }
+    .po23-hero { min-height: 145px; border-radius: 17px; padding: 17px 18px 14px; }
+    .po23-hero:after { width: 195px; height: 150px; right: -38px; top: -26px; }
+    .po23-eyebrow { font-size: 10px; letter-spacing: 1.25px; }
+    .po23-number { font-size: 41px; margin: 3px 0 4px; }
+    .po23-house-type { font-size: 12px; }
+    .po23-status { margin-top: 7px; padding: 4px 9px; font-size: 10px; }
+    .po23-house { top: 13px; right: 7px; height: 96px; width: 54%; }
+    .po23-tagline { right: 15px; bottom: 34px; font-size: 9px; }
+    .po23-progress-line { left: 18px; right: 62px; bottom: 12px; gap: 9px; }
+    .po23-progress-track { height: 7px; }
+    .po23-progress-line strong { font-size: 10px; }
+    .po23-camera { min-height: 54px; gap: 12px; padding: 9px 15px; border-radius: 13px; }
+    .po23-camera-icon { font-size: 24px; }
+    .po23-camera-copy strong { font-size: 12px; }
+    .po23-camera-copy small { font-size: 9px; }
+    .po23-arrow { font-size: 27px; }
+    .po23-compliance { padding: 12px 12px 13px; border-radius: 14px; }
+    .po23-section-head { gap: 8px; margin-bottom: 9px; }
+    .po23-section-head strong { font-size: 10px; }
+    .po23-section-head small { font-size: 9px; }
+    .po23-bars { font-size: 15px; }
+    .po23-counts { gap: 8px; }
+    .po23-count { min-height: 59px; grid-template-columns: 25px 1fr; grid-template-rows: 26px 14px; padding: 7px 5px 6px; border-radius: 10px; }
+    .po23-count-icon { width: 21px; height: 21px; font-size: 13px; }
+    .po23-count strong { font-size: 17px; }
+    .po23-count small { font-size: 9px; }
+    .po23-link-card { min-height: 55px; gap: 11px; padding: 8px 12px; border-radius: 12px; }
+    .po23-link-icon { width: 33px; height: 33px; flex-basis: 33px; border-radius: 9px; font-size: 19px; }
+    .po23-link-copy { gap: 3px; }
+    .po23-link-copy strong { font-size: 12px; }
+    .po23-link-copy small { font-size: 9px; }
+    .po23-link-arrow { font-size: 23px; }
+    .po23-timeline-detail { padding: 11px 14px; border-radius: 12px; }
+    .po23-timeline-entry { gap: 9px; padding: 6px 0; font-size: 11px; }
+    .po23-timeline-entry small { font-size: 9px; }
+    @media(max-width:390px) {
+      #screen-plotoverview .screen-body { padding-left: 12px; padding-right: 12px; }
+      .po23-hero { min-height: 139px; }
+      .po23-number { font-size: 39px; }
+      .po23-count { min-height: 56px; }
+      .po23-link-card { min-height: 53px; }
+    }
+
 </style>
   <!-- PlotVault v11.23 - Plot Overview Redesign -->
+<meta name="plotvault-version" content="v11.24">
 </head>
 
 <body>
@@ -1575,7 +1628,8 @@
     @media(max-width:370px){.cl-item-card{gap:8px;padding:10px 8px}.cl-item-icon{width:35px;height:35px;flex-basis:35px}.cl-action{padding:0 8px;font-size:11px}}
 
 
-    /* v11.23 - Plot Overview aligned to the supplied iPhone mockup */
+    /* v11.23 - Plot Overview aligned to the supplied iPhone mockup
+    /* Updated sizing overrides: v11.24 */ */
     #screen-plotoverview .topnav { padding: 11px 14px; }
     #screen-plotoverview .topnav-title h1 { font-size: 15px; }
     #screen-plotoverview .topnav-title .sub { font-size: 11px; }
