@@ -1364,7 +1364,7 @@
 
 </style>
   <!-- PlotVault v11.23 - Plot Overview Redesign -->
-<meta name="plotvault-version" content="v11.28">
+<meta name="plotvault-version" content="v11.29">
 
 <style id="plotvault-v1126-screen-corrections">
 /* v11.26 — Plot Overview: proportions based on the supplied iPhone reference */
@@ -1491,6 +1491,170 @@ html, body { overflow-x: hidden; }
 /* Prevent common wide media/form controls from forcing a horizontal page width. */
 #frame img, #frame video, #frame canvas { max-width: 100%; }
 #frame input, #frame select, #frame textarea { max-width: 100%; }
+</style>
+
+
+<style id="plotvault-v1129-screen-fit">
+/* v11.29: Plot Overview is a fixed-height screen; keep all primary actions visible. */
+#screen-plotoverview {
+  display:none;
+  overflow:hidden !important;
+  overscroll-behavior: none;
+}
+#screen-plotoverview.active {
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
+#screen-plotoverview > .topnav {
+  flex:0 0 auto;
+  padding:8px 13px;
+}
+#screen-plotoverview > .screen-body,
+#screen-plotoverview #po-body {
+  flex:1 1 auto;
+  min-height:0;
+  overflow:hidden !important;
+  padding:6px 11px 7px !important;
+}
+#screen-plotoverview .po23-wrap {
+  display:flex;
+  flex-direction:column;
+  gap:7px !important;
+  padding:0 !important;
+  min-height:0;
+}
+#screen-plotoverview .po23-hero {
+  min-height:112px !important;
+  padding:12px 15px 10px !important;
+  border-radius:14px !important;
+  flex:0 0 auto;
+}
+#screen-plotoverview .po23-number {font-size:39px !important; margin:2px 0 3px !important;}
+#screen-plotoverview .po23-house {height:91px !important; width:49% !important; top:9px !important;}
+#screen-plotoverview .po23-tagline {bottom:29px !important; right:12px !important;}
+#screen-plotoverview .po23-progress-line {bottom:9px !important; left:15px !important; right:55px !important;}
+#screen-plotoverview .po23-camera {
+  min-height:46px !important;
+  padding:7px 12px !important;
+  gap:10px !important;
+  border-radius:11px !important;
+  flex:0 0 auto;
+}
+#screen-plotoverview .po23-camera-icon {font-size:22px !important;}
+#screen-plotoverview .po23-compliance {
+  padding:8px 9px 9px !important;
+  border-radius:12px !important;
+  flex:0 0 auto;
+}
+#screen-plotoverview .po23-section-head {margin-bottom:6px !important;}
+#screen-plotoverview .po23-counts {gap:6px !important;}
+#screen-plotoverview .po23-count {
+  min-height:55px !important;
+  grid-template-columns:22px 1fr !important;
+  grid-template-rows:24px 13px !important;
+  padding:5px 3px !important;
+}
+#screen-plotoverview .po23-count-icon {width:19px !important;height:19px !important;font-size:12px !important;}
+#screen-plotoverview .po23-count strong {font-size:17px !important;}
+#screen-plotoverview .po23-count small {font-size:8px !important;}
+#screen-plotoverview .po23-link-card {
+  min-height:45px !important;
+  padding:5px 10px !important;
+  gap:9px !important;
+  border-radius:10px !important;
+  flex:0 0 auto;
+}
+#screen-plotoverview .po23-link-icon {width:31px !important;height:31px !important;flex-basis:31px !important;font-size:17px !important;}
+#screen-plotoverview .po23-link-copy {gap:2px !important;}
+#screen-plotoverview .po23-link-copy strong {font-size:12px !important;}
+#screen-plotoverview .po23-link-copy small {font-size:9px !important;}
+#screen-plotoverview .po23-link-arrow {font-size:20px !important;}
+#screen-plotoverview .po23-timeline-detail {padding:7px 10px !important;}
+
+/* v11.29: project overview uses two balanced information columns.
+   Client and Site Manager labels sit above their values; Address spans both columns. */
+#screen-projectdetails .project-title-row {
+  flex-direction:row !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:7px !important;
+}
+#screen-projectdetails .project-title-copy {flex:1 1 auto;min-width:0;}
+#screen-projectdetails .project-detail-content h1 {font-size:27px !important;}
+#screen-projectdetails .project-badges {position:static !important;flex:0 0 auto;gap:5px !important;}
+#screen-projectdetails .status-badge {padding:6px 8px !important;font-size:10px !important;}
+#screen-projectdetails .project-location {font-size:12px !important;}
+#screen-projectdetails .project-detail-hero {padding:7px 13px 3px !important;}
+#screen-projectdetails .back-btn {margin-bottom:7px !important;font-size:14px !important;}
+#screen-projectdetails .project-detail-image {height:clamp(112px, 32vw, 145px) !important;margin-bottom:8px !important;}
+#screen-projectdetails .project-details-body {padding:5px 13px 88px !important;}
+#screen-projectdetails .pd-overview-card {
+  padding:9px 12px 8px !important;
+  margin-bottom:7px !important;
+  border-radius:16px !important;
+}
+#screen-projectdetails .pd-card-heading {margin-bottom:6px !important;}
+#screen-projectdetails .pd-card-heading h3 {font-size:16px !important;}
+#screen-projectdetails .pd-card-heading button {padding:6px 10px !important;font-size:12px !important;}
+#screen-projectdetails .pd-info-grid {
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  column-gap:12px !important;
+  row-gap:5px !important;
+}
+#screen-projectdetails .pd-info-row {
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  gap:1px !important;
+  min-width:0 !important;
+  font-size:11px !important;
+  line-height:1.2 !important;
+}
+#screen-projectdetails .pd-info-row span {font-size:10px !important;white-space:nowrap;}
+#screen-projectdetails .pd-info-row strong {
+  display:block !important;
+  width:100% !important;
+  font-size:11px !important;
+  line-height:1.22 !important;
+  overflow-wrap:anywhere !important;
+}
+#screen-projectdetails .pd-info-row:nth-child(3) {grid-column:1 / -1 !important;}
+#screen-projectdetails .pd-date-grid {
+  margin-top:6px !important;
+  padding-top:6px !important;
+  gap:10px !important;
+}
+#screen-projectdetails .pd-date-grid span {font-size:10px !important;}
+#screen-projectdetails .pd-date-grid strong {font-size:12px !important;line-height:1.15 !important;}
+#screen-projectdetails .pd-stats-grid {
+  gap:5px !important;
+  padding:7px !important;
+  margin-bottom:8px !important;
+  border-radius:15px !important;
+}
+#screen-projectdetails .pd-stat-tile {min-height:70px !important;padding:5px 2px !important;gap:2px !important;border-radius:10px !important;}
+#screen-projectdetails .pd-stat-icon {font-size:18px !important;}
+#screen-projectdetails .pd-stat-tile strong {font-size:17px !important;}
+#screen-projectdetails .pd-stat-tile small {font-size:8px !important;}
+#screen-projectdetails .pd-plots-heading {margin-bottom:7px !important;}
+#screen-projectdetails .pd-plots-heading .section-heading {font-size:18px !important;}
+#screen-projectdetails .pd-plots-heading button {padding:8px 11px !important;font-size:12px !important;}
+#screen-projectdetails .pd-plot-list > .card {padding:8px 10px !important;margin-bottom:7px !important;}
+#screen-projectdetails .pd-plot-list > .card .progress-track {height:6px !important;}
+
+@media(max-height:720px) {
+  #screen-plotoverview .po23-hero {min-height:103px !important;}
+  #screen-plotoverview .po23-link-card {min-height:41px !important;}
+  #screen-projectdetails .project-detail-image {height:112px !important;}
+  #screen-projectdetails .pd-stat-tile {min-height:64px !important;}
+}
+@media(max-width:360px) {
+  #screen-projectdetails .project-title-row {align-items:flex-start !important;}
+  #screen-projectdetails .project-detail-content h1 {font-size:24px !important;}
+  #screen-projectdetails .status-badge {padding:5px 6px !important;font-size:9px !important;}
+}
 </style>
 
 </head>
