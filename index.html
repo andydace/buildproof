@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlotVault – BuildProof Inspection Platform</title>
+  <title>PlotVault – Capture, verify, comply</title>
   <style>
     :root {
       --navy: #0F2A3D;
@@ -1657,6 +1657,138 @@ html, body { overflow-x: hidden; }
 }
 </style>
 
+
+<style id="plotvault-v1130-iphone-fit">
+/* v11.30 – iPhone 16 layout correction */
+:root { --pv-bottom-safe: env(safe-area-inset-bottom, 0px); }
+
+/* Plot Overview: occupy the usable viewport and do not scroll. */
+#screen-plotoverview {
+  position:absolute !important;
+  inset:0 0 0 0 !important;
+  height:100dvh !important;
+  max-height:100dvh !important;
+  overflow:hidden !important;
+  overscroll-behavior:none !important;
+}
+#screen-plotoverview.active {
+  display:flex !important;
+  flex-direction:column !important;
+}
+#screen-plotoverview .topnav {
+  flex:0 0 auto !important;
+  min-height:55px !important;
+  padding:8px 14px !important;
+}
+#screen-plotoverview .screen-body,
+#screen-plotoverview #po-body {
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  height:auto !important;
+  overflow:hidden !important;
+  padding:8px 13px calc(76px + var(--pv-bottom-safe)) !important;
+  box-sizing:border-box !important;
+}
+#screen-plotoverview .po23-wrap {
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:space-between !important;
+  height:100% !important;
+  min-height:0 !important;
+  gap:clamp(7px,1.4vh,13px) !important;
+  padding:0 !important;
+  box-sizing:border-box !important;
+}
+#screen-plotoverview .po23-hero {
+  flex:1 1 0 !important;
+  min-height:132px !important;
+  max-height:190px !important;
+  padding:clamp(13px,2.2vh,20px) 17px !important;
+}
+#screen-plotoverview .po23-number {font-size:clamp(40px,7vh,52px) !important;}
+#screen-plotoverview .po23-house {height:clamp(94px,15vh,125px) !important;width:53% !important;}
+#screen-plotoverview .po23-camera {
+  flex:0 0 auto !important;
+  min-height:60px !important;
+  padding:10px 15px !important;
+}
+#screen-plotoverview .po23-compliance {
+  flex:1 1 0 !important;
+  min-height:105px !important;
+  max-height:160px !important;
+  padding:clamp(9px,1.5vh,14px) !important;
+}
+#screen-plotoverview .po23-count {min-height:58px !important;}
+#screen-plotoverview .po23-link-card {
+  flex:1 1 0 !important;
+  min-height:49px !important;
+  max-height:66px !important;
+}
+
+/* Projects header and cards sized for iPhone 16 (393px CSS viewport). */
+#screen-projects .topnav {
+  position:relative !important;
+  min-height:66px !important;
+  padding:14px 16px 9px !important;
+  align-items:center !important;
+}
+#screen-projects .topnav-title h1 {font-size:27px !important;line-height:1.05 !important;}
+#screen-projects .topnav-title div {font-size:12px !important;margin-top:4px !important;}
+#screen-projects .screen-body {
+  padding:8px 14px calc(76px + var(--pv-bottom-safe)) !important;
+  overflow-y:auto !important;
+  overflow-x:hidden !important;
+  box-sizing:border-box !important;
+}
+#screen-projects .project-stats {
+  margin:0 0 14px !important;
+  padding:12px 8px !important;
+  min-height:65px !important;
+  box-sizing:border-box !important;
+}
+#screen-projects .project-stat {min-width:0 !important;padding:0 4px !important;}
+#screen-projects .project-stat strong {font-size:21px !important;line-height:1.1 !important;}
+#screen-projects .project-stat span {font-size:9px !important;margin-top:4px !important;white-space:nowrap !important;}
+#screen-projects .project-search-row {gap:0 !important;margin-bottom:12px !important;}
+#screen-projects .project-searchbox {height:46px !important;padding:0 14px !important;}
+#screen-projects .project-searchbox input {font-size:14px !important;}
+#screen-projects .project-filters {
+  gap:7px !important;
+  margin:0 0 13px !important;
+  overflow-x:auto !important;
+  padding-bottom:3px !important;
+}
+#screen-projects .project-filter {padding:9px 15px !important;font-size:12px !important;}
+#screen-projects .projects-list {width:100% !important;min-width:0 !important;}
+#screen-projects .project-card {
+  height:150px !important;
+  padding:10px !important;
+  margin-bottom:10px !important;
+  border-radius:18px !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+}
+#screen-projects .project-card-main {height:130px !important;gap:10px !important;}
+#screen-projects .project-card-image {
+  width:94px !important;height:130px !important;flex:0 0 94px !important;border-radius:13px !important;
+}
+#screen-projects .project-card-info {min-width:0 !important;overflow:hidden !important;}
+#screen-projects .project-card-name {font-size:15px !important;line-height:1.12 !important;}
+#screen-projects .project-card-location {font-size:11px !important;line-height:1.2 !important;}
+#screen-projects .project-card-metrics {margin-top:8px !important;grid-template-columns:.8fr 1fr 1fr !important;}
+#screen-projects .project-card-metric {padding:0 5px !important;}
+#screen-projects .project-card-metric strong {font-size:14px !important;}
+#screen-projects .project-card-metric span {font-size:9px !important;}
+#screen-projects .project-card-progress {margin-top:6px !important;}
+#screen-projects .project-card-updated {font-size:9px !important;margin-top:5px !important;}
+
+/* Remove obsolete floating camera control and unused legacy nav if any remain. */
+#fabbtn,.fab {display:none !important;}
+#bottomnav .nav-item[data-nav="dashboard"],
+#bottomnav .nav-item[data-nav="camera"] {display:none !important;}
+#bottomnav {grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+</style>
+
 </head>
 
 <body>
@@ -2132,19 +2264,10 @@ html, body { overflow-x: hidden; }
     color:var(--muted);
     margin-top:6px;
 ">
-    BuildProof Inspection Platform
+    Capture, verify, comply
 </div>
           </div>
-          <button class="backbtn" style="
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    background:#EEF2F7;
-    color:#6B7280;
-    font-size:20px;
-">
-    👤
-</button>
+          
         </div>
         
         <div class="screen-body"style="padding-bottom:90px;">
@@ -2156,71 +2279,20 @@ html, body { overflow-x: hidden; }
           </div>
           <div class="project-search-row">
             <label class="project-searchbox"><span style="font-size:22px;color:#8995a6;">⌕</span><input id="project-search" type="search" aria-label="Search projects" oninput="handleProjectSearch(this.value)" placeholder="Search Projects"></label>
-            <button class="project-filter-tools" type="button" aria-label="Project filter options" title="Filter options">☷</button>
+            
           </div>
           <div class="project-filters" role="group" aria-label="Filter projects">
             <button type="button" class="project-filter active" onclick="setProjectFilter('all', this)">All</button>
             <button type="button" class="project-filter" onclick="setProjectFilter('active', this)">Active</button>
             <button type="button" class="project-filter" onclick="setProjectFilter('completed', this)">Completed</button>
-            <button type="button" class="project-filter" onclick="setProjectFilter('behind', this)">Behind Schedule</button>
+            
           </div>
           <div id="projects-list" class="projects-list"></div>
         </div>
       </div>
     </div>
 
-    <div style="
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#fff;
-border-top:1px solid #E5E7EB;
-display:flex;
-justify-content:space-around;
-padding:12px 0;
-z-index:1000;
-">
-
-    <div onclick="go('projects')" style="
-        text-align:center;
-        color:#2F80ED;
-        cursor:pointer;
-    ">
-        <div style="font-size:24px;">🏠</div>
-        <div style="font-size:12px;font-weight:600;">Projects</div>
-    </div>
-
-    <div onclick="go('dashboard')" style="
-        text-align:center;
-        color:#94A3B8;
-        cursor:pointer;
-    ">
-        <div style="font-size:24px;">🗺️</div>
-        <div style="font-size:12px;">Home</div>
-    </div>
-
-    <div onclick="go('reports')" style="
-        text-align:center;
-        color:#94A3B8;
-        cursor:pointer;
-    ">
-        <div style="font-size:24px;">📊</div>
-        <div style="font-size:12px;">Reports</div>
-    </div>
-
-    <div onclick="go('settings')" style="
-        text-align:center;
-        color:#94A3B8;
-        cursor:pointer;
-    ">
-        <div style="font-size:24px;">⚙️</div>
-        <div style="font-size:12px;">Settings</div>
-    </div>
-
-</div>
-
-    <!-- PROJECT DETAILS — v11.26 structure aligned to the supplied iPhone mockup -->
+        <!-- PROJECT DETAILS — v11.26 structure aligned to the supplied iPhone mockup -->
   <div class="screen" id="screen-projectdetails">
     <div class="project-detail-hero">
       <button class="back-btn" onclick="back()">← Back</button>
@@ -2712,7 +2784,7 @@ z-index:1000;
 
     </div>
 
-    <button class="fab" onclick="openCamera(state.projectId||'oakview')" id="fabbtn">📷</button>
+    
 
     <div id="bottomnav">
       <button class="nav-item active" data-nav="dashboard" onclick="go('dashboard')"><span class="ic">🏠</span><span
