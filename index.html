@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlotVault v11.39 – Photo Stamp Alignment</title>
+  <title>PlotVault v11.40 – Plot Overview Full-Screen Sizing</title>
   <style>
     :root {
       --navy: #0F2A3D;
@@ -1910,6 +1910,47 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
   #screen-plotoverview .po23-link-copy small { display:none; }
   #screen-plotoverview .po23-hero { padding-left:12px !important; }
   #screen-projectdetails .pd-stat-tile small { font-size:8px !important; }
+}
+</style>
+
+
+<style id="plotvault-v1140-real-app-plot-screen-fit">
+/* v11.40: This stylesheet is in the APP head (not the generated report template).
+   Fill the real #screens viewport and distribute the Plot Overview cards through it. */
+@media (max-width: 600px) {
+  html, body { width:100% !important; height:100% !important; min-height:0 !important; }
+  body { display:block !important; margin:0 !important; padding:0 !important; min-height:0 !important; overflow:hidden !important; }
+  #frame { width:100% !important; max-width:none !important; height:100vh !important; height:100dvh !important; min-height:0 !important; margin:0 !important; border-radius:0 !important; display:flex !important; flex-direction:column !important; }
+  #statusbar { flex:0 0 27px !important; height:27px !important; }
+  #screens { flex:1 1 auto !important; height:auto !important; min-height:0 !important; position:relative !important; overflow:hidden !important; }
+}
+#screen-plotoverview { position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; max-height:none !important; min-height:0 !important; display:none; flex-direction:column !important; overflow:hidden !important; }
+#screen-plotoverview.active { display:flex !important; }
+#screen-plotoverview > .topnav { flex:0 0 auto !important; min-height:58px !important; padding:9px 15px !important; }
+#screen-plotoverview > #po-body.screen-body { flex:1 1 0 !important; display:flex !important; flex-direction:column !important; min-height:0 !important; height:auto !important; width:100% !important; max-width:none !important; margin:0 !important; padding:10px 13px 8px !important; overflow:hidden !important; }
+#screen-plotoverview #po-body > .po23-wrap { flex:1 1 auto !important; width:100% !important; height:100% !important; min-height:0 !important; display:flex !important; flex-direction:column !important; justify-content:space-between !important; gap:clamp(9px,1.7vh,16px) !important; padding:0 !important; }
+#screen-plotoverview .po23-hero { flex:1.25 1 0 !important; min-height:130px !important; max-height:none !important; height:auto !important; padding:clamp(15px,2.5vh,23px) 18px !important; }
+#screen-plotoverview .po23-number { font-size:clamp(42px,6.5vh,54px) !important; }
+#screen-plotoverview .po23-house { height:clamp(95px,15vh,130px) !important; }
+#screen-plotoverview .po23-camera { flex:0.62 1 0 !important; min-height:58px !important; max-height:none !important; height:auto !important; padding:10px 15px !important; }
+#screen-plotoverview .po23-camera-icon { font-size:27px !important; }
+#screen-plotoverview .po23-compliance { flex:1.05 1 0 !important; min-height:110px !important; max-height:none !important; padding:clamp(10px,1.8vh,16px) !important; }
+#screen-plotoverview .po23-count { min-height:clamp(58px,8.5vh,72px) !important; }
+#screen-plotoverview .po23-link-card { flex:0.78 1 0 !important; min-height:52px !important; max-height:none !important; height:auto !important; padding:8px 12px !important; }
+#screen-plotoverview .po23-link-icon { width:36px !important; height:36px !important; flex-basis:36px !important; }
+#screen-plotoverview .po23-link-copy strong { font-size:13px !important; }
+#screen-plotoverview .po23-link-copy small { font-size:10px !important; }
+#screen-plotoverview > div:last-child { flex:0 0 auto !important; width:100% !important; padding:7px 13px calc(10px + env(safe-area-inset-bottom,0px)) !important; }
+#screen-plotoverview > div:last-child .btn { min-height:49px !important; font-size:14px !important; }
+@media (max-height:740px) {
+  #screen-plotoverview > #po-body.screen-body { padding:7px 12px 6px !important; }
+  #screen-plotoverview #po-body > .po23-wrap { gap:7px !important; }
+  #screen-plotoverview .po23-hero { min-height:112px !important; }
+  #screen-plotoverview .po23-camera { min-height:50px !important; }
+  #screen-plotoverview .po23-compliance { min-height:96px !important; }
+  #screen-plotoverview .po23-count { min-height:49px !important; }
+  #screen-plotoverview .po23-link-card { min-height:45px !important; }
+  #screen-plotoverview > div:last-child .btn { min-height:43px !important; }
 }
 </style>
 
@@ -4469,7 +4510,7 @@ return `
       const evidenceRegister = (plot.gallery || []).map((photo,i) => `<tr><td>${i+1}</td><td>${escapeHTML(photo.category || 'Uncategorised')}</td><td>${escapeHTML(photo.timestamp || photo.date || 'Date not recorded')}</td><td>${Number.isFinite(Number(photo.latitude)) && Number.isFinite(Number(photo.longitude)) ? `${Number(photo.latitude).toFixed(6)}, ${Number(photo.longitude).toFixed(6)}` : 'Not recorded'}</td><td>${escapeHTML(photo.notes || '')}</td></tr>`).join('');
       return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="plotvault-build" content="11.39"><title>Part L Report - ${escapeHTML(plot.number)}</title><style>
-        *{box-sizing:border-box}body{font:14px Arial,sans-serif;color:#263746;margin:32px;line-height:1.45}h1,h2{color:#0F2A3D}header{border-bottom:3px solid #1E6B8C;padding-bottom:16px;margin-bottom:22px}.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{text-align:left;padding:9px;border:1px solid #d9e0e6;vertical-align:top}th{background:#edf3f7}.footer{margin-top:32px;color:#667;font-size:12px}.evidence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:14px}.evidence-photo{margin:0;break-inside:avoid;page-break-inside:avoid}.photo-frame{display:flex;justify-content:center;align-items:flex-end;width:100%;overflow:hidden;background:#e9eef2}.photo-image-wrap{position:relative;display:inline-block;max-width:100%;line-height:0}.photo-frame img{display:block;width:auto;height:auto;max-width:100%;max-height:430px;object-fit:contain}.photo-stamp{position:absolute;right:6px;bottom:6px;max-width:78%;display:flex;flex-direction:column;gap:2px;padding:7px 9px;background:rgba(8,25,39,.84);color:#fff;border-left:3px solid #4fc3a1;font-size:10px;line-height:1.25;text-align:left;overflow-wrap:anywhere}.photo-stamp strong{font-size:12px}.evidence-photo figcaption{font-size:11px;padding:7px 1px;color:#425466}.evidence-photo figcaption small{color:#667}.no-photos{padding:16px;background:#f4f7f9;border:1px solid #d9e0e6}@media(max-width:700px){body{margin:16px}.evidence-grid{grid-template-columns:1fr}}@media print{body{margin:12mm}.evidence-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.photo-frame,.evidence-photo{break-inside:avoid;page-break-inside:avoid}.photo-stamp{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+        *{box-sizing:border-box}body{font:14px Arial,sans-serif;color:#263746;margin:32px;line-height:1.45}h1,h2{color:#0F2A3D}header{border-bottom:3px solid #1E6B8C;padding-bottom:16px;margin-bottom:22px}.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{text-align:left;padding:9px;border:1px solid #d9e0e6;vertical-align:top}th{background:#edf3f7}.footer{margin-top:32px;color:#667;font-size:12px}.evidence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:14px}.evidence-photo{margin:0;break-inside:avoid;page-break-inside:avoid}.photo-frame{display:flex;justify-content:center;align-items:flex-end;width:100%;overflow:hidden;background:#e9eef2}.photo-image-wrap{position:relative;display:inline-block;max-width:100%;line-height:0}.photo-frame img{display:block;width:auto;height:auto;max-width:100%;max-height:430px;object-fit:contain}.photo-stamp{position:absolute;right:8px;bottom:8px;max-width:78%;display:flex;flex-direction:column;gap:2px;padding:0;background:transparent;border:0;color:#fff;font-size:10px;line-height:1.25;text-align:right;overflow-wrap:anywhere;text-shadow:0 1px 3px rgba(0,0,0,.95),1px 0 2px rgba(0,0,0,.85),-1px 0 2px rgba(0,0,0,.85)}.photo-stamp strong{font-size:12px}.evidence-photo figcaption{font-size:11px;padding:7px 1px;color:#425466}.evidence-photo figcaption small{color:#667}.no-photos{padding:16px;background:#f4f7f9;border:1px solid #d9e0e6}@media(max-width:700px){body{margin:16px}.evidence-grid{grid-template-columns:1fr}}@media print{body{margin:12mm}.evidence-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.photo-frame,.evidence-photo{break-inside:avoid;page-break-inside:avoid}.photo-stamp{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
       </style>
 <style id="plotvault-v1137-iphone-fit-and-report-navigation">
 /* v11.37: use the full iPhone viewport and give Plot Overview more room. */
