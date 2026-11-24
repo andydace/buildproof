@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlotVault v11.40 – Plot Overview Full-Screen Sizing</title>
+  <title>PlotVault v11.45 – Plot Screen and Report Sharing</title>
   <style>
     :root {
       --navy: #0F2A3D;
@@ -1373,7 +1373,7 @@
 
 </style>
   <!-- PlotVault v11.23 - Plot Overview Redesign -->
-<meta name="plotvault-version" content="v11.44">
+<meta name="plotvault-version" content="v11.45">
 
 <style id="plotvault-v1126-screen-corrections">
 /* v11.26 — Plot Overview: proportions based on the supplied iPhone reference */
@@ -1954,6 +1954,56 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 }
 </style>
 
+
+<style id="plotvault-v1145-final-plot-fit">
+/* v11.45: final, authoritative Plot Overview sizing. The footer has its own
+   flex row; the content area is the remaining viewport, not a scrolling page. */
+#screen-plotoverview { position:absolute !important; inset:0 !important; height:100% !important; min-height:0 !important; max-height:none !important; display:none; flex-direction:column !important; overflow:hidden !important; }
+#screen-plotoverview.active { display:flex !important; }
+#screen-plotoverview > .topnav { flex:0 0 56px !important; min-height:56px !important; height:56px !important; padding:7px 13px !important; }
+#screen-plotoverview > #po-body.screen-body { flex:1 1 0 !important; height:0 !important; min-height:0 !important; max-height:none !important; padding:8px 12px !important; margin:0 !important; overflow:hidden !important; display:flex !important; flex-direction:column !important; box-sizing:border-box !important; }
+#screen-plotoverview #po-body > .po23-wrap { flex:1 1 auto !important; height:100% !important; min-height:0 !important; width:100% !important; padding:0 !important; margin:0 !important; display:flex !important; flex-direction:column !important; justify-content:space-between !important; gap:6px !important; box-sizing:border-box !important; }
+#screen-plotoverview .po23-hero { flex:0 0 124px !important; height:124px !important; min-height:124px !important; max-height:124px !important; padding:13px 16px 12px !important; border-radius:15px !important; }
+#screen-plotoverview .po23-number { font-size:42px !important; margin:2px 0 3px !important; }
+#screen-plotoverview .po23-status { margin-top:5px !important; position:relative !important; z-index:3 !important; }
+#screen-plotoverview .po23-progress-line { left:15px !important; right:56px !important; bottom:9px !important; gap:8px !important; }
+#screen-plotoverview .po23-progress-track { height:7px !important; }
+#screen-plotoverview .po23-camera { flex:0 0 56px !important; height:56px !important; min-height:56px !important; max-height:56px !important; padding:8px 13px !important; gap:10px !important; }
+#screen-plotoverview .po23-camera-icon { font-size:25px !important; }
+#screen-plotoverview .po23-compliance { flex:0 0 108px !important; height:108px !important; min-height:108px !important; max-height:108px !important; padding:9px 10px !important; }
+#screen-plotoverview .po23-section-head { margin-bottom:7px !important; }
+#screen-plotoverview .po23-counts { gap:7px !important; }
+#screen-plotoverview .po23-count { min-height:62px !important; padding:6px 4px !important; grid-template-columns:24px 1fr !important; grid-template-rows:27px 15px !important; }
+#screen-plotoverview .po23-count-icon { width:21px !important; height:21px !important; font-size:13px !important; }
+#screen-plotoverview .po23-count strong { font-size:19px !important; }
+#screen-plotoverview .po23-count small { font-size:9px !important; }
+#screen-plotoverview .po23-link-card { flex:0 0 52px !important; height:52px !important; min-height:52px !important; max-height:52px !important; padding:7px 11px !important; gap:9px !important; border-radius:12px !important; }
+#screen-plotoverview .po23-link-icon { width:36px !important; height:36px !important; flex:0 0 36px !important; font-size:19px !important; }
+#screen-plotoverview .po23-link-copy { gap:3px !important; }
+#screen-plotoverview .po23-link-copy strong { font-size:13px !important; }
+#screen-plotoverview .po23-link-copy small { font-size:10px !important; }
+#screen-plotoverview .po23-link-arrow { font-size:23px !important; }
+#screen-plotoverview .po-delete-footer { flex:0 0 auto !important; width:100% !important; padding:5px 12px calc(7px + env(safe-area-inset-bottom,0px)) !important; margin:0 !important; box-sizing:border-box !important; }
+#screen-plotoverview .po-delete-footer .btn { display:block !important; width:100% !important; min-height:44px !important; height:44px !important; margin:0 !important; padding:8px 12px !important; }
+@media(max-height:740px) {
+ #screen-plotoverview > .topnav { flex-basis:51px !important; height:51px !important; min-height:51px !important; }
+ #screen-plotoverview > #po-body.screen-body { padding:6px 10px !important; }
+ #screen-plotoverview #po-body > .po23-wrap { gap:5px !important; }
+ #screen-plotoverview .po23-hero { flex-basis:112px !important; height:112px !important; min-height:112px !important; max-height:112px !important; padding:10px 14px !important; }
+ #screen-plotoverview .po23-number { font-size:38px !important; }
+ #screen-plotoverview .po23-camera { flex-basis:50px !important; height:50px !important; min-height:50px !important; max-height:50px !important; }
+ #screen-plotoverview .po23-compliance { flex-basis:96px !important; height:96px !important; min-height:96px !important; max-height:96px !important; padding:7px 9px !important; }
+ #screen-plotoverview .po23-count { min-height:54px !important; }
+ #screen-plotoverview .po23-link-card { flex-basis:46px !important; height:46px !important; min-height:46px !important; max-height:46px !important; padding:5px 9px !important; }
+ #screen-plotoverview .po23-link-icon { width:32px !important; height:32px !important; flex-basis:32px !important; }
+ #screen-plotoverview .po-delete-footer .btn { min-height:40px !important; height:40px !important; }
+}
+@media(max-width:360px) {
+ #screen-plotoverview .po23-link-card { padding-left:8px !important; padding-right:8px !important; }
+ #screen-plotoverview .po23-link-copy small { font-size:9px !important; }
+}
+</style>
+
 </head>
 
 <body>
@@ -2434,7 +2484,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
       <span class="sync-pill">● Synced</span>
     </div>
     <div class="screen-body" id="po-body"></div>
-    <div style="padding:0 16px 90px"><button class="btn btn-destructive" style="width:100%" onclick="deletePlot(state.plotId)">Delete Plot</button></div>
+    <div class="po-delete-footer"><button class="btn btn-destructive" style="width:100%" onclick="deletePlot(state.plotId)">Delete Plot</button></div>
   </div>
 
   <!-- CHECKLIST -->
@@ -2545,7 +2595,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
       </section>
       <section class="card">
         <h3 style="color:var(--navy);margin-bottom:8px">Workspace information</h3>
-        <div style="font-size:13px;color:var(--muted);line-height:1.8">Version: PlotVault v11.43<br>Storage: This browser/device<br>Projects: <strong id="setting-project-count">0</strong><br>Plots: <strong id="setting-plot-count">0</strong><br>Generated reports: <strong id="setting-report-count">0</strong></div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.8">Version: PlotVault v11.45<br>Storage: This browser/device<br>Projects: <strong id="setting-project-count">0</strong><br>Plots: <strong id="setting-plot-count">0</strong><br>Generated reports: <strong id="setting-report-count">0</strong></div>
       </section>
     </div>
   </div>
@@ -2809,7 +2859,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
     }
 
-    const PLOTVAULT_VERSION = "11.44";
+    const PLOTVAULT_VERSION = "11.45";
     function saveData() {
       try {
         const payload = {
@@ -4501,7 +4551,7 @@ return `
         const project = projects[p.projectId] || {name:'Unknown project'};
         return `<div class="card"><div class="row"><strong style="color:var(--navy)">${escapeHTML(p.number)}</strong><span class="badge ${ready?'badge-green':'badge-amber'}">${ready?'Ready':'Draft available'}</span></div><div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px">${escapeHTML(project.name)} · ${approved}/${items.length} items approved</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="generatePlotReport('${p.id}')">Generate / Print PDF</button><button class="btn btn-secondary btn-sm" onclick="openChecklist('${p.id}')">Review checklist</button></div></div>`;
       }).join('') : '<div class="empty-state"><div class="ic">📄</div>No plots available. Add a plot and complete its Part L checklist to generate a report.</div>';
-      history.innerHTML = reportHistory.length ? [...reportHistory].reverse().map(r => `<div class="card"><div class="row"><strong style="color:var(--navy)">${escapeHTML(r.plotNumber)} · Part L</strong><span class="badge ${r.status==='Draft'?'badge-amber':'badge-blue'}">${r.status || 'Generated'}</span></div><div style="font-size:12px;color:var(--muted);margin:6px 0 12px">${escapeHTML(r.projectName)} · ${escapeHTML(r.generatedAt)}</div><div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm" onclick="openSavedReport('${r.id}')">Open / Print</button><button class="btn btn-secondary btn-sm" onclick="downloadReportHTML('${r.id}')">Download</button><button class="btn btn-primary btn-sm" onclick="emailSavedReport('${r.id}')">Email SAP Assessor</button></div></div>`).join('') : '<div class="empty-state"><div class="ic">🗂️</div>No reports have been generated yet.</div>';
+      history.innerHTML = reportHistory.length ? [...reportHistory].reverse().map(r => `<div class="card"><div class="row"><strong style="color:var(--navy)">${escapeHTML(r.plotNumber)} · Part L</strong><span class="badge ${r.status==='Draft'?'badge-amber':'badge-blue'}">${r.status || 'Generated'}</span></div><div style="font-size:12px;color:var(--muted);margin:6px 0 12px">${escapeHTML(r.projectName)} · ${escapeHTML(r.generatedAt)}</div><div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm" onclick="openSavedReport('${r.id}')">Open / Print</button><button class="btn btn-secondary btn-sm" onclick="downloadReportHTML('${r.id}')">Download</button><button class="btn btn-primary btn-sm" onclick="shareSavedReport('${r.id}')">Email SAP Assessor</button></div></div>`).join('') : '<div class="empty-state"><div class="ic">🗂️</div>No reports have been generated yet.</div>';
     }
     function buildReportDocument(plot) {
       const project = projects[plot.projectId] || {};
@@ -4712,7 +4762,27 @@ html, body { width:100%; max-width:100%; min-height:100%; overflow-x:hidden; }
       if (!win) { toast('Report saved to history. Allow pop-ups to open the print view.'); return; }
       win.document.open(); win.document.write(record.html); win.document.close();
     }
-    function emailSavedReport(id) { const r=reportHistory.find(x=>x.id===id); if(!r)return; const project=projects[r.projectId]||{}; const recipient=r.sapAssessorEmail||project.sapAssessorEmail||''; if(!recipient){toast('Add the SAP Assessor email in Project Details → Edit first');return;} const subject=encodeURIComponent(`PlotVault Part L Evidence Report – ${r.projectName} – ${r.plotNumber}`); const body=encodeURIComponent(`Hello ${r.sapAssessor||project.sapAssessor||'SAP Assessor'},\n\nPlease find the Part L evidence report details below.\nProject: ${r.projectName}\nPlot: ${r.plotNumber}\nGenerated: ${r.generatedAt}\n\nPlease attach the downloaded PlotVault report (HTML/PDF) before sending.\n\nKind regards`); window.location.href=`mailto:${encodeURIComponent(recipient)}?subject=${subject}&body=${body}`; }
+    async function shareSavedReport(id) {
+      const r = reportHistory.find(x => x.id === id); if (!r) return;
+      const project = projects[r.projectId] || {};
+      const recipient = r.sapAssessorEmail || project.sapAssessorEmail || '';
+      if (!recipient) { toast('Add the SAP Assessor email in Project Details → Edit first'); return; }
+      const safePlot = String(r.plotNumber || 'Plot').replace(/[^a-z0-9_-]+/gi, '-');
+      const file = new File([r.html], `PlotVault-${safePlot}-Part-L-Report.html`, { type: 'text/html' });
+      const shareData = {
+        files: [file],
+        title: `PlotVault Part L Evidence Report – ${r.projectName} – ${r.plotNumber}`,
+        text: `To: ${recipient}\nHello ${r.sapAssessor || project.sapAssessor || 'SAP Assessor'},\n\nPlease find attached the PlotVault Part L evidence report.\nProject: ${r.projectName}\nPlot: ${r.plotNumber}\nGenerated: ${r.generatedAt}\n\nKind regards`
+      };
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try { await navigator.share(shareData); }
+        catch (err) { if (err && err.name !== 'AbortError') toast('Unable to open the sharing options on this device'); }
+      } else {
+        downloadReportHTML(id);
+        toast('This browser cannot attach files to the share sheet. The report file has been downloaded instead.');
+      }
+    }
+    function emailSavedReport(id) { shareSavedReport(id); }
     function openSavedReport(id) { const r=reportHistory.find(x=>x.id===id); if(!r)return; const win=window.open('','_blank'); if(!win){toast('Allow pop-ups to open the report');return;} win.document.open();win.document.write(r.html);win.document.close(); }
     function downloadReportHTML(id) { const r=reportHistory.find(x=>x.id===id); if(!r)return; const blob=new Blob([r.html],{type:'text/html'}); const url=URL.createObjectURL(blob); const a=document.createElement('a');a.href=url;a.download=`PlotVault-${String(r.plotNumber).replace(/\W+/g,'-')}-Part-L-Report.html`;a.click();URL.revokeObjectURL(url); }
     function renderSettings() {
