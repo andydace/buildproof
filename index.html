@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlotVault v11.31 – Functional Platform Foundation</title>
+  <title>PlotVault v11.32 – Plot Storage and Mobile Fix</title>
   <style>
     :root {
       --navy: #0F2A3D;
@@ -1373,7 +1373,7 @@
 
 </style>
   <!-- PlotVault v11.23 - Plot Overview Redesign -->
-<meta name="plotvault-version" content="v11.29">
+<meta name="plotvault-version" content="v11.32">
 
 <style id="plotvault-v1126-screen-corrections">
 /* v11.26 — Plot Overview: proportions based on the supplied iPhone reference */
@@ -1796,6 +1796,49 @@ html, body { overflow-x: hidden; }
 #bottomnav .nav-item[data-nav="dashboard"],
 #bottomnav .nav-item[data-nav="camera"] {display:none !important;}
 #bottomnav {grid-template-columns:repeat(3,minmax(0,1fr)) !important;}
+</style>
+
+
+
+<style id="plotvault-v1132-mobile-persistence-layout-fixes">
+/* v11.32: lock the two requested iPhone screens to the viewport width. */
+html, body, #frame, #screens { max-width:100%; width:100%; overflow-x:hidden !important; }
+#screen-projectdetails, #screen-plotoverview {
+  width:100%; max-width:100%; min-width:0; overflow-x:hidden !important;
+  overscroll-behavior-x:none; touch-action:pan-y;
+}
+#screen-projectdetails > *, #screen-plotoverview > *,
+#screen-projectdetails .screen-body, #screen-plotoverview .screen-body,
+#screen-projectdetails .project-detail-hero, #screen-projectdetails .project-details-body,
+#screen-plotoverview #po-body {
+  box-sizing:border-box; max-width:100%; min-width:0; overflow-x:hidden !important;
+}
+#screen-projectdetails { overflow-y:auto !important; -webkit-overflow-scrolling:touch; }
+#screen-projectdetails .screen-body, #screen-projectdetails .project-details-body {
+  overflow-y:visible !important; width:100%; min-width:0;
+}
+/* Restore vertical scrolling for the full plot information; do not clip its lower sections. */
+#screen-plotoverview { overflow-y:auto !important; -webkit-overflow-scrolling:touch; }
+#screen-plotoverview.active { display:flex; flex-direction:column; min-height:0; }
+#screen-plotoverview > .topnav { flex:0 0 auto; width:100%; min-width:0; }
+#screen-plotoverview > .screen-body, #screen-plotoverview #po-body {
+  flex:0 0 auto !important; min-height:0; height:auto !important;
+  overflow:visible !important; width:100%; min-width:0; padding:10px 12px 18px !important;
+}
+#screen-plotoverview .po23-wrap, #screen-plotoverview .po23-hero,
+#screen-plotoverview .po23-camera, #screen-plotoverview .po23-compliance,
+#screen-plotoverview .po23-link-card, #screen-plotoverview .po23-timeline-detail {
+  width:100%; max-width:100%; min-width:0; box-sizing:border-box;
+}
+#screen-plotoverview .po23-link-copy, #screen-plotoverview .po23-link-copy small,
+#screen-projectdetails .pd-info-row strong { min-width:0; overflow-wrap:anywhere; word-break:normal; }
+#screen-projectdetails .pd-stats-grid { width:100%; max-width:100%; min-width:0; grid-template-columns:repeat(5,minmax(0,1fr)); }
+#screen-projectdetails .pd-plot-list, #screen-projectdetails #plot-list { width:100%; max-width:100%; min-width:0; }
+#screen-projectdetails .project-detail-content, #screen-projectdetails .pd-overview-card,
+#screen-projectdetails .pd-plots-heading, #screen-projectdetails .pd-plot-list > .card { min-width:0; max-width:100%; }
+#screen-projectdetails .pd-plots-heading { flex-wrap:wrap; }
+#screen-projectdetails .pd-info-grid, #screen-projectdetails .pd-date-grid { min-width:0; max-width:100%; }
+#screen-projectdetails img, #screen-plotoverview img { max-width:100%; }
 </style>
 
 </head>
@@ -2387,7 +2430,7 @@ html, body { overflow-x: hidden; }
       </section>
       <section class="card">
         <h3 style="color:var(--navy);margin-bottom:8px">Workspace information</h3>
-        <div style="font-size:13px;color:var(--muted);line-height:1.8">Version: PlotVault v11.31<br>Storage: This browser/device<br>Projects: <strong id="setting-project-count">0</strong><br>Plots: <strong id="setting-plot-count">0</strong><br>Generated reports: <strong id="setting-report-count">0</strong></div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.8">Version: PlotVault v11.32<br>Storage: This browser/device<br>Projects: <strong id="setting-project-count">0</strong><br>Plots: <strong id="setting-plot-count">0</strong><br>Generated reports: <strong id="setting-report-count">0</strong></div>
       </section>
     </div>
   </div>
@@ -2651,23 +2694,39 @@ html, body { overflow-x: hidden; }
 
     }
 
-    const PLOTVAULT_VERSION = '11.31';
+    const PLOTVAULT_VERSION = '11.32';
     function saveData() {
       try {
-        localStorage.setItem('plotvaultProjects', JSON.stringify(projects));
-        localStorage.setItem('plotvaultPlots', JSON.stringify(plots));
-        localStorage.setItem('plotvaultReports', JSON.stringify(reportHistory));
-        localStorage.setItem('plotvaultSettings', JSON.stringify(appSettings));
+        const payload = {
+          projects: JSON.stringify(projects),
+          plots: JSON.stringify(plots),
+          reports: JSON.stringify(reportHistory),
+          settings: JSON.stringify(appSettings)
+        };
+        localStorage.setItem('plotvaultProjects', payload.projects);
+        localStorage.setItem('plotvaultPlots', payload.plots);
+        localStorage.setItem('plotvaultReports', payload.reports);
+        localStorage.setItem('plotvaultSettings', payload.settings);
         localStorage.setItem('plotvaultVersion', PLOTVAULT_VERSION);
-      } catch (error) { console.error('PlotVault save failed', error); toast('Unable to save data on this device'); }
+        // Read-after-write verification catches Safari storage failures immediately.
+        if (localStorage.getItem('plotvaultPlots') !== payload.plots ||
+            localStorage.getItem('plotvaultProjects') !== payload.projects) {
+          throw new Error('Local storage verification failed');
+        }
+        return true;
+      } catch (error) {
+        console.error('PlotVault save failed', error);
+        toast('Unable to save data on this device. Check Safari storage settings and available space.');
+        return false;
+      }
     }
 
     function loadData() {
-      // v11.31 intentionally starts clean: only Doseley Halt, with no demo plots,
-      // sample evidence or sample reports. A one-time migration prevents old
-      // v11.30 local data from reintroducing demonstration records.
+      // Fresh-start cleanup is a one-time migration only. Never clear user records
+      // merely because a later app version is installed.
       const storedVersion = localStorage.getItem('plotvaultVersion');
-      if (storedVersion !== PLOTVAULT_VERSION) {
+      const cleanStartApplied = localStorage.getItem('plotvaultCleanStartApplied') === 'yes';
+      if (!cleanStartApplied && storedVersion !== '11.31' && storedVersion !== '11.32') {
         localStorage.removeItem('plotvaultProjects');
         localStorage.removeItem('plotvaultPlots');
         localStorage.removeItem('plotvaultReports');
@@ -2675,9 +2734,11 @@ html, body { overflow-x: hidden; }
         projects = { doseley: { id:'doseley', name:'Doseley Halt', location:'Telford, Shropshire', client:'', siteManager:'', status:'Active', plots:0, completion:0, compliance:0, updated:'Not yet updated', startDate:'', targetDate:'' } };
         plots = {}; reportHistory = [];
         appSettings = { assessor:'', role:'', email:'', company:'', address:'', phone:'', companyEmail:'', reportFooter:'', showCompany:true };
+        localStorage.setItem('plotvaultCleanStartApplied', 'yes');
         saveData();
         return;
       }
+      localStorage.setItem('plotvaultCleanStartApplied', 'yes');
       try {
         const savedProjects = localStorage.getItem('plotvaultProjects');
         const savedPlots = localStorage.getItem('plotvaultPlots');
@@ -2687,14 +2748,27 @@ html, body { overflow-x: hidden; }
         if (savedPlots) plots = JSON.parse(savedPlots);
         if (savedReports) reportHistory = JSON.parse(savedReports);
         if (savedSettings) appSettings = { ...appSettings, ...JSON.parse(savedSettings) };
-        if (!projects.doseley) projects.doseley = { id:'doseley', name:'Doseley Halt', location:'Telford, Shropshire', client:'', siteManager:'', status:'Active', plots:0, completion:0, compliance:0, updated:'Not yet updated' };
+        if (!projects || typeof projects !== 'object') projects = {};
+        if (!projects.doseley && Object.keys(projects).length === 0) {
+          projects.doseley = { id:'doseley', name:'Doseley Halt', location:'Telford, Shropshire', client:'', siteManager:'', status:'Active', plots:0, completion:0, compliance:0, updated:'Not yet updated' };
+        }
         if (!Array.isArray(reportHistory)) reportHistory = [];
         if (!plots || typeof plots !== 'object') plots = {};
+        // Repair missing/mismatched IDs without discarding existing plot data.
+        Object.entries(projects).forEach(([id, project]) => { if (project && !project.id) project.id = id; });
+        Object.entries(plots).forEach(([id, plot]) => {
+          if (!plot || typeof plot !== 'object') { delete plots[id]; return; }
+          if (!plot.id) plot.id = id;
+          if (!Array.isArray(plot.checklist)) plot.checklist = [];
+          if (!Array.isArray(plot.gallery)) plot.gallery = [];
+          if (!Array.isArray(plot.timeline)) plot.timeline = [];
+        });
       } catch (error) {
         console.error('PlotVault data could not be read', error);
-        toast('Saved data could not be read. A clean workspace has been opened.');
-        projects = { doseley: { id:'doseley', name:'Doseley Halt', location:'Telford, Shropshire', client:'', siteManager:'', status:'Active', plots:0, completion:0, compliance:0, updated:'Not yet updated' } };
-        plots = {}; reportHistory = [];
+        toast('Saved data could not be read. Existing storage has been left untouched.');
+        projects = projects || {};
+        plots = plots || {};
+        reportHistory = Array.isArray(reportHistory) ? reportHistory : [];
       }
     }
 
@@ -2724,7 +2798,9 @@ html, body { overflow-x: hidden; }
     function go(screen, push = true) {
       if (push && state.screen !== screen) state.history.push(state.screen);
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById('screen-' + screen).classList.add('active');
+      const targetScreen = document.getElementById('screen-' + screen);
+      if (!targetScreen) { console.error('PlotVault screen not found:', screen); toast('This screen is unavailable'); return; }
+      targetScreen.classList.add('active');
       state.screen = screen;
       updateBottomNav(screen);
       updateFab(screen);
@@ -2771,10 +2847,12 @@ html, body { overflow-x: hidden; }
       const map = { dashboard: 'dashboard', projects: 'projects', projectdetails: 'projects', plotoverview: 'projects', reports: 'reports', settings: 'settings', notifications: 'settings', userprofile: 'settings', camera: 'camera', category: 'camera', notes: 'camera', photoreview: 'camera' };
       const active = map[screen];
       document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.dataset.nav === active));
-      document.getElementById('bottomnav').style.display = ['splash', 'login', 'companysetup', 'camera', 'category', 'notes', 'photoreview'].includes(screen) ? 'none' : 'flex';
+      const bottomNav = document.getElementById('bottomnav');
+      if (bottomNav) bottomNav.style.display = ['splash', 'login', 'companysetup', 'camera', 'category', 'notes', 'photoreview'].includes(screen) ? 'none' : 'flex';
     }
     function updateFab(screen) {
-      document.getElementById('fabbtn').style.display = ['dashboard', 'projects', 'projectdetails', 'plotoverview', 'reports', 'settings', 'notifications', 'userprofile'].includes(screen) ? 'flex' : 'none';
+      const fab = document.getElementById('fabbtn');
+      if (fab) fab.style.display = ['dashboard', 'projects', 'projectdetails', 'plotoverview', 'reports', 'settings', 'notifications', 'userprofile'].includes(screen) ? 'flex' : 'none';
     }
 
     /* ---------------- NAVIGATION HELPERS ---------------- */
@@ -3418,10 +3496,12 @@ return `
       const plotNumber = String(p.number || 'Plot').replace(/^Plot\s*/i, '');
       const latestActivity = p.timeline.length ? p.timeline[0][1] : 'No activity yet';
 
-      document.getElementById('po-number').textContent = p.number || 'Plot';
-      document.getElementById('po-project').textContent = project.name || 'Development';
-
+      const numberHeading = document.getElementById('po-number');
+      const projectHeading = document.getElementById('po-project');
       const body = document.getElementById('po-body');
+      if (!body || !numberHeading || !projectHeading) { console.error('Plot overview markup is incomplete'); toast('Plot information could not be displayed'); return; }
+      numberHeading.textContent = p.number || 'Plot';
+      projectHeading.textContent = project.name || 'Development';
       body.innerHTML = `
         <div class="po23-wrap">
           <section class="po23-hero" aria-label="Plot summary">
@@ -4074,7 +4154,15 @@ return `
 
     function renderProjects() {
       updateProjectStats();
-      const matchingProjects = Object.values(projects).filter(project => {
+      const seenProjectKeys = new Set();
+      const uniqueProjects = Object.values(projects).filter(project => {
+        if (!project) return false;
+        const key = `${String(project.name || '').trim().toLowerCase()}|${String(project.location || '').trim().toLowerCase()}`;
+        if (seenProjectKeys.has(key)) return false;
+        seenProjectKeys.add(key);
+        return true;
+      });
+      const matchingProjects = uniqueProjects.filter(project => {
         const searchableText = `${project.name} ${project.location}`.toLowerCase();
         const status = (project.status || '').toLowerCase();
         const matchesSearch = searchableText.includes(projectSearch);
@@ -4117,13 +4205,33 @@ return `
 
     function filterProjects() { renderProjects(); }
 
+    let projectCreateInProgress = false;
     function addProject() {
-      const name = prompt('Enter the project / development name');
-      if (!name || !name.trim()) return;
-      const location = prompt('Enter the site location') || '';
-      const id = 'project_' + Date.now();
-      projects[id] = { id, name:name.trim(), location:location.trim(), client:'', siteManager:'', status:'Active', plots:0, completion:0, compliance:0, updated:new Date().toLocaleDateString('en-GB'), startDate:'', targetDate:'' };
-      saveData(); renderProjects(); toast('Project created');
+      if (projectCreateInProgress) return;
+      projectCreateInProgress = true;
+      try {
+        const name = prompt('Enter the project / development name');
+        if (!name || !name.trim()) return;
+        const location = prompt('Enter the site location') || '';
+        const cleanName = name.trim();
+        const cleanLocation = location.trim();
+        const existing = Object.values(projects).find(p =>
+          String(p.name || '').trim().toLowerCase() === cleanName.toLowerCase() &&
+          String(p.location || '').trim().toLowerCase() === cleanLocation.toLowerCase()
+        );
+        if (existing) {
+          toast('This project already exists. Opening the existing project.');
+          openProject(existing.id);
+          return;
+        }
+        const id = 'project_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+        projects[id] = { id, name:cleanName, location:cleanLocation, client:'', siteManager:'', status:'Active', plots:0, completion:0, compliance:0, updated:new Date().toLocaleDateString('en-GB'), startDate:'', targetDate:'' };
+        if (!saveData()) { delete projects[id]; return; }
+        renderProjects();
+        toast('Project created');
+      } finally {
+        projectCreateInProgress = false;
+      }
     }
 
     function deleteProject(id) {
@@ -4146,106 +4254,49 @@ return `
       saveData(); renderPlotList(); renderProjects(); go('projectdetails'); toast('Plot deleted');
     }
 
+    let plotCreateInProgress = false;
     function createPlotFromForm() {
-
-      const plotNumber =
-        document.getElementById(
-          'new-plot-number'
-        ).value.trim();
-
-      const houseType =
-        document.getElementById(
-          'new-house-type'
-        ).value.trim();
-
-      if (!plotNumber) {
-        toast("Enter a plot number");
-        return;
-      }
-      const duplicate = Object.values(plots).some(p => p.projectId === state.projectId && String(p.number).trim().toLowerCase() === plotNumber.toLowerCase());
+      if (plotCreateInProgress) return;
+      const numberEl = document.getElementById('new-plot-number');
+      const typeEl = document.getElementById('new-house-type');
+      if (!numberEl || !typeEl) { toast('The Add Plot form is unavailable'); return; }
+      const plotNumber = numberEl.value.trim();
+      const houseType = typeEl.value.trim();
+      if (!plotNumber) { toast('Enter a plot number'); numberEl.focus(); return; }
+      if (!projects[state.projectId]) { toast('Select a project before adding a plot'); return; }
+      const duplicate = Object.values(plots).some(p => p && p.projectId === state.projectId && String(p.number).trim().toLowerCase() === plotNumber.toLowerCase());
       if (duplicate) { toast('That plot number already exists in this project'); return; }
-
-      const id = "plot" + Date.now();
-
+      plotCreateInProgress = true;
+      const id = 'plot_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
       plots[id] = {
-        id: id,
-        projectId: state.projectId,
-        number: plotNumber,
-        houseType: houseType || "New Plot",
-        stage: "Not Started",
-        status: "Not Started",
-        score: 0,
-        last: "Just created",
-        checklist: mkChecklist('missing'),
-        missing: [],
-        timeline: [],
-        gallery: []
+        id, projectId:state.projectId, number:plotNumber, houseType:houseType || 'New Plot',
+        stage:'Not Started', status:'Not Started', score:0, last:'Just created',
+        checklist:mkChecklist('missing'), missing:[], timeline:[], gallery:[]
       };
-
-      saveData();
-
+      const saved = saveData();
+      plotCreateInProgress = false;
+      if (!saved) { delete plots[id]; return; }
+      numberEl.value = '';
+      typeEl.selectedIndex = 0;
       renderPlotList();
-
-      document.getElementById(
-        'new-plot-number'
-      ).value = '';
-
-      document.getElementById('new-house-type').selectedIndex = 0;
-
+      renderProjects();
       go('projectdetails');
-
-      toast("Plot added");
+      toast('Plot added and saved');
     }
+
     function addPlot() {
-
-
-      const plotNumber = prompt("Enter plot number");
-
-      if (!plotNumber) return;
-      const id = "plot" + Date.now();
-
-      plots[id] = {
-        id: id,
-        projectId: state.projectId,
-        number: plotNumber,
-        houseType: "New Plot",
-        stage: "Not Started",
-        status: "Not Started",
-        score: 0,
-        last: "Just created",
-        checklist: [],
-        missing: [],
-        timeline: [],
-        gallery: []
-      };
-      console.log("PLOT ADDED", id);
-
-      const plotList = document.getElementById('plot-list');
-
-      plotList.insertAdjacentHTML(
-        'beforeend',
-        `
-    <div class="card tap">
-      <div class="row">
-        <span style="font-weight:800;color:var(--navy);">
-          ${plotNumber}
-        </span>
-        <span class="badge badge-blue">New</span>
-      </div>
-
-      <div style="font-size:12px;color:var(--muted);margin-top:4px;">
-        New plot created
-      </div>
-    </div>
-    `
-      );
-      console.log('ABOUT TO SAVE');
-      saveData();
-
-      renderPlotList();
-
-      toast("Plot added");
+      const plotNumber = prompt('Enter plot number');
+      if (!plotNumber || !plotNumber.trim()) return;
+      if (!projects[state.projectId]) { toast('Select a project before adding a plot'); return; }
+      if (Object.values(plots).some(p => p && p.projectId === state.projectId && String(p.number).trim().toLowerCase() === plotNumber.trim().toLowerCase())) {
+        toast('That plot number already exists in this project'); return;
+      }
+      const id = 'plot_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
+      plots[id] = { id, projectId:state.projectId, number:plotNumber.trim(), houseType:'New Plot', stage:'Not Started', status:'Not Started', score:0, last:'Just created', checklist:mkChecklist('missing'), missing:[], timeline:[], gallery:[] };
+      if (!saveData()) { delete plots[id]; return; }
+      renderPlotList(); renderProjects(); toast('Plot added and saved');
     }
+
     function editPlot() {
 
       const plot = plots[state.plotId];
@@ -4325,9 +4376,9 @@ return `
         const approved = items.filter(i => i[1] === 'done').length;
         const ready = items.length > 0 && approved === items.length;
         const project = projects[p.projectId] || {name:'Unknown project'};
-        return `<div class="card"><div class="row"><strong style="color:var(--navy)">${escapeHTML(p.number)}</strong><span class="badge ${ready?'badge-green':'badge-amber'}">${ready?'Ready':'Blocked'}</span></div><div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px">${escapeHTML(project.name)} · ${approved}/${items.length} items approved</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ${ready?'btn-primary':'btn-secondary'} btn-sm" ${ready?'':'disabled'} onclick="generatePlotReport('${p.id}')">Print / Save as PDF</button><button class="btn btn-secondary btn-sm" onclick="openChecklist('${p.id}')">Review checklist</button></div></div>`;
+        return `<div class="card"><div class="row"><strong style="color:var(--navy)">${escapeHTML(p.number)}</strong><span class="badge ${ready?'badge-green':'badge-amber'}">${ready?'Ready':'Draft available'}</span></div><div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px">${escapeHTML(project.name)} · ${approved}/${items.length} items approved</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="generatePlotReport('${p.id}')">Generate / Print PDF</button><button class="btn btn-secondary btn-sm" onclick="openChecklist('${p.id}')">Review checklist</button></div></div>`;
       }).join('') : '<div class="empty-state"><div class="ic">📄</div>No plots available. Add a plot and complete its Part L checklist to generate a report.</div>';
-      history.innerHTML = reportHistory.length ? [...reportHistory].reverse().map(r => `<div class="card"><div class="row"><strong style="color:var(--navy)">${escapeHTML(r.plotNumber)} · Part L</strong><span class="badge badge-blue">Generated</span></div><div style="font-size:12px;color:var(--muted);margin:6px 0 12px">${escapeHTML(r.projectName)} · ${escapeHTML(r.generatedAt)}</div><div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm" onclick="openSavedReport('${r.id}')">Open / Print</button><button class="btn btn-secondary btn-sm" onclick="downloadReportHTML('${r.id}')">Download</button></div></div>`).join('') : '<div class="empty-state"><div class="ic">🗂️</div>No reports have been generated yet.</div>';
+      history.innerHTML = reportHistory.length ? [...reportHistory].reverse().map(r => `<div class="card"><div class="row"><strong style="color:var(--navy)">${escapeHTML(r.plotNumber)} · Part L</strong><span class="badge ${r.status==='Draft'?'badge-amber':'badge-blue'}">${r.status || 'Generated'}</span></div><div style="font-size:12px;color:var(--muted);margin:6px 0 12px">${escapeHTML(r.projectName)} · ${escapeHTML(r.generatedAt)}</div><div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm" onclick="openSavedReport('${r.id}')">Open / Print</button><button class="btn btn-secondary btn-sm" onclick="downloadReportHTML('${r.id}')">Download</button></div></div>`).join('') : '<div class="empty-state"><div class="ic">🗂️</div>No reports have been generated yet.</div>';
     }
     function buildReportDocument(plot) {
       const project = projects[plot.projectId] || {};
@@ -4339,9 +4390,9 @@ return `
     function generatePlotReport(plotId) {
       const plot = plots[plotId]; if (!plot) return;
       const items = plot.checklist || [];
-      if (!items.length || items.some(i => i[1] !== 'done')) { toast('All Part L items must be approved before generating a report'); return; }
+      const isDraft = !items.length || items.some(i => i[1] !== 'done');
       const project = projects[plot.projectId] || {};
-      const record = { id:'report_'+Date.now(), plotId, projectId:plot.projectId, plotNumber:plot.number, projectName:project.name || '', generatedAt:new Date().toLocaleString('en-GB'), html:buildReportDocument(plot) };
+      const record = { id:'report_'+Date.now(), plotId, projectId:plot.projectId, plotNumber:plot.number, projectName:project.name || '', generatedAt:new Date().toLocaleString('en-GB'), status:isDraft?'Draft':'Approved', html:buildReportDocument(plot) };
       reportHistory.push(record); saveData(); renderReports();
       const win = window.open('', '_blank');
       if (!win) { toast('Report saved to history. Allow pop-ups to open the print view.'); return; }
