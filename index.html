@@ -2338,11 +2338,13 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
       <section class="card pd-overview-card">
         <div class="pd-card-heading">
           <h3>Project Overview</h3>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button onclick="editProject()">✎ Edit</button><button onclick="deleteProject(state.projectId)" style="color:#C62828">Delete</button></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button onclick="editProject()" title="Edit project and SAP Assessor contact details">✎ Edit</button><button onclick="deleteProject(state.projectId)" style="color:#C62828">Delete</button></div>
         </div>
         <div class="pd-info-grid">
           <div class="pd-info-row"><span>Client</span><strong id="pd-client">Central &amp; Country Developments</strong></div>
           <div class="pd-info-row"><span>Site Manager</span><strong id="pd-sitemanager">Site manager</strong></div>
+          <div class="pd-info-row"><span>SAP Assessor</span><strong id="pd-sap-assessor">Not set</strong></div>
+          <div class="pd-info-row"><span>SAP Assessor Email</span><strong id="pd-sap-email">Not set</strong></div>
           <div class="pd-info-row"><span>Address</span><strong id="pd-location">Doseley Halt, Telford, Shropshire</strong></div>
         </div>
         <div class="pd-date-grid">
@@ -2543,7 +2545,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
       </section>
       <section class="card">
         <h3 style="color:var(--navy);margin-bottom:8px">Workspace information</h3>
-        <div style="font-size:13px;color:var(--muted);line-height:1.8">Version: PlotVault v11.37<br>Storage: This browser/device<br>Projects: <strong id="setting-project-count">0</strong><br>Plots: <strong id="setting-plot-count">0</strong><br>Generated reports: <strong id="setting-report-count">0</strong></div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.8">Version: PlotVault v11.43<br>Storage: This browser/device<br>Projects: <strong id="setting-project-count">0</strong><br>Plots: <strong id="setting-plot-count">0</strong><br>Generated reports: <strong id="setting-report-count">0</strong></div>
       </section>
     </div>
   </div>
@@ -2807,7 +2809,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
     }
 
-    const PLOTVAULT_VERSION = '11.36';
+    const PLOTVAULT_VERSION = "11.43";
     function saveData() {
       try {
         const payload = {
@@ -2999,6 +3001,8 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
         projects[id].client || "Not set";
 
       document.getElementById('pd-sitemanager').textContent = projects[id].siteManager || 'Not set';
+      const sapNameEl = document.getElementById('pd-sap-assessor'); if (sapNameEl) sapNameEl.textContent = projects[id].sapAssessor || 'Not set';
+      const sapEmailEl = document.getElementById('pd-sap-email'); if (sapEmailEl) sapEmailEl.textContent = projects[id].sapAssessorEmail || 'Not set';
       const startDateEl = document.getElementById('pd-start-date'); if (startDateEl) startDateEl.textContent = projects[id].startDate || 'Not set';
       const targetDateEl = document.getElementById('pd-target-date'); if (targetDateEl) targetDateEl.textContent = projects[id].targetDate || 'Not set';
 
@@ -3024,6 +3028,9 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
         prompt("Client", project.client || "");
 
       const newSiteManager = prompt('Site Manager', project.siteManager || '');
+      const sapAssessor = prompt('SAP Assessor name', project.sapAssessor || '');
+      const sapAssessorEmail = prompt('SAP Assessor email address', project.sapAssessorEmail || '');
+      if (sapAssessorEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sapAssessorEmail)) { toast('Please enter a valid SAP Assessor email address'); return; }
       const startDate = prompt('Start date (optional)', project.startDate || '');
       const targetDate = prompt('Target completion date (optional)', project.targetDate || '');
 
@@ -3031,6 +3038,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
       project.location = newLocation;
       project.client = newClient;
       project.siteManager = newSiteManager;
+      project.sapAssessor = sapAssessor || ''; project.sapAssessorEmail = sapAssessorEmail || '';
       project.startDate = startDate || ''; project.targetDate = targetDate || '';
       project.updated = new Date().toLocaleDateString('en-GB');
 
@@ -3048,6 +3056,8 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
       document.getElementById('pd-sitemanager').textContent =
         project.siteManager || "Not set";
+      const sapNameEl = document.getElementById('pd-sap-assessor'); if (sapNameEl) sapNameEl.textContent = project.sapAssessor || 'Not set';
+      const sapEmailEl = document.getElementById('pd-sap-email'); if (sapEmailEl) sapEmailEl.textContent = project.sapAssessorEmail || 'Not set';
 
 
       const sd=document.getElementById('pd-start-date'); if(sd) sd.textContent=project.startDate || 'Not set';
@@ -4338,7 +4348,7 @@ return `
           return;
         }
         const id = 'project_' + Date.now() + '_' + Math.random().toString(36).slice(2,7);
-        projects[id] = { id, name:cleanName, location:cleanLocation, client:'', siteManager:'', status:'Active', plots:0, completion:0, compliance:0, updated:new Date().toLocaleDateString('en-GB'), startDate:'', targetDate:'' };
+        projects[id] = { id, name:cleanName, location:cleanLocation, client:'', siteManager:'', sapAssessor:'', sapAssessorEmail:'', status:'Active', plots:0, completion:0, compliance:0, updated:new Date().toLocaleDateString('en-GB'), startDate:'', targetDate:'' };
         if (!saveData()) { delete projects[id]; return; }
         renderProjects();
         toast('Project created');
@@ -4491,7 +4501,7 @@ return `
         const project = projects[p.projectId] || {name:'Unknown project'};
         return `<div class="card"><div class="row"><strong style="color:var(--navy)">${escapeHTML(p.number)}</strong><span class="badge ${ready?'badge-green':'badge-amber'}">${ready?'Ready':'Draft available'}</span></div><div style="font-size:12.5px;color:var(--muted);margin:6px 0 12px">${escapeHTML(project.name)} · ${approved}/${items.length} items approved</div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="generatePlotReport('${p.id}')">Generate / Print PDF</button><button class="btn btn-secondary btn-sm" onclick="openChecklist('${p.id}')">Review checklist</button></div></div>`;
       }).join('') : '<div class="empty-state"><div class="ic">📄</div>No plots available. Add a plot and complete its Part L checklist to generate a report.</div>';
-      history.innerHTML = reportHistory.length ? [...reportHistory].reverse().map(r => `<div class="card"><div class="row"><strong style="color:var(--navy)">${escapeHTML(r.plotNumber)} · Part L</strong><span class="badge ${r.status==='Draft'?'badge-amber':'badge-blue'}">${r.status || 'Generated'}</span></div><div style="font-size:12px;color:var(--muted);margin:6px 0 12px">${escapeHTML(r.projectName)} · ${escapeHTML(r.generatedAt)}</div><div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm" onclick="openSavedReport('${r.id}')">Open / Print</button><button class="btn btn-secondary btn-sm" onclick="downloadReportHTML('${r.id}')">Download</button></div></div>`).join('') : '<div class="empty-state"><div class="ic">🗂️</div>No reports have been generated yet.</div>';
+      history.innerHTML = reportHistory.length ? [...reportHistory].reverse().map(r => `<div class="card"><div class="row"><strong style="color:var(--navy)">${escapeHTML(r.plotNumber)} · Part L</strong><span class="badge ${r.status==='Draft'?'badge-amber':'badge-blue'}">${r.status || 'Generated'}</span></div><div style="font-size:12px;color:var(--muted);margin:6px 0 12px">${escapeHTML(r.projectName)} · ${escapeHTML(r.generatedAt)}</div><div style="display:flex;gap:8px"><button class="btn btn-secondary btn-sm" onclick="openSavedReport('${r.id}')">Open / Print</button><button class="btn btn-secondary btn-sm" onclick="downloadReportHTML('${r.id}')">Download</button><button class="btn btn-primary btn-sm" onclick="emailSavedReport('${r.id}')">Email SAP Assessor</button></div></div>`).join('') : '<div class="empty-state"><div class="ic">🗂️</div>No reports have been generated yet.</div>';
     }
     function buildReportDocument(plot) {
       const project = projects[plot.projectId] || {};
@@ -4509,7 +4519,7 @@ return `
       }).join('');
       const evidenceRegister = (plot.gallery || []).map((photo,i) => `<tr><td>${i+1}</td><td>${escapeHTML(photo.category || 'Uncategorised')}</td><td>${escapeHTML(photo.timestamp || photo.date || 'Date not recorded')}</td><td>${Number.isFinite(Number(photo.latitude)) && Number.isFinite(Number(photo.longitude)) ? `${Number(photo.latitude).toFixed(6)}, ${Number(photo.longitude).toFixed(6)}` : 'Not recorded'}</td><td>${escapeHTML(photo.notes || '')}</td></tr>`).join('');
       return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="plotvault-build" content="11.39"><title>Part L Report - ${escapeHTML(plot.number)}</title><style>
+<meta name="plotvault-build" content="11.43"><title>Part L Report - ${escapeHTML(plot.number)}</title><style>
         *{box-sizing:border-box}body{font:14px Arial,sans-serif;color:#263746;margin:32px;line-height:1.45}h1,h2{color:#0F2A3D}header{border-bottom:3px solid #1E6B8C;padding-bottom:16px;margin-bottom:22px}.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px 0}table{width:100%;border-collapse:collapse;margin-top:12px}th,td{text-align:left;padding:9px;border:1px solid #d9e0e6;vertical-align:top}th{background:#edf3f7}.footer{margin-top:32px;color:#667;font-size:12px}.evidence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:14px}.evidence-photo{margin:0;break-inside:avoid;page-break-inside:avoid}.photo-frame{display:flex;justify-content:center;align-items:flex-end;width:100%;overflow:hidden;background:#e9eef2}.photo-image-wrap{position:relative;display:inline-block;max-width:100%;line-height:0}.photo-frame img{display:block;width:auto;height:auto;max-width:100%;max-height:430px;object-fit:contain}.photo-stamp{position:absolute;right:8px;bottom:8px;max-width:78%;display:flex;flex-direction:column;gap:2px;padding:0;background:transparent;border:0;color:#fff;font-size:10px;line-height:1.25;text-align:right;overflow-wrap:anywhere;text-shadow:0 1px 3px rgba(0,0,0,.95),1px 0 2px rgba(0,0,0,.85),-1px 0 2px rgba(0,0,0,.85)}.photo-stamp strong{font-size:12px}.evidence-photo figcaption{font-size:11px;padding:7px 1px;color:#425466}.evidence-photo figcaption small{color:#667}.no-photos{padding:16px;background:#f4f7f9;border:1px solid #d9e0e6}@media(max-width:700px){body{margin:16px}.evidence-grid{grid-template-columns:1fr}}@media print{body{margin:12mm}.evidence-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.photo-frame,.evidence-photo{break-inside:avoid;page-break-inside:avoid}.photo-stamp{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
       </style>
 <style id="plotvault-v1137-iphone-fit-and-report-navigation">
@@ -4625,19 +4635,20 @@ html, body { width:100%; max-width:100%; min-height:100%; overflow-x:hidden; }
   #screen-plotoverview > div:last-child .btn { min-height:46px !important; }
 }
 </style>
-</head><body><nav class="report-toolbar" aria-label="Report navigation"><strong>PlotVault Evidence Report</strong><button type="button" onclick="window.close();setTimeout(function(){if(!window.closed){history.back();}},120)">← Back to PlotVault</button></nav><header><h1>PlotVault — Part L Evidence Report</h1><div>${escapeHTML(project.name || '')} · ${escapeHTML(project.location || '')}</div></header><h2>Plot details</h2><div class="meta"><div><b>Plot:</b> ${escapeHTML(plot.number)}</div><div><b>House type:</b> ${escapeHTML(plot.houseType || 'Not recorded')}</div><div><b>Build stage:</b> ${escapeHTML(plot.stage || 'Not recorded')}</div><div><b>Report generated:</b> ${new Date().toLocaleString('en-GB')}</div><div><b>Client:</b> ${escapeHTML(project.client || 'Not recorded')}</div><div><b>Site manager:</b> ${escapeHTML(project.siteManager || 'Not recorded')}</div></div>${settings.showCompany && settings.company ? `<h2>Company / assessor</h2><p>${escapeHTML(settings.company)}<br>${escapeHTML(settings.address)}<br>${escapeHTML(settings.phone)} · ${escapeHTML(settings.companyEmail)}<br>Assessor: ${escapeHTML(settings.assessor)} (${escapeHTML(settings.role)})</p>` : ''}<h2>Part L checklist</h2><table><thead><tr><th>Inspection item</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table><h2>Photographic evidence</h2><p>Each photograph is stamped in the corner with its project name, plot, section, capture date/time and GPS coordinates where available.</p><div class="evidence-grid">${photos || '<div class="no-photos">No evidence photos recorded for this plot.</div>'}</div><h2>Evidence register</h2><table><thead><tr><th>#</th><th>Section</th><th>Date / time</th><th>GPS coordinates</th><th>Notes</th></tr></thead><tbody>${evidenceRegister || '<tr><td colspan="5">No evidence photos recorded.</td></tr>'}</tbody></table><p><b>Checklist completion:</b> ${(plot.checklist || []).filter(i=>i[1]==='done').length} / ${(plot.checklist || []).length} approved</p><div class="footer">${escapeHTML(settings.reportFooter || 'Generated by PlotVault. This report records the data held in the application at the time of generation.')}</div><script>window.onload=()=>setTimeout(()=>window.print(),350)<\/script></body></html>`;
+</head><body><nav class="report-toolbar" aria-label="Report navigation"><strong>PlotVault Evidence Report</strong><button type="button" onclick="window.close();setTimeout(function(){if(!window.closed){history.back();}},120)">← Back to PlotVault</button></nav><header><h1>PlotVault — Part L Evidence Report</h1><div>${escapeHTML(project.name || '')} · ${escapeHTML(project.location || '')}</div></header><h2>Plot details</h2><div class="meta"><div><b>Plot:</b> ${escapeHTML(plot.number)}</div><div><b>House type:</b> ${escapeHTML(plot.houseType || 'Not recorded')}</div><div><b>Build stage:</b> ${escapeHTML(plot.stage || 'Not recorded')}</div><div><b>Report generated:</b> ${new Date().toLocaleString('en-GB')}</div><div><b>Client:</b> ${escapeHTML(project.client || 'Not recorded')}</div><div><b>Site manager:</b> ${escapeHTML(project.siteManager || 'Not recorded')}</div></div>${(settings.showCompany && settings.company) || project.sapAssessor || project.sapAssessorEmail ? `<h2>Company / SAP Assessor</h2><p>${settings.showCompany ? `${escapeHTML(settings.company)}<br>${escapeHTML(settings.address)}<br>${escapeHTML(settings.phone)} · ${escapeHTML(settings.companyEmail)}<br>` : ''}SAP Assessor: ${escapeHTML(project.sapAssessor || 'Not recorded')}<br>SAP Assessor email: ${escapeHTML(project.sapAssessorEmail || 'Not recorded')}</p>` : ''}<h2>Part L checklist</h2><table><thead><tr><th>Inspection item</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table><h2>Photographic evidence</h2><p>Each photograph is stamped in the corner with its project name, plot, section, capture date/time and GPS coordinates where available.</p><div class="evidence-grid">${photos || '<div class="no-photos">No evidence photos recorded for this plot.</div>'}</div><h2>Evidence register</h2><table><thead><tr><th>#</th><th>Section</th><th>Date / time</th><th>GPS coordinates</th><th>Notes</th></tr></thead><tbody>${evidenceRegister || '<tr><td colspan="5">No evidence photos recorded.</td></tr>'}</tbody></table><p><b>Checklist completion:</b> ${(plot.checklist || []).filter(i=>i[1]==='done').length} / ${(plot.checklist || []).length} approved</p><div class="footer">${escapeHTML(settings.reportFooter || 'Generated by PlotVault. This report records the data held in the application at the time of generation.')}</div><script>window.onload=()=>setTimeout(()=>window.print(),350)<\/script></body></html>`;
     }
     function generatePlotReport(plotId) {
       const plot = plots[plotId]; if (!plot) return;
       const items = plot.checklist || [];
       const isDraft = !items.length || items.some(i => i[1] !== 'done');
       const project = projects[plot.projectId] || {};
-      const record = { id:'report_'+Date.now(), plotId, projectId:plot.projectId, plotNumber:plot.number, projectName:project.name || '', generatedAt:new Date().toLocaleString('en-GB'), status:isDraft?'Draft':'Approved', html:buildReportDocument(plot) };
+      const record = { id:'report_'+Date.now(), plotId, projectId:plot.projectId, plotNumber:plot.number, projectName:project.name || '', sapAssessor:project.sapAssessor || '', sapAssessorEmail:project.sapAssessorEmail || '', generatedAt:new Date().toLocaleString('en-GB'), status:isDraft?'Draft':'Approved', html:buildReportDocument(plot) };
       reportHistory.push(record); saveData(); renderReports();
       const win = window.open('', '_blank');
       if (!win) { toast('Report saved to history. Allow pop-ups to open the print view.'); return; }
       win.document.open(); win.document.write(record.html); win.document.close();
     }
+    function emailSavedReport(id) { const r=reportHistory.find(x=>x.id===id); if(!r)return; const project=projects[r.projectId]||{}; const recipient=r.sapAssessorEmail||project.sapAssessorEmail||''; if(!recipient){toast('Add the SAP Assessor email in Project Details → Edit first');return;} const subject=encodeURIComponent(`PlotVault Part L Evidence Report – ${r.projectName} – ${r.plotNumber}`); const body=encodeURIComponent(`Hello ${r.sapAssessor||project.sapAssessor||'SAP Assessor'},\n\nPlease find the Part L evidence report details below.\nProject: ${r.projectName}\nPlot: ${r.plotNumber}\nGenerated: ${r.generatedAt}\n\nPlease attach the downloaded PlotVault report (HTML/PDF) before sending.\n\nKind regards`); window.location.href=`mailto:${encodeURIComponent(recipient)}?subject=${subject}&body=${body}`; }
     function openSavedReport(id) { const r=reportHistory.find(x=>x.id===id); if(!r)return; const win=window.open('','_blank'); if(!win){toast('Allow pop-ups to open the report');return;} win.document.open();win.document.write(r.html);win.document.close(); }
     function downloadReportHTML(id) { const r=reportHistory.find(x=>x.id===id); if(!r)return; const blob=new Blob([r.html],{type:'text/html'}); const url=URL.createObjectURL(blob); const a=document.createElement('a');a.href=url;a.download=`PlotVault-${String(r.plotNumber).replace(/\W+/g,'-')}-Part-L-Report.html`;a.click();URL.revokeObjectURL(url); }
     function renderSettings() {
@@ -4703,3 +4714,84 @@ html, body { width:100%; max-width:100%; min-height:100%; overflow-x:hidden; }
 </body>
 
 </html>
+<style id="plotvault-v1142-plot-layout-balance">
+/* v11.42: rebalance Plot Overview so Delete Plot remains visible and hero labels do not collide. */
+#screen-plotoverview {
+  height:100dvh !important;
+  max-height:100dvh !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+#screen-plotoverview.active { position:absolute !important; inset:0 !important; }
+#screen-plotoverview > .topnav { flex:0 0 auto !important; }
+#screen-plotoverview > .screen-body,
+#screen-plotoverview #po-body {
+  flex:1 1 auto !important;
+  min-height:0 !important;
+  padding:7px 13px 66px !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+#screen-plotoverview .po23-wrap {
+  height:100% !important;
+  min-height:0 !important;
+  justify-content:space-between !important;
+  gap:7px !important;
+}
+/* Keep the hero large enough for status and progress to occupy separate rows. */
+#screen-plotoverview .po23-hero {
+  flex:0 0 146px !important;
+  min-height:146px !important;
+  max-height:146px !important;
+  padding:12px 16px 11px !important;
+  box-sizing:border-box !important;
+}
+#screen-plotoverview .po23-status {
+  position:relative !important;
+  z-index:2 !important;
+  display:inline-flex !important;
+  max-width:58% !important;
+  margin-top:5px !important;
+  margin-bottom:19px !important;
+  white-space:nowrap !important;
+}
+#screen-plotoverview .po23-progress-line {
+  left:16px !important;
+  right:16px !important;
+  bottom:9px !important;
+  z-index:3 !important;
+}
+#screen-plotoverview .po23-camera { flex:0 0 auto !important; min-height:52px !important; }
+#screen-plotoverview .po23-compliance {
+  flex:0 0 auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  padding:8px 10px !important;
+}
+#screen-plotoverview .po23-count { min-height:49px !important; }
+#screen-plotoverview .po23-link-card {
+  flex:0 0 auto !important;
+  min-height:43px !important;
+  max-height:none !important;
+}
+/* Pin Delete Plot inside the screen's safe bottom area, rather than below the viewport. */
+#screen-plotoverview > div[style*="padding:0 16px 90px"] {
+  position:absolute !important;
+  z-index:20 !important;
+  left:0 !important;
+  right:0 !important;
+  bottom:env(safe-area-inset-bottom, 0px) !important;
+  padding:7px 16px 8px !important;
+  margin:0 !important;
+  background:linear-gradient(to top, #f3f6fa 78%, rgba(243,246,250,0)) !important;
+  box-sizing:border-box !important;
+}
+#screen-plotoverview > div[style*="padding:0 16px 90px"] .btn { min-height:39px !important; }
+@media(max-height:720px) {
+  #screen-plotoverview .po23-hero { flex-basis:132px !important; min-height:132px !important; max-height:132px !important; }
+  #screen-plotoverview .po23-status { margin-bottom:13px !important; }
+  #screen-plotoverview .po23-camera { min-height:46px !important; }
+  #screen-plotoverview .po23-count { min-height:44px !important; }
+  #screen-plotoverview .po23-link-card { min-height:39px !important; }
+}
+</style>
