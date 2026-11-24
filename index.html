@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlotVault v11.32 – Plot Storage and Mobile Fix</title>
+  <title>PlotVault v11.33 – Sign In and Plot Screen Fit</title>
   <style>
     :root {
       --navy: #0F2A3D;
@@ -1373,7 +1373,7 @@
 
 </style>
   <!-- PlotVault v11.23 - Plot Overview Redesign -->
-<meta name="plotvault-version" content="v11.32">
+<meta name="plotvault-version" content="v11.33">
 
 <style id="plotvault-v1126-screen-corrections">
 /* v11.26 — Plot Overview: proportions based on the supplied iPhone reference */
@@ -1839,6 +1839,78 @@ html, body, #frame, #screens { max-width:100%; width:100%; overflow-x:hidden !im
 #screen-projectdetails .pd-plots-heading { flex-wrap:wrap; }
 #screen-projectdetails .pd-info-grid, #screen-projectdetails .pd-date-grid { min-width:0; max-width:100%; }
 #screen-projectdetails img, #screen-plotoverview img { max-width:100%; }
+</style>
+
+
+<style id="plotvault-v1133-signin-and-plot-fit">
+/* v11.33: restore the sign-in entry point and keep the plot overview within one viewport. */
+html, body { width:100%; max-width:100%; overflow-x:hidden; }
+#frame { width:100%; max-width:430px; min-width:0; }
+#screens { min-width:0; min-height:0; }
+.screen, .screen-body { min-width:0; max-width:100%; }
+
+/* The sign-in screen remains the first screen after loading; its existing form and
+   navigation are preserved. */
+#screen-login { overflow-y:auto; }
+#screen-login .screen-body { width:100%; min-height:100%; padding:34px 22px 28px !important; }
+#screen-login .screen-body > div { max-width:360px; margin-left:auto; margin-right:auto; }
+#screen-login .pv-logo { width:260px; max-width:78vw; }
+
+/* Plot overview: fit its content into the app viewport rather than requiring
+   vertical scrolling. Compress spacing responsively while keeping every action. */
+#screen-plotoverview {
+  height:100%; min-height:0; overflow:hidden !important;
+  display:none; flex-direction:column;
+}
+#screen-plotoverview.active { display:flex; }
+#screen-plotoverview > .topnav { flex:0 0 auto; min-height:56px; padding:8px 13px; }
+#screen-plotoverview .screen-body#po-body {
+  flex:1 1 auto; min-height:0; height:0; overflow:hidden !important;
+  padding:7px 12px 5px !important; width:100%;
+}
+#screen-plotoverview .po23-wrap { gap:7px !important; padding-bottom:0 !important; }
+#screen-plotoverview .po23-hero { min-height:126px !important; height:126px; padding:12px 15px 12px !important; border-radius:15px; }
+#screen-plotoverview .po23-number { font-size:39px !important; margin:1px 0 2px !important; }
+#screen-plotoverview .po23-house { height:88px !important; top:8px !important; }
+#screen-plotoverview .po23-tagline { bottom:28px !important; right:12px !important; }
+#screen-plotoverview .po23-progress-line { bottom:9px !important; left:15px !important; right:60px !important; }
+#screen-plotoverview .po23-camera { min-height:49px !important; height:49px; padding:6px 12px !important; border-radius:12px; }
+#screen-plotoverview .po23-camera-icon { font-size:22px !important; }
+#screen-plotoverview .po23-camera-copy strong { font-size:11px !important; }
+#screen-plotoverview .po23-camera-copy small { font-size:9px !important; }
+#screen-plotoverview .po23-compliance { padding:8px 10px !important; border-radius:12px; }
+#screen-plotoverview .po23-section-head { margin-bottom:6px !important; }
+#screen-plotoverview .po23-count { min-height:48px !important; grid-template-columns:22px 1fr !important; grid-template-rows:21px 12px !important; padding:5px 3px !important; }
+#screen-plotoverview .po23-count-icon { width:19px !important; height:19px !important; font-size:12px !important; }
+#screen-plotoverview .po23-count strong { font-size:16px !important; }
+#screen-plotoverview .po23-count small { font-size:8px !important; }
+#screen-plotoverview .po23-link-card { min-height:47px !important; height:47px; padding:5px 9px !important; gap:8px !important; border-radius:11px; }
+#screen-plotoverview .po23-link-icon { width:29px !important; height:29px !important; flex-basis:29px !important; font-size:16px !important; }
+#screen-plotoverview .po23-link-copy { gap:1px !important; }
+#screen-plotoverview .po23-link-copy strong { font-size:11px !important; }
+#screen-plotoverview .po23-link-copy small { font-size:8px !important; }
+#screen-plotoverview .po23-link-arrow { font-size:19px !important; }
+#screen-plotoverview .po23-timeline-card { min-height:43px !important; height:43px; }
+#screen-plotoverview > div:last-child { flex:0 0 auto; padding:3px 12px calc(5px + env(safe-area-inset-bottom)) !important; }
+#screen-plotoverview > div:last-child .btn { min-height:35px; padding:7px 12px; font-size:12px; }
+
+/* Never allow sideways panning on either of the two main overview screens. */
+#screen-plotoverview, #screen-plotoverview * ,
+#screen-projectdetails, #screen-projectdetails * { max-width:100%; }
+#screen-plotoverview, #screen-projectdetails { overflow-x:hidden !important; }
+#screen-projectdetails .screen-body, #screen-projectdetails .project-details-body { overflow-x:hidden !important; }
+#screen-projectdetails .pd-stats-grid { grid-template-columns:repeat(5,minmax(0,1fr)); }
+#screen-projectdetails .pd-stat-tile { min-width:0; }
+@media (max-height:740px) {
+  #screen-plotoverview .po23-hero { height:112px !important; min-height:112px !important; }
+  #screen-plotoverview .po23-link-card { height:42px; min-height:42px !important; }
+  #screen-plotoverview .po23-timeline-card { height:39px; min-height:39px !important; }
+}
+@media (max-width:360px) {
+  #screen-plotoverview .po23-link-copy small { display:none; }
+  #screen-plotoverview .po23-hero { padding-left:12px !important; }
+  #screen-projectdetails .pd-stat-tile small { font-size:8px !important; }
+}
 </style>
 
 </head>
@@ -2694,7 +2766,7 @@ html, body, #frame, #screens { max-width:100%; width:100%; overflow-x:hidden !im
 
     }
 
-    const PLOTVAULT_VERSION = '11.32';
+    const PLOTVAULT_VERSION = '11.33';
     function saveData() {
       try {
         const payload = {
@@ -4455,7 +4527,7 @@ return `
     /* ---------------- BOOT ---------------- */
     loadData();
 
-    go('projects', false);
+    go('login', false);
     enhanceKeyboardAccess();
     const _origGo = go;
     go = function (...args) { _origGo(...args); enhanceKeyboardAccess(); };
