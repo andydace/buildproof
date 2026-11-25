@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlotVault v11.45 – Plot Screen and Report Sharing</title>
+  <title>PlotVault v11.46 – Workflow and Screen Improvements</title>
   <style>
     :root {
       --navy: #0F2A3D;
@@ -1373,7 +1373,7 @@
 
 </style>
   <!-- PlotVault v11.23 - Plot Overview Redesign -->
-<meta name="plotvault-version" content="v11.45">
+<meta name="plotvault-version" content="v11.46">
 
 <style id="plotvault-v1126-screen-corrections">
 /* v11.26 — Plot Overview: proportions based on the supplied iPhone reference */
@@ -1937,6 +1937,8 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 #screen-plotoverview .po23-compliance { flex:1.05 1 0 !important; min-height:110px !important; max-height:none !important; padding:clamp(10px,1.8vh,16px) !important; }
 #screen-plotoverview .po23-count { min-height:clamp(58px,8.5vh,72px) !important; }
 #screen-plotoverview .po23-link-card { flex:0.78 1 0 !important; min-height:52px !important; max-height:none !important; height:auto !important; padding:8px 12px !important; }
+#screen-plotoverview .po23-retake-alert { border:1px solid #e6aaaa !important; background:#fff7f7 !important; }
+#screen-plotoverview .po23-retake-alert .po23-link-copy small { color:#b42318 !important; font-weight:800 !important; }
 #screen-plotoverview .po23-link-icon { width:36px !important; height:36px !important; flex-basis:36px !important; }
 #screen-plotoverview .po23-link-copy strong { font-size:13px !important; }
 #screen-plotoverview .po23-link-copy small { font-size:10px !important; }
@@ -1956,7 +1958,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
 
 <style id="plotvault-v1145-final-plot-fit">
-/* v11.45: final, authoritative Plot Overview sizing. The footer has its own
+/* v11.46: final, authoritative Plot Overview sizing. The footer has its own
    flex row; the content area is the remaining viewport, not a scrolling page. */
 #screen-plotoverview { position:absolute !important; inset:0 !important; height:100% !important; min-height:0 !important; max-height:none !important; display:none; flex-direction:column !important; overflow:hidden !important; }
 #screen-plotoverview.active { display:flex !important; }
@@ -2595,7 +2597,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
       </section>
       <section class="card">
         <h3 style="color:var(--navy);margin-bottom:8px">Workspace information</h3>
-        <div style="font-size:13px;color:var(--muted);line-height:1.8">Version: PlotVault v11.45<br>Storage: This browser/device<br>Projects: <strong id="setting-project-count">0</strong><br>Plots: <strong id="setting-plot-count">0</strong><br>Generated reports: <strong id="setting-report-count">0</strong></div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.8">Version: PlotVault v11.46<br>Storage: This browser/device<br>Projects: <strong id="setting-project-count">0</strong><br>Plots: <strong id="setting-plot-count">0</strong><br>Generated reports: <strong id="setting-report-count">0</strong></div>
       </section>
     </div>
   </div>
@@ -2859,7 +2861,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
     }
 
-    const PLOTVAULT_VERSION = "11.45";
+    const PLOTVAULT_VERSION = "11.46";
     function saveData() {
       try {
         const payload = {
@@ -2887,39 +2889,35 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
     }
 
     function loadData() {
-      // Fresh-start cleanup is a one-time migration only. Never clear user records
-      // merely because a later app version is installed.
+      // Safe upgrade rule: never delete a user's saved projects, plots, reports or settings
+      // when installing a newer version. Only create the initial Doseley workspace when
+      // there is genuinely no saved workspace yet.
       const storedVersion = localStorage.getItem('plotvaultVersion');
-      const cleanStartApplied = localStorage.getItem('plotvaultCleanStartApplied') === 'yes';
-      if (!cleanStartApplied && storedVersion !== '11.31' && storedVersion !== '11.32') {
-        localStorage.removeItem('plotvaultProjects');
-        localStorage.removeItem('plotvaultPlots');
-        localStorage.removeItem('plotvaultReports');
-        localStorage.removeItem('plotvaultSettings');
-        projects = { doseley: { id:'doseley', name:'Doseley Halt', location:'Telford, Shropshire', client:'', siteManager:'', status:'Active', plots:0, completion:0, compliance:0, updated:'Not yet updated', startDate:'', targetDate:'' } };
-        plots = {}; reportHistory = [];
-        appSettings = { assessor:'', role:'', email:'', company:'', address:'', phone:'', companyEmail:'', reportFooter:'', showCompany:true };
-        localStorage.setItem('plotvaultCleanStartApplied', 'yes');
-        saveData();
-        return;
-      }
-      localStorage.setItem('plotvaultCleanStartApplied', 'yes');
+      const savedProjects = localStorage.getItem('plotvaultProjects');
+      const savedPlots = localStorage.getItem('plotvaultPlots');
+      const savedReports = localStorage.getItem('plotvaultReports');
+      const savedSettings = localStorage.getItem('plotvaultSettings');
+      const hasSavedWorkspace = !!(savedProjects || savedPlots || savedReports || savedSettings);
+
       try {
-        const savedProjects = localStorage.getItem('plotvaultProjects');
-        const savedPlots = localStorage.getItem('plotvaultPlots');
-        const savedReports = localStorage.getItem('plotvaultReports');
-        const savedSettings = localStorage.getItem('plotvaultSettings');
         if (savedProjects) projects = JSON.parse(savedProjects);
         if (savedPlots) plots = JSON.parse(savedPlots);
         if (savedReports) reportHistory = JSON.parse(savedReports);
         if (savedSettings) appSettings = { ...appSettings, ...JSON.parse(savedSettings) };
         if (!projects || typeof projects !== 'object') projects = {};
-        if (!projects.doseley && Object.keys(projects).length === 0) {
+        if (!plots || typeof plots !== 'object') plots = {};
+        if (!Array.isArray(reportHistory)) reportHistory = [];
+
+        if (!hasSavedWorkspace) {
+          projects = { doseley: { id:'doseley', name:'Doseley Halt', location:'Telford, Shropshire', client:'', siteManager:'', status:'Active', plots:0, completion:0, compliance:0, updated:'Not yet updated', startDate:'', targetDate:'' } };
+          plots = {};
+          reportHistory = [];
+          appSettings = { assessor:'', role:'', email:'', company:'', address:'', phone:'', companyEmail:'', reportFooter:'', showCompany:true };
+        }
+
+        if (!projects.doseley && Object.keys(projects).length === 0 && !hasSavedWorkspace) {
           projects.doseley = { id:'doseley', name:'Doseley Halt', location:'Telford, Shropshire', client:'', siteManager:'', status:'Active', plots:0, completion:0, compliance:0, updated:'Not yet updated' };
         }
-        if (!Array.isArray(reportHistory)) reportHistory = [];
-        if (!plots || typeof plots !== 'object') plots = {};
-        // Repair missing/mismatched IDs without discarding existing plot data.
         Object.entries(projects).forEach(([id, project]) => { if (project && !project.id) project.id = id; });
         Object.entries(plots).forEach(([id, plot]) => {
           if (!plot || typeof plot !== 'object') { delete plots[id]; return; }
@@ -2928,12 +2926,10 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
           if (!Array.isArray(plot.gallery)) plot.gallery = [];
           if (!Array.isArray(plot.timeline)) plot.timeline = [];
         });
+        localStorage.setItem('plotvaultCleanStartApplied', 'yes');
       } catch (error) {
         console.error('PlotVault data could not be read', error);
         toast('Saved data could not be read. Existing storage has been left untouched.');
-        projects = projects || {};
-        plots = plots || {};
-        reportHistory = Array.isArray(reportHistory) ? reportHistory : [];
       }
     }
 
@@ -3265,6 +3261,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
                 capturedBy: appSettings.assessor || "Not recorded",
 
                 colour: "#1F8A4C",
+                reviewStatus: "pending",
 
                 latitude:
                   state.photoLat,
@@ -3432,7 +3429,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
           return total +
             plot.checklist.filter(
-              item => item[1] === 'missing'
+              item => item[1] === 'missing' || item[1] === 'rejected'
             ).length;
 
         }, 0);
@@ -3661,7 +3658,8 @@ return `
 
       const approved = p.checklist.filter(i => i[1] === 'done').length;
       const pending = p.checklist.filter(i => i[1] === 'pending').length;
-      const missing = p.checklist.filter(i => i[1] === 'missing').length;
+      const rejected = p.checklist.filter(i => i[1] === 'rejected').length;
+      const missing = p.checklist.filter(i => i[1] === 'missing' || i[1] === 'rejected').length;
       const total = p.checklist.length;
       const progress = total ? Math.round((approved / total) * 100) : 0;
       const project = projects[p.projectId] || { name: 'Development' };
@@ -3707,9 +3705,9 @@ return `
             </div>
           </section>
 
-          <button class="po23-link-card" onclick="openChecklist('${p.id}')">
+          <button class="po23-link-card ${rejected ? 'po23-retake-alert' : ''}" onclick="openChecklist('${p.id}')">
             <span class="po23-link-icon po23-check-icon">▤</span>
-            <span class="po23-link-copy"><strong>Checklist (${total})</strong><small>View and complete compliance items</small></span>
+            <span class="po23-link-copy"><strong>Checklist (${total})</strong><small>${rejected ? `⚠ ${rejected} photo${rejected === 1 ? '' : 's'} require retaking` : 'View and complete compliance items'}</small></span>
             <span class="po23-link-arrow">›</span>
           </button>
 
@@ -3740,21 +3738,26 @@ return `
 
       renderPlotOverview();
     }
+    function pvEscapeHtml(value) { return String(value ?? '').replace(/[&<>\"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch])); }
+
     function checklistRow(name, st, plotId) {
-      const status = ['done','pending','missing','notstarted'].includes(st) ? st : 'notstarted';
+      const status = ['done','pending','missing','notstarted','rejected'].includes(st) ? st : 'notstarted';
       const parts = name.split(' - ');
       const ref = parts.shift() || '';
       const description = parts.join(' - ');
       const projectId = plots[plotId] ? plots[plotId].projectId : '';
+      const relatedPhoto = plots[plotId] && Array.isArray(plots[plotId].gallery) ? plots[plotId].gallery.find(photo => photo.category === name) : null;
       let action = '';
       if (status === 'done') action = `<span class="cl-action cl-action-approved">Approved</span>`;
-      else if (status === 'pending') action = `<button class="cl-action cl-action-approve" type="button" onclick="event.stopPropagation();approveChecklistItem('${plotId}','${name.replace(/'/g, "\\\\'")}')">Approve</button>`;
-      else if (status === 'missing') action = `<button class="cl-action cl-action-photo" type="button" onclick="event.stopPropagation();openCameraFor('${projectId}','${plotId}','${name.replace(/'/g, "\\\\'")}')">Take Photo</button>`;
+      else if (status === 'pending') action = `<button class="cl-action cl-action-approve" type="button" onclick="event.stopPropagation();approveChecklistItem('${plotId}','${name.replace(/'/g, "\\'")}')">Approve</button>`;
+      else if (status === 'rejected') action = `<button class="cl-action cl-action-photo" type="button" onclick="event.stopPropagation();openCameraFor('${projectId}','${plotId}','${name.replace(/'/g, "\\'")}')">Retake Photo</button>`;
+      else if (status === 'missing') action = `<button class="cl-action cl-action-photo" type="button" onclick="event.stopPropagation();openCameraFor('${projectId}','${plotId}','${name.replace(/'/g, "\\'")}')">Take Photo</button>`;
       else action = `<span class="cl-action cl-action-notstarted">Not Started</span>`;
-      const icons = {done:'✓', pending:'⌛', missing:'✕', notstarted:'○'};
+      const icons = {done:'✓', pending:'⌛', missing:'✕', notstarted:'○', rejected:'!' };
+      const reason = status === 'rejected' && relatedPhoto && relatedPhoto.rejectionReason ? `<div class="cl-rejection-reason">Retake required: ${pvEscapeHtml(relatedPhoto.rejectionReason)}</div>` : '';
       return `<div class="cl-item-card cl-item-${status}">
         <div class="cl-item-icon">${icons[status]}</div>
-        <div class="cl-item-copy"><div class="cl-item-ref">${ref}</div><div class="cl-item-description">${description}</div></div>
+        <div class="cl-item-copy"><div class="cl-item-ref">${ref}</div><div class="cl-item-description">${description}</div>${reason}</div>
         <div class="cl-item-action">${action}</div>
       </div>`;
     }
@@ -3763,7 +3766,7 @@ return `
       if (!p) return;
       const approved = p.checklist.filter(i => i[1] === 'done').length;
       const pending = p.checklist.filter(i => i[1] === 'pending').length;
-      const missing = p.checklist.filter(i => i[1] === 'missing').length;
+      const missing = p.checklist.filter(i => i[1] === 'missing' || i[1] === 'rejected').length;
       const progress = p.checklist.length ? Math.round((approved / p.checklist.length) * 100) : 0;
       document.getElementById('cl-sub').textContent = p.number + ' · ' + projects[p.projectId].name;
       document.getElementById('checklist-body').innerHTML = `
@@ -3829,10 +3832,12 @@ return `
 <div class="gallery-grid" id="gallery-grid"></div>
 `;
       const grid = document.getElementById('gallery-grid');
-      grid.innerHTML = p.gallery.length ? photos.map((photo, index) =>
-
-        `<div class="gallery-thumb"
-    onclick="showEvidence(state.plotId, ${index})">
+      grid.innerHTML = p.gallery.length ? photos.map((photo) => {
+        const originalIndex = p.gallery.indexOf(photo);
+        const reviewStatus = photo.reviewStatus || 'pending';
+        const statusLabel = reviewStatus === 'approved' ? 'APPROVED' : reviewStatus === 'rejected' ? 'RETAKE REQUIRED' : 'PENDING REVIEW';
+        return `<div class="gallery-thumb"
+    onclick="showEvidence(state.plotId, ${originalIndex})">
 
     <img
       src="${photo.image}"
@@ -3855,10 +3860,9 @@ return `
 ">
     ${photo.category.split(' - ')[0]}
 </div>
-
-</div>`
-
-      ).join('') :
+<div class="gallery-review-badge ${reviewStatus}">${statusLabel}</div>
+</div>`;
+      }).join('') :
 
         `<div class="empty-state" style="grid-column:1/-1;"><div class="ic">📷</div>No evidence captured yet.</div>`;
     }
@@ -3914,6 +3918,7 @@ return `
 
     }
     function openEvidenceViewer(photo) {
+      state.selectedPhoto = photo;
 
       document.getElementById(
         'evidence-viewer-body'
@@ -3990,15 +3995,20 @@ return `
 
 </button>
 
+<div class="evidence-review-state">Review status: <strong>${photo.reviewStatus === 'approved' ? 'Approved' : photo.reviewStatus === 'rejected' ? 'Rejected — retake required' : 'Pending review'}</strong></div>
+${photo.reviewStatus === 'rejected' && photo.rejectionReason ? `<div class="evidence-rejection-note">Retake reason: ${pvEscapeHtml(photo.rejectionReason)}</div>` : ''}
 <button
   class="btn btn-primary"
   style="margin-top:10px;"
   onclick="approveEvidence('${photo.category}')">
-
   Approve Evidence
-
 </button>
-
+<button
+  class="btn btn-secondary"
+  style="margin-top:10px;border-color:#C62828;color:#C62828;"
+  onclick="rejectEvidence('${photo.category}')">
+  Reject Photo — Request Retake
+</button>
 <button
   class="btn btn-secondary"
   style="margin-top:10px;"
@@ -4015,46 +4025,53 @@ return `
       go('evidenceviewer');
     }
 
-    function approveChecklistItem(plotId, category) {
-
-      const item = plots[plotId].checklist.find(
-        c => c[0] === category
-      );
-
-      if (item) {
-
-        item[1] = 'done';
-
-        updatePlotScore(plotId);
-
+    function syncEvidenceStatus(plotId, category, status, reason, selectedPhoto) {
+      const plot = plots[plotId];
+      if (!plot) return;
+      if (!Array.isArray(plot.gallery)) plot.gallery = [];
+      const item = plot.checklist.find(c => c[0] === category);
+      if (item) item[1] = status === 'approved' ? 'done' : status === 'rejected' ? 'rejected' : 'pending';
+      const matchingPhotos = plot.gallery.filter(photo => photo.category === category);
+      const targetPhoto = selectedPhoto && matchingPhotos.includes(selectedPhoto) ? selectedPhoto : matchingPhotos[0];
+      if (targetPhoto) {
+        targetPhoto.reviewStatus = status;
+        if (status === 'rejected') targetPhoto.rejectionReason = reason || 'Photo does not meet the evidence requirements';
+        else { delete targetPhoto.rejectionReason; }
       }
-
+      updatePlotScore(plotId);
       saveData();
+    }
 
-      renderChecklist();
-
+    function approveChecklistItem(plotId, category) {
+      syncEvidenceStatus(plotId, category, 'approved');
+      if (state.screen === 'checklist') renderChecklist();
+      if (state.screen === 'evidencegallery') renderGallery();
+      if (state.screen === 'plotoverview') renderPlotOverview();
+      toast('Evidence approved — status updated across Gallery and Checklist');
     }
 
     function approveEvidence(category) {
-
       const plotId = state.plotId;
-
-      const item = plots[plotId].checklist.find(
-        c => c[0] === category
-      );
-
-      if (item) {
-
-        item[1] = 'done';
-
-      }
-
-      saveData();
-
+      syncEvidenceStatus(plotId, category, 'approved', '', state.selectedPhoto);
       openPlot(plotId);
-
+      toast('Evidence approved — Checklist updated automatically');
     }
 
+    function rejectEvidence(category) {
+      const plotId = state.plotId;
+      const reason = prompt('Why is this photo being rejected? Enter the reason so the site manager knows what to retake.');
+      if (reason === null) return;
+      const cleanReason = reason.trim() || 'Photo does not meet the evidence requirements';
+      syncEvidenceStatus(plotId, category, 'rejected', cleanReason, state.selectedPhoto);
+      const plot = plots[plotId];
+      if (plot) {
+        if (!Array.isArray(plot.timeline)) plot.timeline = [];
+        plot.timeline.unshift([new Date().toLocaleString(), `PHOTO REJECTED — ${category}. Retake required: ${cleanReason}`]);
+        saveData();
+      }
+      openPlot(plotId);
+      toast('Photo rejected. A retake warning has been added to the plot checklist.');
+    }
 
     function deleteEvidence(category) {
 
@@ -4217,7 +4234,7 @@ return `
 
           return total +
             plot.checklist.filter(
-              item => item[1] === 'missing'
+              item => item[1] === 'missing' || item[1] === 'rejected'
             ).length;
 
         }, 0);
@@ -4684,6 +4701,98 @@ html, body { width:100%; max-width:100%; min-height:100%; overflow-x:hidden; }
   #screen-plotoverview .po23-link-card { min-height:48px !important; }
   #screen-plotoverview > div:last-child .btn { min-height:46px !important; }
 }
+</style>
+
+<style id="plotvault-v1146-screen-workflow-fixes">
+/* v11.46 — one compact viewport layout; avoid nested scrolling and preserve all plot actions */
+@media (max-width: 700px) {
+  html, body { height:100%; min-height:100%; overflow:hidden; }
+  body { padding:0 !important; min-height:0 !important; }
+  #frame { width:100%; height:100dvh; min-height:0 !important; max-height:100dvh; border-radius:0; }
+  #statusbar { height:24px; flex:0 0 24px; padding:0 14px; }
+  #screens { flex:1 1 auto; min-height:0; overflow:hidden; }
+}
+/* Sign-in: all controls remain visible without page scrolling on a phone */
+#screen-login { overflow:hidden !important; justify-content:center; }
+#screen-login > .screen-body { flex:1 1 auto; min-height:0 !important; height:100%; overflow:hidden !important; display:flex; align-items:center; justify-content:center; padding:12px 22px !important; }
+#screen-login > .screen-body > div { width:100%; max-width:360px; margin:0 auto !important; }
+#screen-login .pv-logo { width:190px !important; max-width:58vw !important; max-height:86px; object-fit:contain; }
+#screen-login .screen-body > div > div:nth-child(1) { margin-bottom:10px !important; }
+#screen-login .screen-body > div > div:nth-child(1) > div[style*="margin-top:18px"] { margin-top:8px !important; font-size:21px !important; }
+#screen-login .screen-body > div > div:nth-child(1) > div[style*="margin-top:6px"] { margin-bottom:10px !important; font-size:12px !important; }
+#screen-login .field { margin-bottom:9px !important; }
+#screen-login input { min-height:42px; }
+#screen-login .row { margin-bottom:10px !important; }
+#screen-login .btn { height:48px; }
+#screen-login .hr-text { margin:9px 0 !important; }
+@media (max-height:740px) {
+  #screen-login > .screen-body { padding:6px 20px !important; }
+  #screen-login .pv-logo { width:150px !important; max-height:62px; }
+  #screen-login .screen-body > div > div:nth-child(1) { margin-bottom:6px !important; }
+  #screen-login .field { margin-bottom:6px !important; }
+  #screen-login input { min-height:38px; }
+  #screen-login .btn { height:43px; }
+}
+/* Plot Overview: fixed vertical stack, evenly spaced, larger action tiles, delete always visible */
+#screen-plotoverview { position:absolute !important; inset:0 !important; height:100% !important; min-height:0 !important; display:none !important; flex-direction:column !important; overflow:hidden !important; }
+#screen-plotoverview.active { display:flex !important; }
+#screen-plotoverview > .topnav { flex:0 0 48px !important; height:48px !important; min-height:48px !important; padding:5px 12px !important; position:relative !important; top:auto !important; }
+#screen-plotoverview > #po-body.screen-body { flex:1 1 0 !important; height:0 !important; min-height:0 !important; overflow:hidden !important; padding:7px 11px 5px !important; display:flex !important; }
+#screen-plotoverview #po-body > .po23-wrap { flex:1 1 auto !important; width:100% !important; min-height:0 !important; height:100% !important; display:flex !important; flex-direction:column !important; justify-content:flex-start !important; gap:7px !important; padding:0 !important; margin:0 !important; }
+#screen-plotoverview .po23-hero { flex:0 0 112px !important; height:112px !important; min-height:112px !important; padding:9px 13px !important; }
+#screen-plotoverview .po23-camera { flex:0 0 52px !important; height:52px !important; min-height:52px !important; }
+#screen-plotoverview .po23-compliance { flex:0 0 104px !important; min-height:104px !important; padding:8px 10px !important; }
+#screen-plotoverview .po23-section-head { margin-bottom:7px !important; }
+#screen-plotoverview .po23-counts { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:7px !important; }
+#screen-plotoverview .po23-count { min-width:0 !important; min-height:62px !important; height:62px !important; display:grid !important; grid-template-columns:1fr !important; grid-template-rows:22px 17px 13px !important; justify-items:center !important; align-content:center !important; align-items:center !important; gap:0 !important; padding:3px 2px !important; text-align:center !important; }
+#screen-plotoverview .po23-count-icon { width:19px !important; height:19px !important; margin:0 auto !important; }
+#screen-plotoverview .po23-count strong, #screen-plotoverview .po23-count small { display:block !important; width:100% !important; text-align:center !important; line-height:1.1 !important; }
+#screen-plotoverview .po23-link-card { flex:1 1 0 !important; min-height:57px !important; height:auto !important; max-height:100px !important; width:100% !important; padding:7px 11px !important; gap:10px !important; }
+#screen-plotoverview .po23-link-icon { width:36px !important; height:36px !important; flex:0 0 36px !important; }
+#screen-plotoverview .po23-link-copy { flex:1 1 auto !important; min-width:0 !important; }
+#screen-plotoverview .po23-link-copy strong { font-size:13px !important; }
+#screen-plotoverview .po23-link-copy small { font-size:9px !important; }
+#screen-plotoverview .po23-timeline-card { flex:1 1 0 !important; min-height:57px !important; height:auto !important; }
+#screen-plotoverview .po23-timeline-detail { max-height:64px !important; overflow:auto !important; }
+#screen-plotoverview > .po-delete-footer { flex:0 0 auto !important; display:block !important; position:relative !important; padding:5px 11px calc(6px + env(safe-area-inset-bottom,0px)) !important; margin:0 !important; background:#f3f6fa !important; }
+#screen-plotoverview > .po-delete-footer .btn { height:40px !important; min-height:40px !important; font-size:13px !important; }
+@media (max-height:740px) {
+ #screen-plotoverview > .topnav { flex-basis:43px !important; height:43px !important; min-height:43px !important; }
+ #screen-plotoverview .po23-hero { flex-basis:98px !important; height:98px !important; min-height:98px !important; }
+ #screen-plotoverview .po23-compliance { flex-basis:94px !important; min-height:94px !important; }
+ #screen-plotoverview .po23-count { min-height:55px !important; height:55px !important; }
+ #screen-plotoverview .po23-link-card, #screen-plotoverview .po23-timeline-card { min-height:50px !important; }
+ #screen-plotoverview > .po-delete-footer .btn { height:36px !important; min-height:36px !important; }
+}
+/* Project Overview: one scroll container. Header moves with content; no nested scroll/sticky jump. */
+#screen-projectdetails { display:none; overflow-y:auto !important; overflow-x:hidden !important; -webkit-overflow-scrolling:touch; }
+#screen-projectdetails.active { display:block !important; }
+#screen-projectdetails .project-detail-hero { position:relative !important; top:auto !important; flex:none !important; }
+#screen-projectdetails .project-details-body { overflow:visible !important; height:auto !important; min-height:0 !important; }
+#screen-projectdetails > .screen-body { padding:7px 12px 90px !important; }
+#screen-projectdetails .project-detail-image { height:92px !important; margin-bottom:8px !important; }
+#screen-projectdetails .project-detail-content h1 { font-size:24px !important; }
+#screen-projectdetails > .screen-body > .pd-overview-card { padding:10px 12px !important; margin-bottom:9px !important; }
+#screen-projectdetails .pd-info-grid .pd-info-row:nth-child(1),
+#screen-projectdetails .pd-info-grid .pd-info-row:nth-child(3),
+#screen-projectdetails .pd-info-grid .pd-info-row:nth-child(4),
+#screen-projectdetails .pd-date-grid { display:none !important; }
+#screen-projectdetails .pd-info-grid { display:block !important; margin-top:5px !important; }
+#screen-projectdetails .pd-info-grid .pd-info-row { padding:2px 0 !important; }
+#screen-projectdetails .pd-stats-grid { margin-top:8px !important; margin-bottom:10px !important; }
+#screen-projectdetails .pd-stat-tile { min-height:67px !important; padding:6px 2px !important; }
+#screen-projectdetails .pd-stat-tile strong { font-size:19px !important; }
+#screen-projectdetails .pd-plots-heading { margin-top:7px !important; }
+/* Rejected evidence remains visible and is explicitly flagged for retake. */
+.cl-item-rejected { border:1px solid #efb6b6 !important; background:#fff5f5 !important; }
+.cl-item-rejected .cl-item-icon { background:#fde5e5 !important; color:#b42318 !important; }
+.cl-rejection-reason { color:#a61b1b; font-size:11px; line-height:1.3; margin-top:4px; font-weight:600; }
+.gallery-thumb { position:relative !important; overflow:hidden; }
+.gallery-review-badge { position:absolute; top:6px; right:6px; padding:4px 6px; border-radius:5px; font-size:9px; font-weight:800; color:#fff; background:#b7791f; }
+.gallery-review-badge.approved { background:#21834a; }
+.gallery-review-badge.rejected { background:#b42318; }
+.evidence-review-state { padding:10px 12px; background:#f0f4f7; border-radius:9px; font-size:13px; }
+.evidence-rejection-note { padding:10px 12px; background:#fff1f1; border:1px solid #f0caca; border-radius:9px; color:#9f2020; font-size:13px; }
 </style>
 </head><body><nav class="report-toolbar" aria-label="Report navigation"><strong>PlotVault Evidence Report</strong><button type="button" onclick="window.close();setTimeout(function(){if(!window.closed){history.back();}},120)">← Back to PlotVault</button></nav><header><h1>PlotVault — Part L Evidence Report</h1><div>${escapeHTML(project.name || '')} · ${escapeHTML(project.location || '')}</div></header><h2>Plot details</h2><div class="meta"><div><b>Plot:</b> ${escapeHTML(plot.number)}</div><div><b>House type:</b> ${escapeHTML(plot.houseType || 'Not recorded')}</div><div><b>Build stage:</b> ${escapeHTML(plot.stage || 'Not recorded')}</div><div><b>Report generated:</b> ${new Date().toLocaleString('en-GB')}</div><div><b>Client:</b> ${escapeHTML(project.client || 'Not recorded')}</div><div><b>Site manager:</b> ${escapeHTML(project.siteManager || 'Not recorded')}</div></div>${(settings.showCompany && settings.company) || project.sapAssessor || project.sapAssessorEmail ? `<h2>Company / SAP Assessor</h2><p>${settings.showCompany ? `${escapeHTML(settings.company)}<br>${escapeHTML(settings.address)}<br>${escapeHTML(settings.phone)} · ${escapeHTML(settings.companyEmail)}<br>` : ''}SAP Assessor: ${escapeHTML(project.sapAssessor || 'Not recorded')}<br>SAP Assessor email: ${escapeHTML(project.sapAssessorEmail || 'Not recorded')}</p>` : ''}<h2>Part L checklist</h2><table><thead><tr><th>Inspection item</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table><h2>Photographic evidence</h2><p>Each photograph is stamped in the corner with its project name, plot, section, capture date/time and GPS coordinates where available.</p><div class="evidence-grid">${photos || '<div class="no-photos">No evidence photos recorded for this plot.</div>'}</div><h2>Evidence register</h2><table><thead><tr><th>#</th><th>Section</th><th>Date / time</th><th>GPS coordinates</th><th>Notes</th></tr></thead><tbody>${evidenceRegister || '<tr><td colspan="5">No evidence photos recorded.</td></tr>'}</tbody></table><p><b>Checklist completion:</b> ${(plot.checklist || []).filter(i=>i[1]==='done').length} / ${(plot.checklist || []).length} approved</p><div class="footer">${escapeHTML(settings.reportFooter || 'Generated by PlotVault. This report records the data held in the application at the time of generation.')}</div><script>window.onload=()=>setTimeout(()=>window.print(),350)<\/script>
 <style id="plotvault-v1144-plot-screen-balanced-fit">
