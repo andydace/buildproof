@@ -2251,6 +2251,114 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 }
 </style>
 
+<style id="plotvault-v1151-final-plot-layout">
+/* v11.51: final layout authority. This is deliberately the last stylesheet in
+   the document so legacy v11.24-v11.50 rules cannot reintroduce flex gaps. */
+@media (max-width:700px) {
+  html, body {
+    width:100% !important; height:100% !important; min-height:0 !important;
+    margin:0 !important; padding:0 !important; overflow:hidden !important;
+  }
+  body { display:block !important; }
+  body > #frame {
+    display:flex !important; flex-direction:column !important;
+    position:relative !important; width:100% !important; height:100vh !important;
+    height:100dvh !important; min-height:0 !important; max-height:none !important;
+    margin:0 !important; padding:0 !important; border-radius:0 !important;
+    overflow:hidden !important;
+  }
+  #frame > #statusbar { flex:0 0 24px !important; height:24px !important; min-height:24px !important; }
+  #frame > #screens { position:relative !important; flex:1 1 0 !important; height:0 !important; min-height:0 !important; overflow:hidden !important; }
+  #screens > #screen-plotoverview {
+    position:absolute !important; inset:0 !important; display:none !important;
+    flex-direction:column !important; width:100% !important; height:100% !important;
+    min-height:0 !important; max-height:none !important; margin:0 !important;
+    padding:0 !important; overflow:hidden !important; box-sizing:border-box !important;
+  }
+  #screens > #screen-plotoverview.active { display:flex !important; }
+  #screens > #screen-plotoverview > .topnav {
+    position:relative !important; top:auto !important; flex:0 0 48px !important;
+    height:48px !important; min-height:48px !important; padding:5px 12px !important;
+  }
+  #screens > #screen-plotoverview > #po-body.screen-body {
+    display:block !important; flex:1 1 0 !important; height:0 !important;
+    min-height:0 !important; max-height:none !important; width:100% !important;
+    margin:0 !important; padding:6px 10px !important; overflow:hidden !important;
+    box-sizing:border-box !important;
+  }
+  #screens > #screen-plotoverview > #po-body > .po23-wrap {
+    display:grid !important; grid-template-columns:minmax(0,1fr) !important;
+    /* Six content rows: summary, camera, compliance, then three tall action tiles. */
+    grid-template-rows:minmax(100px,1.12fr) minmax(48px,.55fr) minmax(92px,1fr) repeat(3,minmax(66px,.92fr)) !important;
+    align-content:stretch !important; justify-content:stretch !important;
+    align-items:stretch !important; justify-items:stretch !important;
+    gap:5px !important; width:100% !important; height:100% !important;
+    min-height:0 !important; margin:0 !important; padding:0 !important;
+    box-sizing:border-box !important;
+  }
+  #screens > #screen-plotoverview > #po-body > .po23-wrap > .po23-hero,
+  #screens > #screen-plotoverview > #po-body > .po23-wrap > .po23-camera,
+  #screens > #screen-plotoverview > #po-body > .po23-wrap > .po23-compliance,
+  #screens > #screen-plotoverview > #po-body > .po23-wrap > .po23-link-card {
+    min-height:0 !important; max-height:none !important; height:100% !important;
+    width:100% !important; margin:0 !important; box-sizing:border-box !important;
+  }
+  #screens > #screen-plotoverview .po23-hero { padding:9px 13px !important; border-radius:13px !important; }
+  #screens > #screen-plotoverview .po23-camera { display:flex !important; align-items:center !important; padding:6px 11px !important; }
+  #screens > #screen-plotoverview .po23-compliance {
+    display:flex !important; flex-direction:column !important; justify-content:center !important;
+    padding:6px 9px !important;
+  }
+  #screens > #screen-plotoverview .po23-section-head { margin-bottom:5px !important; }
+  #screens > #screen-plotoverview .po23-counts {
+    display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    flex:1 1 auto !important; min-height:0 !important; gap:5px !important;
+  }
+  #screens > #screen-plotoverview .po23-count {
+    display:grid !important; grid-template-columns:1fr !important;
+    grid-template-rows:20px 19px 13px !important; align-content:center !important;
+    justify-items:center !important; align-items:center !important; gap:1px !important;
+    min-width:0 !important; min-height:0 !important; height:100% !important;
+    padding:2px !important; text-align:center !important;
+  }
+  #screens > #screen-plotoverview .po23-count-icon { margin:0 auto !important; }
+  #screens > #screen-plotoverview .po23-count strong,
+  #screens > #screen-plotoverview .po23-count small {
+    display:block !important; width:100% !important; text-align:center !important; line-height:1.1 !important;
+  }
+  #screens > #screen-plotoverview > #po-body > .po23-wrap > .po23-link-card {
+    display:flex !important; align-items:center !important; padding:7px 11px !important;
+    gap:9px !important; border-radius:11px !important;
+  }
+  #screens > #screen-plotoverview .po23-link-icon {
+    flex:0 0 36px !important; width:36px !important; height:36px !important;
+  }
+  #screens > #screen-plotoverview .po23-link-copy { flex:1 1 auto !important; min-width:0 !important; }
+  #screens > #screen-plotoverview .po23-link-copy strong { font-size:13px !important; }
+  #screens > #screen-plotoverview .po23-link-copy small { font-size:10px !important; }
+  #screens > #screen-plotoverview > .po-delete-footer {
+    display:block !important; position:relative !important; flex:0 0 51px !important;
+    width:100% !important; height:51px !important; min-height:51px !important;
+    margin:0 !important; padding:5px 10px 6px !important;
+    background:#f3f6fa !important; z-index:10 !important; box-sizing:border-box !important;
+  }
+  #screens > #screen-plotoverview > .po-delete-footer > .btn {
+    display:block !important; width:100% !important; height:40px !important;
+    min-height:40px !important; margin:0 !important; padding:6px 12px !important;
+  }
+}
+@media (max-width:700px) and (max-height:700px) {
+  #screens > #screen-plotoverview > .topnav { flex-basis:43px !important; height:43px !important; min-height:43px !important; }
+  #screens > #screen-plotoverview > .po-delete-footer { flex-basis:45px !important; height:45px !important; min-height:45px !important; padding-top:3px !important; }
+  #screens > #screen-plotoverview > .po-delete-footer > .btn { height:38px !important; min-height:38px !important; }
+  #screens > #screen-plotoverview > #po-body > .po23-wrap {
+    gap:4px !important;
+    grid-template-rows:minmax(88px,1.08fr) minmax(43px,.52fr) minmax(82px,.95fr) repeat(3,minmax(59px,.9fr)) !important;
+  }
+  #screens > #screen-plotoverview .po23-link-icon { flex-basis:32px !important; width:32px !important; height:32px !important; }
+}
+</style>
+
 </head>
 
 <body>
@@ -5150,113 +5258,7 @@ html, body { width:100%; max-width:100%; min-height:100%; overflow-x:hidden; }
 </style>
 
 
-<style id="plotvault-v1151-final-plot-layout">
-/* v11.51: final layout authority. This is deliberately the last stylesheet in
-   the document so legacy v11.24-v11.50 rules cannot reintroduce flex gaps. */
-@media (max-width:700px) {
-  html, body {
-    width:100% !important; height:100% !important; min-height:0 !important;
-    margin:0 !important; padding:0 !important; overflow:hidden !important;
-  }
-  body { display:block !important; }
-  body > #frame {
-    display:flex !important; flex-direction:column !important;
-    position:relative !important; width:100% !important; height:100vh !important;
-    height:100dvh !important; min-height:0 !important; max-height:none !important;
-    margin:0 !important; padding:0 !important; border-radius:0 !important;
-    overflow:hidden !important;
-  }
-  #frame > #statusbar { flex:0 0 24px !important; height:24px !important; min-height:24px !important; }
-  #frame > #screens { position:relative !important; flex:1 1 0 !important; height:0 !important; min-height:0 !important; overflow:hidden !important; }
-  #screens > #screen-plotoverview {
-    position:absolute !important; inset:0 !important; display:none !important;
-    flex-direction:column !important; width:100% !important; height:100% !important;
-    min-height:0 !important; max-height:none !important; margin:0 !important;
-    padding:0 !important; overflow:hidden !important; box-sizing:border-box !important;
-  }
-  #screens > #screen-plotoverview.active { display:flex !important; }
-  #screens > #screen-plotoverview > .topnav {
-    position:relative !important; top:auto !important; flex:0 0 48px !important;
-    height:48px !important; min-height:48px !important; padding:5px 12px !important;
-  }
-  #screens > #screen-plotoverview > #po-body.screen-body {
-    display:block !important; flex:1 1 0 !important; height:0 !important;
-    min-height:0 !important; max-height:none !important; width:100% !important;
-    margin:0 !important; padding:6px 10px !important; overflow:hidden !important;
-    box-sizing:border-box !important;
-  }
-  #screens > #screen-plotoverview > #po-body > .po23-wrap {
-    display:grid !important; grid-template-columns:minmax(0,1fr) !important;
-    /* Six content rows: summary, camera, compliance, then three tall action tiles. */
-    grid-template-rows:minmax(100px,1.12fr) minmax(48px,.55fr) minmax(92px,1fr) repeat(3,minmax(66px,.92fr)) !important;
-    align-content:stretch !important; justify-content:stretch !important;
-    align-items:stretch !important; justify-items:stretch !important;
-    gap:5px !important; width:100% !important; height:100% !important;
-    min-height:0 !important; margin:0 !important; padding:0 !important;
-    box-sizing:border-box !important;
-  }
-  #screens > #screen-plotoverview > #po-body > .po23-wrap > .po23-hero,
-  #screens > #screen-plotoverview > #po-body > .po23-wrap > .po23-camera,
-  #screens > #screen-plotoverview > #po-body > .po23-wrap > .po23-compliance,
-  #screens > #screen-plotoverview > #po-body > .po23-wrap > .po23-link-card {
-    min-height:0 !important; max-height:none !important; height:100% !important;
-    width:100% !important; margin:0 !important; box-sizing:border-box !important;
-  }
-  #screens > #screen-plotoverview .po23-hero { padding:9px 13px !important; border-radius:13px !important; }
-  #screens > #screen-plotoverview .po23-camera { display:flex !important; align-items:center !important; padding:6px 11px !important; }
-  #screens > #screen-plotoverview .po23-compliance {
-    display:flex !important; flex-direction:column !important; justify-content:center !important;
-    padding:6px 9px !important;
-  }
-  #screens > #screen-plotoverview .po23-section-head { margin-bottom:5px !important; }
-  #screens > #screen-plotoverview .po23-counts {
-    display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important;
-    flex:1 1 auto !important; min-height:0 !important; gap:5px !important;
-  }
-  #screens > #screen-plotoverview .po23-count {
-    display:grid !important; grid-template-columns:1fr !important;
-    grid-template-rows:20px 19px 13px !important; align-content:center !important;
-    justify-items:center !important; align-items:center !important; gap:1px !important;
-    min-width:0 !important; min-height:0 !important; height:100% !important;
-    padding:2px !important; text-align:center !important;
-  }
-  #screens > #screen-plotoverview .po23-count-icon { margin:0 auto !important; }
-  #screens > #screen-plotoverview .po23-count strong,
-  #screens > #screen-plotoverview .po23-count small {
-    display:block !important; width:100% !important; text-align:center !important; line-height:1.1 !important;
-  }
-  #screens > #screen-plotoverview > #po-body > .po23-wrap > .po23-link-card {
-    display:flex !important; align-items:center !important; padding:7px 11px !important;
-    gap:9px !important; border-radius:11px !important;
-  }
-  #screens > #screen-plotoverview .po23-link-icon {
-    flex:0 0 36px !important; width:36px !important; height:36px !important;
-  }
-  #screens > #screen-plotoverview .po23-link-copy { flex:1 1 auto !important; min-width:0 !important; }
-  #screens > #screen-plotoverview .po23-link-copy strong { font-size:13px !important; }
-  #screens > #screen-plotoverview .po23-link-copy small { font-size:10px !important; }
-  #screens > #screen-plotoverview > .po-delete-footer {
-    display:block !important; position:relative !important; flex:0 0 51px !important;
-    width:100% !important; height:51px !important; min-height:51px !important;
-    margin:0 !important; padding:5px 10px 6px !important;
-    background:#f3f6fa !important; z-index:10 !important; box-sizing:border-box !important;
-  }
-  #screens > #screen-plotoverview > .po-delete-footer > .btn {
-    display:block !important; width:100% !important; height:40px !important;
-    min-height:40px !important; margin:0 !important; padding:6px 12px !important;
-  }
-}
-@media (max-width:700px) and (max-height:700px) {
-  #screens > #screen-plotoverview > .topnav { flex-basis:43px !important; height:43px !important; min-height:43px !important; }
-  #screens > #screen-plotoverview > .po-delete-footer { flex-basis:45px !important; height:45px !important; min-height:45px !important; padding-top:3px !important; }
-  #screens > #screen-plotoverview > .po-delete-footer > .btn { height:38px !important; min-height:38px !important; }
-  #screens > #screen-plotoverview > #po-body > .po23-wrap {
-    gap:4px !important;
-    grid-template-rows:minmax(88px,1.08fr) minmax(43px,.52fr) minmax(82px,.95fr) repeat(3,minmax(59px,.9fr)) !important;
-  }
-  #screens > #screen-plotoverview .po23-link-icon { flex-basis:32px !important; width:32px !important; height:32px !important; }
-}
-</style>
+
 
 </body></html>`;
     }
