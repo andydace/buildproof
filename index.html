@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PlotVault v11.47 – Applied Screen and Workflow Fixes</title>
+  <title>PlotVault v11.48 – Full Height Plot Overview</title>
   <style>
     :root {
       --navy: #0F2A3D;
@@ -1373,7 +1373,7 @@
 
 </style>
   <!-- PlotVault v11.23 - Plot Overview Redesign -->
-<meta name="plotvault-version" content="v11.46">
+<meta name="plotvault-version" content="v11.48">
 
 <style id="plotvault-v1126-screen-corrections">
 /* v11.26 — Plot Overview: proportions based on the supplied iPhone reference */
@@ -2008,7 +2008,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
 
 <style id="plotvault-v1147-screen-workflow-fixes">
-/* v11.47 — one compact viewport layout; avoid nested scrolling and preserve all plot actions */
+/* v11.48 — one compact viewport layout; avoid nested scrolling and preserve all plot actions */
 @media (max-width: 700px) {
   html, body { height:100%; min-height:100%; overflow:hidden; }
   body { padding:0 !important; min-height:0 !important; }
@@ -2953,7 +2953,7 @@ html, body { width:100%; max-width:100%; overflow-x:hidden; }
 
     }
 
-    const PLOTVAULT_VERSION = "11.47";
+    const PLOTVAULT_VERSION = "11.48";
     function saveData() {
       try {
         const payload = {
@@ -4885,6 +4885,52 @@ html, body { width:100%; max-width:100%; min-height:100%; overflow-x:hidden; }
 .gallery-review-badge.rejected { background:#b42318; }
 .evidence-review-state { padding:10px 12px; background:#f0f4f7; border-radius:9px; font-size:13px; }
 .evidence-rejection-note { padding:10px 12px; background:#fff1f1; border:1px solid #f0caca; border-radius:9px; color:#9f2020; font-size:13px; }
+</style>
+
+
+<style id="plotvault-v1148-viewport-authority">
+/* v11.48: authoritative viewport and Plot Overview layout. This block is deliberately
+   the final stylesheet so earlier legacy rules cannot shrink or hide the footer. */
+@media (max-width: 700px) {
+  html, body { width:100% !important; height:100% !important; min-height:0 !important; margin:0 !important; padding:0 !important; overflow:hidden !important; }
+  body { display:block !important; }
+  #frame { position:relative !important; display:flex !important; flex-direction:column !important; width:100% !important; height:100vh !important; height:100dvh !important; min-height:0 !important; max-height:none !important; margin:0 !important; padding:0 !important; overflow:hidden !important; }
+  #statusbar { flex:0 0 24px !important; height:24px !important; min-height:24px !important; }
+  #screens { position:relative !important; flex:1 1 0 !important; width:100% !important; height:0 !important; min-height:0 !important; overflow:hidden !important; }
+  .screen { position:absolute !important; inset:0 !important; width:100% !important; height:100% !important; min-height:0 !important; max-height:none !important; }
+  #screen-plotoverview { position:absolute !important; inset:0 !important; display:none !important; flex-direction:column !important; width:100% !important; height:100% !important; min-height:0 !important; max-height:none !important; overflow:hidden !important; }
+  #screen-plotoverview.active { display:flex !important; }
+  #screen-plotoverview > .topnav { position:relative !important; inset:auto !important; flex:0 0 50px !important; height:50px !important; min-height:50px !important; width:100% !important; padding:5px 12px !important; }
+  #screen-plotoverview > #po-body.screen-body { display:flex !important; flex:1 1 0 !important; height:0 !important; min-height:0 !important; width:100% !important; overflow:hidden !important; padding:8px 11px 7px !important; margin:0 !important; }
+  #screen-plotoverview #po-body > .po23-wrap { display:flex !important; flex:1 1 0 !important; flex-direction:column !important; justify-content:space-between !important; align-items:stretch !important; width:100% !important; height:100% !important; min-height:0 !important; gap:6px !important; padding:0 !important; margin:0 !important; }
+  #screen-plotoverview .po23-hero { flex:1.25 1 0 !important; height:auto !important; min-height:105px !important; max-height:none !important; padding:10px 14px !important; }
+  #screen-plotoverview .po23-camera { flex:.62 1 0 !important; height:auto !important; min-height:50px !important; max-height:none !important; padding:7px 12px !important; }
+  #screen-plotoverview .po23-compliance { flex:1.12 1 0 !important; height:auto !important; min-height:100px !important; max-height:none !important; padding:8px 10px !important; }
+  #screen-plotoverview .po23-counts { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; gap:7px !important; }
+  #screen-plotoverview .po23-count { display:grid !important; grid-template-columns:1fr !important; grid-template-rows:20px 20px 14px !important; align-content:center !important; justify-items:center !important; align-items:center !important; gap:1px !important; min-width:0 !important; min-height:58px !important; height:auto !important; padding:4px 2px !important; text-align:center !important; }
+  #screen-plotoverview .po23-count-icon { margin:0 auto !important; }
+  #screen-plotoverview .po23-count strong, #screen-plotoverview .po23-count small { display:block !important; width:100% !important; text-align:center !important; line-height:1.15 !important; }
+  #screen-plotoverview .po23-link-card { display:flex !important; flex:1 1 0 !important; height:auto !important; min-height:58px !important; max-height:none !important; width:100% !important; padding:7px 11px !important; gap:10px !important; }
+  #screen-plotoverview .po23-link-icon { flex:0 0 36px !important; width:36px !important; height:36px !important; }
+  #screen-plotoverview .po23-link-copy { flex:1 1 auto !important; min-width:0 !important; }
+  #screen-plotoverview .po23-link-card.po23-timeline-card { flex:1 1 0 !important; }
+  #screen-plotoverview .po23-timeline-detail { flex:0 1 auto !important; max-height:42px !important; overflow:auto !important; }
+  #screen-plotoverview > .po-delete-footer { display:block !important; position:relative !important; flex:0 0 auto !important; width:100% !important; min-height:54px !important; padding:6px 11px calc(7px + env(safe-area-inset-bottom,0px)) !important; margin:0 !important; background:#f3f6fa !important; z-index:5 !important; }
+  #screen-plotoverview > .po-delete-footer .btn { display:block !important; width:100% !important; height:41px !important; min-height:41px !important; margin:0 !important; }
+}
+@media (max-width:700px) and (max-height:740px) {
+  #screen-plotoverview > .topnav { flex-basis:44px !important; height:44px !important; min-height:44px !important; }
+  #screen-plotoverview > #po-body.screen-body { padding-top:5px !important; padding-bottom:4px !important; }
+  #screen-plotoverview #po-body > .po23-wrap { gap:4px !important; }
+  #screen-plotoverview .po23-hero { min-height:92px !important; }
+  #screen-plotoverview .po23-camera { min-height:45px !important; }
+  #screen-plotoverview .po23-compliance { min-height:88px !important; }
+  #screen-plotoverview .po23-count { min-height:49px !important; grid-template-rows:17px 17px 12px !important; }
+  #screen-plotoverview .po23-link-card { min-height:49px !important; padding:5px 9px !important; }
+  #screen-plotoverview .po23-link-icon { width:31px !important; height:31px !important; flex-basis:31px !important; }
+  #screen-plotoverview > .po-delete-footer { min-height:48px !important; padding-top:4px !important; padding-bottom:4px !important; }
+  #screen-plotoverview > .po-delete-footer .btn { height:38px !important; min-height:38px !important; }
+}
 </style>
 </head><body><nav class="report-toolbar" aria-label="Report navigation"><strong>PlotVault Evidence Report</strong><button type="button" onclick="window.close();setTimeout(function(){if(!window.closed){history.back();}},120)">← Back to PlotVault</button></nav><header><h1>PlotVault — Part L Evidence Report</h1><div>${escapeHTML(project.name || '')} · ${escapeHTML(project.location || '')}</div></header><h2>Plot details</h2><div class="meta"><div><b>Plot:</b> ${escapeHTML(plot.number)}</div><div><b>House type:</b> ${escapeHTML(plot.houseType || 'Not recorded')}</div><div><b>Build stage:</b> ${escapeHTML(plot.stage || 'Not recorded')}</div><div><b>Report generated:</b> ${new Date().toLocaleString('en-GB')}</div><div><b>Client:</b> ${escapeHTML(project.client || 'Not recorded')}</div><div><b>Site manager:</b> ${escapeHTML(project.siteManager || 'Not recorded')}</div></div>${(settings.showCompany && settings.company) || project.sapAssessor || project.sapAssessorEmail ? `<h2>Company / SAP Assessor</h2><p>${settings.showCompany ? `${escapeHTML(settings.company)}<br>${escapeHTML(settings.address)}<br>${escapeHTML(settings.phone)} · ${escapeHTML(settings.companyEmail)}<br>` : ''}SAP Assessor: ${escapeHTML(project.sapAssessor || 'Not recorded')}<br>SAP Assessor email: ${escapeHTML(project.sapAssessorEmail || 'Not recorded')}</p>` : ''}<h2>Part L checklist</h2><table><thead><tr><th>Inspection item</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table><h2>Photographic evidence</h2><p>Each photograph is stamped in the corner with its project name, plot, section, capture date/time and GPS coordinates where available.</p><div class="evidence-grid">${photos || '<div class="no-photos">No evidence photos recorded for this plot.</div>'}</div><h2>Evidence register</h2><table><thead><tr><th>#</th><th>Section</th><th>Date / time</th><th>GPS coordinates</th><th>Notes</th></tr></thead><tbody>${evidenceRegister || '<tr><td colspan="5">No evidence photos recorded.</td></tr>'}</tbody></table><p><b>Checklist completion:</b> ${(plot.checklist || []).filter(i=>i[1]==='done').length} / ${(plot.checklist || []).length} approved</p><div class="footer">${escapeHTML(settings.reportFooter || 'Generated by PlotVault. This report records the data held in the application at the time of generation.')}</div><script>window.onload=()=>setTimeout(()=>window.print(),350)<\/script>
 <style id="plotvault-v1144-plot-screen-balanced-fit">
